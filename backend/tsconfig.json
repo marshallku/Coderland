@@ -6,7 +6,6 @@
     "target": "es6",
     "moduleResolution": "node",
     "outDir": "dist",
-    "strictNullChecks": false,
     "types": ["jest"],
     "baseUrl": ".",
     "paths": {
