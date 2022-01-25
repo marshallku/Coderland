@@ -24,6 +24,15 @@
       {
         "endOfLine": "auto"
       }
-    ]
+    ],
+    "import/extensions": 0
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".ts"]
+      },
+      "typescript": {}
+    }
   }
 }
