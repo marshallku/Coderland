@@ -9,6 +9,7 @@
     "types": ["jest"],
     "baseUrl": ".",
     "paths": {
+      "@src/*": ["src/*"],
       "*": ["node_modules/*", "src/types/*"]
     }
   },
