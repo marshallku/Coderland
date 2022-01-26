@@ -14,3 +14,15 @@ export async function createPost(
   const post = await Post.createPost(user, postDto);
   return post.id;
 }
+
+export async function updatePost(
+  postId: string,
+  postDto: Partial<IPostDocument>
+) {
+  const post = await Post.updatePost(postId, postDto);
+  return post.id;
+}
+
+export async function deletePost(postId: string) {
+  await Post.deletePost(postId);
+}

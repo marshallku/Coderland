@@ -23,4 +23,9 @@ export interface IPostModel extends Model<IPostDocument> {
     user: IUserDocument,
     postDto: Partial<IPostDocument>
   ) => Promise<IPostDocument>;
+  updatePost: (
+    postId: string,
+    postDto: Partial<IPostDocument>
+  ) => Promise<IPostDocument>;
+  deletePost: (postId: string) => Promise<void>;
 }
