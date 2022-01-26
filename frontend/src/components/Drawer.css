@@ -65,11 +65,13 @@
   background: rgba(0, 0, 0, 0.5);
   opacity: 0;
   transition: opacity 0.25s ease-in-out;
+  pointer-events: none;
   z-index: 90;
 }
 
 .drawer-closer--revealed {
   opacity: 1;
+  pointer-events: all;
 }
 
 @media screen and (min-width: 1180px) {
