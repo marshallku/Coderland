@@ -13,4 +13,25 @@ export const postsListInfo = [
     title: "제목",
     author: "익명의 도도새",
   },
+  {
+    id: 125,
+    order: 2,
+    category: "주제",
+    title: "제목",
+    author: "익명의 도도새",
+  },
+  {
+    id: 126,
+    order: 2,
+    category: "주제",
+    title: "제목",
+    author: "익명의 도도새",
+  },
+  {
+    id: 127,
+    order: 2,
+    category: "주제",
+    title: "제목",
+    author: "익명의 도도새",
+  },
 ];
