@@ -19,12 +19,10 @@ describe("구글 기능 테스트", () => {
 
 describe("유저 기능 테스트", () => {
   let token = "Bearer ";
-  const conn = db
-    .createConnection(`${configs.mongoUri}/coderland`)
-    .collection("users");
+  const connection = db.createConnection(`${configs.mongoUri}/coderland`);
 
   beforeAll(async () => {
-    await conn.insertOne({
+    await connection.collection("users").insertOne({
       googleId: "1230419308012123",
       nickname: "testuser",
       name: "family given",
@@ -67,6 +65,9 @@ describe("유저 기능 테스트", () => {
   });
 
   afterAll(async () => {
-    await conn.deleteMany({});
+    await connection
+      .collection("users")
+      .deleteOne({ googleId: "1230419308012123" });
+    await db.disconnect();
   });
 });

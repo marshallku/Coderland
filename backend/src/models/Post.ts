@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
-import { IPostDocument } from "post";
+import { IPostDocument, IPostModel } from "post";
 import { CommentSchema } from "./Comment";
-import { GatheringSchema } from "./Gathering";
 
 export const PostSchema = new mongoose.Schema<IPostDocument>(
   {
@@ -37,14 +36,10 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
     category: {
       type: String,
     },
-    tags: {
-      type: [String],
-    },
-    anonymity: {
+    anonymous: {
       type: Boolean,
       default: false,
     },
-    gathering: GatheringSchema,
   },
   {
     timestamps: true,
@@ -52,6 +47,14 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
   }
 );
 
-const Post = mongoose.model<IPostDocument>("Post", PostSchema);
+PostSchema.statics.findPostById = async (postId: string) => {
+  const post = await Post.findOne({ id: postId }).populate(
+    "author",
+    "nickname"
+  );
+  return post;
+};
+
+const Post = mongoose.model<IPostDocument, IPostModel>("Post", PostSchema);
 
 export { Post };
