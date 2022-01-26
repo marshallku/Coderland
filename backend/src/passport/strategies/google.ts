@@ -20,7 +20,10 @@ export default new GoogleStrategy(
     if (provider !== "google") {
       done("잘못된 접근이에요...");
     }
-    const user = await User.findOrCreate(id, { displayName, name, photos });
+    const user = await User.findOrCreate(
+      { googleId: id },
+      { displayName, name, photos }
+    );
     done(null, user);
   }
 );
