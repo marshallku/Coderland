@@ -15,10 +15,15 @@
 
 .posts-list__post {
   display: grid;
-  padding: 10px 20px;
+  padding: 20px;
   grid-template-columns: 0.25fr 1fr 6fr 1fr;
   justify-items: center;
   align-items: center;
+  border-bottom: 1px solid #e1e2e4;
+}
+
+.posts-list__post:last-child {
+  border-bottom: none;
 }
 
 .post__category {
