@@ -2,12 +2,10 @@
   "roots": ["<rootDir>/test/"],
   "testEnvironment": "jsdom",
   "moduleNameMapper": {
-    "\\.(css|less|svg)$": "identity-obj-proxy"
+    "\\.(css|svg)$": "identity-obj-proxy"
   },
   "setupFilesAfterEnv": ["<rootDir>/test/setup.ts"],
   "transform": {
     "^.+\\.tsx?$": "ts-jest"
-  },
-  "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
-  "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
+  }
 }
