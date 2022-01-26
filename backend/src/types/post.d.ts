@@ -1,6 +1,5 @@
-import { Document, PopulatedDoc } from "mongoose";
+import { Document, Model, PopulatedDoc } from "mongoose";
 import { ICommentDocument } from "comment";
-import { IGatheringDocument } from "gathering";
 import { IUserDocument } from "user";
 
 export interface IPost {
@@ -10,13 +9,15 @@ export interface IPost {
   comments: ICommentDocument[];
   views: number;
   likes: number;
-  subject: "review" | "gathering" | "article" | "dev" | "recruit" | "chat";
-  category: ("study" | "code" | "team") | undefined;
-  tags: string[];
-  anonymity: boolean;
-  gathering: IGatheringDocument;
+  subject: "review" | "article" | "dev" | "recruit" | "chat";
+  category: "none";
+  anonymous: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface IPostDocument extends IPost, Document {}
+
+export interface IPostModel extends Model<IPostDocument> {
+  findPostById: (postId: string) => Promise<IPostDocument>;
+}
