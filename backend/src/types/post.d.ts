@@ -10,7 +10,6 @@ export interface IPost {
   views: number;
   likes: number;
   subject: "review" | "article" | "dev" | "recruit" | "chat";
-  category: "none";
   anonymous: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -20,4 +19,8 @@ export interface IPostDocument extends IPost, Document {}
 
 export interface IPostModel extends Model<IPostDocument> {
   findPostById: (postId: string) => Promise<IPostDocument>;
+  createPost: (
+    user: IUserDocument,
+    postDto: Partial<IPostDocument>
+  ) => Promise<IPostDocument>;
 }
