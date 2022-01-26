@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Drawer from "./components/Drawer";
-import GlobalNavigationBar from "./components/GNB";
+import GlobalNavigation from "./components/GlobalNavigation";
 import Home from "./pages/Home";
 import Recruit from "./pages/Recruit";
 import Detail from "./pages/Detail";
@@ -9,9 +8,8 @@ export default function App() {
   return (
     <>
       <BrowserRouter>
-        <GlobalNavigationBar />
+        <GlobalNavigation />
         <div className="main-container">
-          <Drawer />
           <div className="container-wrap">
             <main className="container">
               <Routes>
