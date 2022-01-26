@@ -1,0 +1,33 @@
+.markdown-editor__buttons {
+  display: flex;
+  padding-left: 2rem;
+  gap: 5px;
+}
+
+.markdown-editor__button {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: var(--multipurpose);
+  border: 0.7px solid var(--gray-5);
+  border-bottom: 0;
+  border-radius: 0.45rem 0.45rem 0 0;
+}
+
+.markdown-editor__button.highlight {
+  background: var(--multipurpose-pressed);
+}
+
+.markdown-editor__textarea,
+.markdown-editor__preview {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background-color: var(--multipurpose);
+  border: 0.7px solid var(--gray-5);
+  border-radius: 0.9rem;
+  line-height: 2;
+}
+
+.markdown-editor__textarea {
+  height: 30rem;
+  resize: none;
+}
