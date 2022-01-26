@@ -39,7 +39,7 @@ export default function MarkdownEditor(props: MarkdownEditorProps) {
             onChange={(event) => setValue(event.target.value)}
           />
         ) : (
-          <MarkdownViewer value={value} />
+          <MarkdownViewer className="markdown-editor__preview" value={value} />
         )}
       </div>
     </div>
