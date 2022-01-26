@@ -1,0 +1,91 @@
+.button {
+  display: inline-block;
+  border-radius: var(--border-radius);
+  line-height: 1.5rem;
+}
+
+.button--large {
+  width: clamp(0px, 100%, 360px);
+  padding: 1rem;
+}
+
+.button--medium {
+  padding: 0.75rem 1rem;
+}
+
+.button--small {
+  padding: 0.75rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.button--primary-ghost {
+  color: var(--primary);
+}
+
+.button--primary-ghost:active {
+  background-color: var(--multipurpose);
+  color: var(--primary);
+}
+
+.button--primary-second {
+  background-color: var(--primary-second);
+  color: var(--primary);
+}
+
+.button--primary-second:active {
+  background-color: var(--primary-second-pressed);
+  color: var(--primary);
+}
+
+.button--primary {
+  background: var(--primary);
+  color: var(--gray-6);
+}
+
+.button--primary:active {
+  background: var(--primary-pressed);
+  color: var(--gray-6);
+}
+
+.button--warning-second {
+  background-color: var(--warning-second);
+  color: var(--warning);
+}
+
+.button--warning-second:active {
+  background-color: var(--warning-second-pressed);
+  color: var(--warning-pressed);
+}
+
+.button--warning {
+  background-color: var(--warning);
+  color: var(--gray-6);
+}
+
+.button--warning:active {
+  background-color: var(--warning-pressed);
+}
+
+.button--multipurpose {
+  background: var(--multipurpose);
+  color: var(--gray-2);
+}
+
+.button--multipurpose:active {
+  background: var(--multipurpose-pressed);
+  color: var(--gray-0);
+}
+
+.button--primary-ghost:disabled,
+.button--primary-second:disabled,
+.button--warning-second:disabled,
+.button--multipurpose:disabled {
+  background-color: var(--multipurpose);
+  color: var(--gray-5);
+}
+
+.button--primary:disabled,
+.button--warning:disabled {
+  background-color: var(--gray-5);
+  color: var(--gray-3);
+}

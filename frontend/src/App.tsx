@@ -6,17 +6,21 @@ import Recruit from "./pages/Recruit";
 
 export default function App() {
   return (
-    <div>
+    <>
       <BrowserRouter>
         <GlobalNavigationBar />
-        <Drawer />
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/recruit" element={<Recruit />} />
-          </Routes>
-        </main>
+        <div className="main-container">
+          <Drawer />
+          <div className="container-wrap">
+            <main className="container">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/recruit" element={<Recruit />} />
+              </Routes>
+            </main>
+          </div>
+        </div>
       </BrowserRouter>
-    </div>
+    </>
   );
 }

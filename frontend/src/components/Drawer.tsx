@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
+import "./Drawer.css";
 
 export default function Drawer() {
   return (
-    <nav>
+    <nav className="drawer">
       <h2>코더랜드</h2>
       <ul>
         <li>
