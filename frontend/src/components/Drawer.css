@@ -1,0 +1,19 @@
+.drawer {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 400px;
+  height: 100%;
+  padding: 20px 0;
+  background-color: var(--gray-5);
+  transform: translate3d(-400px, 0, 0);
+  overflow-y: auto;
+  overscroll-behavior: none;
+  z-index: 100;
+}
+
+@media screen and (min-width: 1180px) {
+  .drawer {
+    transform: none;
+  }
+}

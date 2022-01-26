@@ -3,14 +3,17 @@ import RehypeRaw from "rehype-raw";
 import RehypeSanitize from "rehype-sanitize";
 
 export default function MarkdownViewer(props: MarkdownViewerProps) {
+  const { className, value } = props;
+
   return (
     <ReactMarkdown
-      className={props.className}
+      className={className || ""}
       rehypePlugins={[RehypeRaw, RehypeSanitize]}
       components={{
         h1: "h2",
       }}
-      children={props.value}
-    />
+    >
+      {value}
+    </ReactMarkdown>
   );
 }

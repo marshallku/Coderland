@@ -1,0 +1,63 @@
+.select,
+.select__list {
+  padding: 0.5rem;
+}
+
+.select {
+  position: relative;
+  display: block;
+  width: 100%;
+  color: var(--text);
+  background-color: var(--multipurpose);
+  line-height: 2;
+  border: var(--border-thickness) solid var(--gray-5);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.select::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  width: 0;
+  height: 0;
+  margin-top: -0.2rem;
+  border-left: 0.4rem solid transparent;
+  border-right: 0.4rem solid transparent;
+  border-top: 0.4rem solid var(--text);
+  transform-origin: center 0.1rem;
+  transition: transform 0.25s ease-in-out;
+}
+
+.select--open::after {
+  transform: rotate(180deg);
+}
+
+.select__list {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  width: 100%;
+  padding: 10px;
+  background-color: var(--multipurpose);
+  border: var(--border-thickness) solid var(--gray-5);
+  border-radius: var(--border-radius);
+  opacity: 0;
+  transform: translate3d(0, -10px, 0);
+  transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.select--open .select__list {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  pointer-events: all;
+}
+
+.select__list > li:not(:last-child) {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: var(--border-thickness) solid var(--gray-5);
+}
