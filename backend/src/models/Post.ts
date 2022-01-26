@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { IPostDocument, IPostModel } from "post";
+import { IUserDocument } from "user";
 import { CommentSchema } from "./Comment";
 
 export const PostSchema = new mongoose.Schema<IPostDocument>(
@@ -33,9 +34,6 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
       type: String,
       required: true,
     },
-    category: {
-      type: String,
-    },
     anonymous: {
       type: Boolean,
       default: false,
@@ -52,6 +50,20 @@ PostSchema.statics.findPostById = async (postId: string) => {
     "author",
     "nickname"
   );
+  return post;
+};
+
+PostSchema.statics.createPost = async (
+  user: IUserDocument,
+  postDto: Partial<IPostDocument>
+) => {
+  const { title, contents, subject } = postDto;
+  const post = await Post.create({
+    title,
+    contents,
+    subject,
+    author: user,
+  });
   return post;
 };
 

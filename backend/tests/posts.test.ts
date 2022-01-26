@@ -55,6 +55,49 @@ describe("일반 포스트 기능 테스트", () => {
     expect(res.body.post.title).toEqual("title");
   });
 
+  it("포스트 생성 테스트", async () => {
+    // given
+    const title = "new title";
+    const contents = "new contents";
+    const subject = "article";
+    const category = "none";
+
+    // when
+    const res = await request(server)
+      .post("/api/posts")
+      .set("authorization", token)
+      .send({ title, contents, subject, category });
+
+    // then
+    expect(res.statusCode).toEqual(201);
+    expect(res.body.isOk).toEqual(true);
+    expect(Object.keys(res.body)).toEqual(
+      expect.arrayContaining(["isOk", "postId"])
+    );
+  });
+
+  it("Fail 포스트 생성 테스트 로그인 없이", async () => {
+    // given
+    const title = "new title2222";
+    const contents = "new contents2222";
+    const subject = "chat";
+    const category = "none";
+
+    // when
+    const res = await request(server)
+      .post("/api/posts")
+      .send({ title, contents, subject, category });
+
+    // then
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.isOk).toEqual(false);
+    expect(res.body.msg).toEqual("로그인이 필요합니다!");
+  });
+
+  afterEach(async () => {
+    await connection.collection("posts").dropIndexes();
+  });
+
   afterAll(async () => {
     await connection
       .collection("users")

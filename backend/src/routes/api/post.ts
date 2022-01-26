@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { findPostById } from "../../services/post";
+import { findPostById, createPost } from "../../services/post";
 import asyncHandler from "../../utils/async-handler";
+import loginRequired from "../middlewares/login-required";
 
 export default (app: Router) => {
   const route = Router();
@@ -14,6 +15,17 @@ export default (app: Router) => {
         isOk: true,
         post,
       });
+    })
+  );
+
+  route.post(
+    "/",
+    loginRequired,
+    asyncHandler(async (req, res) => {
+      const { user } = req;
+      const { title, contents, subject } = req.body;
+      const postId = await createPost(user, { title, contents, subject });
+      res.status(201).json({ isOk: true, postId });
     })
   );
 
