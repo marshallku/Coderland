@@ -50,8 +50,10 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.listen(port, () => {
-  logger.info(`Start App at ${port}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () => {
+    logger.info(`Start App at ${port}`);
+  });
+}
 
 export default app;
