@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { IUserDocument } from "user";
+import { IGoogleUser, IUserDocument, IUserModel } from "user";
 
 export const UserSchema = new mongoose.Schema<IUserDocument>({
   googleId: {
@@ -31,6 +31,23 @@ export const UserSchema = new mongoose.Schema<IUserDocument>({
   },
 });
 
-const User = mongoose.model<IUserDocument>("User", UserSchema);
+UserSchema.statics.findOrCreate = async (
+  googleId: string,
+  user?: IGoogleUser
+) => {
+  const googleUser = await User.findOne({ googleId });
+  if (googleUser) {
+    return googleUser;
+  }
+  const newUser = await User.create({
+    googleId,
+    nickname: user.displayName,
+    name: `${user.name.familyName} ${user.name.givenName}`,
+    profile: user.photos[0].value,
+  });
+  return newUser;
+};
+
+const User = mongoose.model<IUserDocument, IUserModel>("User", UserSchema);
 
 export { User };

@@ -1,9 +1,11 @@
 import express, { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import dotenv from "dotenv";
 import pino from "pino";
 import asyncHandler from "./utils/async-handler";
+import route from "./routes/index";
+import passportInit from "./passport/index";
+import configs from "./config/configs";
 
 const app = express();
 
@@ -13,10 +15,9 @@ const logger = pino({
   },
 });
 
-dotenv.config();
+passportInit();
 
-const port = process.env.PORT || 3333;
-const mongoUri = process.env.MONGO_URI;
+const { mongoUri, port } = configs;
 
 mongoose.connect(`${mongoUri}/coderland`, () => {
   logger.info("DB connected");
@@ -29,6 +30,8 @@ app.use(express.urlencoded({ extended: false }));
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({ isOk: true });
 });
+
+app.use("/api", route());
 
 app.get(
   "/error",
