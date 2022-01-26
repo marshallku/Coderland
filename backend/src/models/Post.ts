@@ -50,6 +50,10 @@ PostSchema.statics.findPostById = async (postId: string) => {
     "author",
     "nickname"
   );
+  if (!post) {
+    throw new Error("존재하지 않는 글입니다.");
+  }
+
   return post;
 };
 
@@ -65,6 +69,23 @@ PostSchema.statics.createPost = async (
     author: user,
   });
   return post;
+};
+
+PostSchema.statics.updatePost = async (
+  postId: string,
+  postDto: Partial<IPostDocument>
+) => {
+  const { title, contents } = postDto;
+  const post = await Post.findOneAndUpdate(
+    { id: postId },
+    { title, contents },
+    { new: true }
+  );
+  return post;
+};
+
+PostSchema.statics.deletePost = async (postId: string) => {
+  await Post.findByIdAndDelete(postId);
 };
 
 const Post = mongoose.model<IPostDocument, IPostModel>("Post", PostSchema);

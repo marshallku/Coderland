@@ -64,6 +64,10 @@ describe("유저 기능 테스트", () => {
     expect(res.body.msg).toEqual("로그인이 필요합니다!");
   });
 
+  afterEach(async () => {
+    await connection.collection("users").dropIndexes();
+  });
+
   afterAll(async () => {
     await connection
       .collection("users")
