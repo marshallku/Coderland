@@ -1,0 +1,37 @@
+.detail {
+  padding: 3rem;
+  margin: 3rem;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+}
+
+.header {
+  font-size: 1rem;
+}
+
+.header__title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.header-subcontainer {
+  display: flex;
+  border-bottom: 1px solid var(--gray-5);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.header-subcontainer__author {
+  color: var(--purple-base);
+  margin-right: 2rem;
+}
+
+.header-subcontainer__created {
+  color: var(--gray-3);
+}
+
+.content {
+  height: 30vh;
+  border-bottom: 1px solid var(--gray-5);
+  margin-bottom: 1.5rem;
+}
