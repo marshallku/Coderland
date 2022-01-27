@@ -1,6 +1,7 @@
 import { Document, Model, PopulatedDoc } from "mongoose";
 import { ICommentDocument } from "comment";
 import { IUserDocument } from "user";
+import { IPagination } from "pagination";
 
 export type subjects = "review" | "article" | "dev" | "recruit" | "chat";
 
@@ -20,6 +21,10 @@ export interface IPost {
 export interface IPostDocument extends IPost, Document {}
 
 export interface IPostModel extends Model<IPostDocument> {
+  findAllPosts: (
+    subject: string,
+    page: number
+  ) => Promise<[IPostDocument[], IPagination]>;
   findPostById: (postId: string) => Promise<IPostDocument>;
   createPost: (
     user: IUserDocument,

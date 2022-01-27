@@ -1,6 +1,6 @@
 import jwt, { SignOptions, VerifyCallback } from "jsonwebtoken";
 import { IUserDocument } from "user";
-import configs from "../../config/configs";
+import configs from "../../config";
 
 const { jwtSecret } = configs;
 
