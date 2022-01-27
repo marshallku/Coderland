@@ -36,6 +36,14 @@ export const CommentSchema = new mongoose.Schema<ICommentDocument>(
   }
 );
 
+CommentSchema.statics.findCommentById = async (commentId: string) => {
+  const comment = await Comment.findById(commentId).populate(
+    "author",
+    "nickname"
+  );
+  return comment;
+};
+
 CommentSchema.statics.createComment = async (
   user: IUserDocument,
   commentDto
@@ -73,6 +81,17 @@ CommentSchema.statics.findAllComments = async (
     .limit(perPage);
 
   return [comments, { page, nextPage: page < totalPage }];
+};
+
+CommentSchema.statics.updateComment = async (
+  commentId: string,
+  contents: string
+) => {
+  await Comment.findOneAndUpdate({ id: commentId }, { contents });
+};
+
+CommentSchema.statics.deleteComment = async (commentId) => {
+  await Comment.findOneAndDelete({ id: commentId });
 };
 
 const Comment = mongoose.model<ICommentDocument, ICommentModel>(

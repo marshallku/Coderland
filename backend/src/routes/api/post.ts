@@ -1,5 +1,5 @@
 import { Router } from "express";
-import checkPermission from "../../utils/check-permission";
+import checkPermission from "../middlewares/check-permission";
 import {
   findAllPosts,
   findPostById,

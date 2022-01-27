@@ -16,6 +16,7 @@ export interface IComment {
 export interface ICommentDocument extends IComment, Document {}
 
 export interface ICommentModel extends Model<ICommentDocument> {
+  findCommentById: (commentId: string) => Promise<ICommentDocument>;
   createComment: (
     user: IUserDocument,
     commentDto: { postId: string; contents: string }
@@ -24,4 +25,6 @@ export interface ICommentModel extends Model<ICommentDocument> {
     postId: string,
     page: number
   ) => Promise<[ICommentDocument[], IPagination]>;
+  updateComment: (commentId: string, contents: string) => Promise<void>;
+  deleteComment: (commentId: string) => Promise<void>;
 }
