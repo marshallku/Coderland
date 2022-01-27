@@ -88,6 +88,7 @@ const tmpUser = {
 
 const tmpComments = [
   {
+    _id: "6af3af681248ec28ad187628",
     contents:
       "엘리스 SW 엔지니어 트랙은 디지털 융합 신기술 훈련, 기업 맞춤형 국기훈련입니다.",
     author: "하트 여왕",
@@ -95,6 +96,7 @@ const tmpComments = [
     updatedAt: "2022-01-25T10:23:38.981Z",
   },
   {
+    _id: "60f6af69124eef28ad1676e3",
     contents:
       "엘리스 SW 엔지니어 트랙은 디지털 융합 신기술 훈련, 기업 맞춤형 국기훈련입니다.",
     author: "3월의 토끼",
@@ -102,6 +104,7 @@ const tmpComments = [
     updatedAt: "2022-01-25T10:23:38.981Z",
   },
   {
+    _id: "80f6ac6812485f2ead1876e7",
     contents:
       "엘리스 SW 엔지니어 트랙은 디지털 융합 신기술 훈련, 기업 맞춤형 국기훈련입니다.",
     author: "하트 여왕",
