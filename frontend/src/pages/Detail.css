@@ -14,23 +14,23 @@
   margin-bottom: 1.5rem;
 }
 
-.header-subcontainer {
+.header-container {
   display: flex;
   border-bottom: 1px solid var(--gray-5);
   padding-bottom: 1rem;
   justify-content: space-between;
 }
 
-.header-subcontainer__author {
+.header-container__author {
   color: var(--purple-base);
   margin-right: 2rem;
 }
 
-.header-subcontainer__created {
+.header-container__created {
   color: var(--gray-3);
 }
 
-.header-subcontainer__likes__true {
+.header-container__likes--true {
   color: var(--red-base);
 }
 
