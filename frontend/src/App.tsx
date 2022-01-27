@@ -3,6 +3,7 @@ import GlobalNavigation from "./components/GlobalNavigation";
 import Home from "./pages/Home";
 import Recruit from "./pages/Recruit";
 import Detail from "./pages/Detail";
+import Add from "./pages/Add";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/recruit" element={<Recruit />} />
                 <Route path="/posts/:id" element={<Detail />} />
+                <Route path="/add/:subject" element={<Add />} />
               </Routes>
             </main>
           </div>
