@@ -284,6 +284,6 @@ describe("일반 포스트 기능 테스트", () => {
       .deleteOne({ googleId: "1230809419304811" });
 
     await connection.collection("posts").deleteMany({});
-    db.disconnect();
+    await db.disconnect();
   });
 });
