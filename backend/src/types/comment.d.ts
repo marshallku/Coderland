@@ -26,5 +26,5 @@ export interface ICommentModel extends Model<ICommentDocument> {
     page: number
   ) => Promise<[ICommentDocument[], IPagination]>;
   updateComment: (commentId: string, contents: string) => Promise<void>;
-  deleteComment: (commentId: string) => Promise<void>;
+  deleteComment: (postId: string, commentId: string) => Promise<void>;
 }

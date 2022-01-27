@@ -85,6 +85,25 @@ describe("댓글 통합 테스트", () => {
     commentId = res.body.commentId;
   });
 
+  it("포스트 댓글 갯수 확인", async () => {
+    const res = await request(server).get(`/api/posts/${postId}`).send();
+
+    expect(res.body.post.commentCount).toEqual(1);
+  });
+
+  it("Fail 없는 포스트 코멘트 생성 테스트", async () => {
+    const contents = "comment contents";
+
+    const res = await request(server)
+      .post("/api/posts/sadlkjflkasd/comments")
+      .set("authorization", token)
+      .send({ contents });
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.isOk).toEqual(false);
+    expect(res.body.msg).toEqual("존재하지 않는 글입니다.");
+  });
+
   it("일반 포스트 코멘트 리스트 테스트", async () => {
     const res = await request(server)
       .get(`/api/posts/${postId}/comments`)
@@ -183,6 +202,12 @@ describe("댓글 통합 테스트", () => {
     expect(Object.keys(res.body)).toEqual(
       expect.arrayContaining(["isOk", "commentId"])
     );
+  });
+
+  it("포스트 댓글 갯수 확인", async () => {
+    const res = await request(server).get(`/api/posts/${postId}`).send();
+
+    expect(res.body.post.commentCount).toEqual(0);
   });
 
   let anonymousPostId: string;
