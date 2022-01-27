@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import favicon from "../../static/image/favicon.svg";
 import "./GNB.css";
 
@@ -8,6 +9,25 @@ export default function GlobalNavigationBar({
   return (
     <nav className="gnb">
       <div className="gnb__grow">
+        <Link to="/" className="gnb__button">
+          <img
+            src={favicon}
+            width={40}
+            height={40}
+            alt="로고"
+            className="gnb__logo"
+          />
+        </Link>
+      </div>
+      <div className="gnb__grow gnb__grow--right">
+        <Link to="/search" className="gnb__button">
+          <i role="img" aria-label="검색" className="icon-search"></i>
+        </Link>
+        {/* TODO: Dropdown 메뉴 구현 */}
+        <button className="gnb__button">
+          <i role="img" aria-label="알림" className="icon-notifications"></i>
+        </button>
+        {/* TODO: 유저 프로필 이미지 추가 */}
         <button
           className={`hbg gnb__button${
             drawerRevealed ? " hbg--activated" : ""
@@ -19,10 +39,7 @@ export default function GlobalNavigationBar({
           <div className="hbg__line hbg__line--mid"></div>
           <div className="hbg__line hbg__line--bot"></div>
         </button>
-        <img src={favicon} height="56" />
       </div>
-      <div className="gnb__center"></div>
-      <div className="gnb__grow"></div>
     </nav>
   );
 }
