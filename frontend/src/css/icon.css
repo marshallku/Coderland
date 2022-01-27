@@ -1,11 +1,11 @@
 @font-face {
   font-family: "coderland";
-  src: url("/static/icon/coderland.eot?nenei0");
-  src: url("/static/icon/coderland.eot?nenei0#iefix")
+  src: url("/static/icon/coderland.eot?dvdkgf");
+  src: url("/static/icon/coderland.eot?dvdkgf#iefix")
       format("embedded-opentype"),
-    url("/static/icon/coderland.ttf?nenei0") format("truetype"),
-    url("/static/icon/coderland.woff?nenei0") format("woff"),
-    url("/static/icon/coderland.svg?nenei0#coderland") format("svg");
+    url("/static/icon/coderland.ttf?dvdkgf") format("truetype"),
+    url("/static/icon/coderland.woff?dvdkgf") format("woff"),
+    url("/static/icon/coderland.svg?dvdkgf#coderland") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -712,7 +712,7 @@
 .icon-panorama_fisheye:before {
   content: "\e9fe";
 }
-.icon-remove_red_eye:before {
+.icon-visibility:before {
   content: "\e9ff";
 }
 .icon-arrow_drop_down:before {
