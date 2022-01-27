@@ -1,11 +1,11 @@
 @font-face {
   font-family: "coderland";
-  src: url("/static/icon/coderland.eot?xl9cee");
-  src: url("/static/icon/coderland.eot?xl9cee#iefix")
+  src: url("/static/icon/coderland.eot?nenei0");
+  src: url("/static/icon/coderland.eot?nenei0#iefix")
       format("embedded-opentype"),
-    url("/static/icon/coderland.ttf?xl9cee") format("truetype"),
-    url("/static/icon/coderland.woff?xl9cee") format("woff"),
-    url("/static/icon/coderland.svg?xl9cee#coderland") format("svg");
+    url("/static/icon/coderland.ttf?nenei0") format("truetype"),
+    url("/static/icon/coderland.woff?nenei0") format("woff"),
+    url("/static/icon/coderland.svg?nenei0#coderland") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -709,6 +709,12 @@
 .icon-navigate_next:before {
   content: "\e9a7";
 }
+.icon-panorama_fisheye:before {
+  content: "\e9fe";
+}
+.icon-remove_red_eye:before {
+  content: "\e9ff";
+}
 .icon-arrow_drop_down:before {
   content: "\e9a8";
 }
@@ -786,6 +792,9 @@
 }
 .icon-check_box_outline_blank:before {
   content: "\e9c1";
+}
+.icon-radio_button_on:before {
+  content: "\ea00";
 }
 .icon-bookmark:before {
   content: "\e9c2";
