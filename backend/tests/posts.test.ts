@@ -13,6 +13,7 @@ describe("일반 포스트 기능 테스트", () => {
   let token = "Bearer ";
   let notOwnerToken = "Bearer ";
   let postId: string;
+  let anonymousPostId: string;
 
   beforeAll(async () => {
     await connection.collection("users").insertOne({
@@ -45,7 +46,7 @@ describe("일반 포스트 기능 테스트", () => {
     notOwnerToken += createToken(notOwnerUser);
   });
 
-  it("포스트 생성 테스트", async () => {
+  it("일반 포스트 생성 테스트", async () => {
     // given
     const title = "new title";
     const contents = "new contents";
@@ -68,20 +69,19 @@ describe("일반 포스트 기능 테스트", () => {
     postId = res.body.postId;
   });
 
-  it("포스트 조회 테스트", async () => {
+  it("일반 포스트 조회 테스트", async () => {
     // when
-    const res = await request(server)
-      .get(`/api/posts/${postId}`)
-      .set("authorization", token)
-      .send();
+    const res = await request(server).get(`/api/posts/${postId}`).send();
 
     // then
     expect(res.statusCode).toEqual(200);
     expect(res.body.isOk).toEqual(true);
     expect(res.body.post.title).toEqual("new title");
+    expect(res.body.post.author).toEqual("testuser2");
+    expect(res.body.post.anonymous).toEqual(false);
   });
 
-  it("Fail 포스트 생성 테스트 로그인 없이", async () => {
+  it("Fail 익명 포스트 생성 테스트 로그인 없이", async () => {
     // given
     const title = "new title2222";
     const contents = "new contents2222";
@@ -99,10 +99,11 @@ describe("일반 포스트 기능 테스트", () => {
     expect(res.body.msg).toEqual("로그인이 필요합니다!");
   });
 
-  it("포스트 수정 로직", async () => {
+  it("일반 포스트에서 익명 포스트로 수정 로직", async () => {
     // given
     const title = "update title";
     const contents = "update contents";
+    const subject = "chat";
 
     // when
     const res = await request(server)
@@ -111,6 +112,7 @@ describe("일반 포스트 기능 테스트", () => {
       .send({
         title,
         contents,
+        subject,
       });
 
     // then
@@ -123,6 +125,8 @@ describe("일반 포스트 기능 테스트", () => {
     expect(res2.statusCode).toEqual(200);
     expect(res2.body.isOk).toEqual(true);
     expect(res2.body.post.title).toEqual("update title");
+    expect(res2.body.post.author).not.toEqual("testuser2");
+    expect(res2.body.post.anonymous).toEqual(true);
   });
 
   it("Fail 포스트 수정 로직 권한 없음", async () => {
@@ -171,6 +175,69 @@ describe("일반 포스트 기능 테스트", () => {
 
     expect(res.statusCode).toEqual(403);
     expect(res.body.msg).toEqual("존재하지 않는 글입니다.");
+  });
+
+  it("익명 포스트 생성 테스트", async () => {
+    // given
+    const title = "anonymous";
+    const contents = "new contents";
+    const subject = "review";
+    const category = "none";
+
+    // when
+    const res = await request(server)
+      .post("/api/posts")
+      .set("authorization", token)
+      .send({ title, contents, subject, category });
+
+    // then
+    expect(res.statusCode).toEqual(201);
+    expect(res.body.isOk).toEqual(true);
+    expect(Object.keys(res.body)).toEqual(
+      expect.arrayContaining(["isOk", "postId"])
+    );
+
+    anonymousPostId = res.body.postId;
+  });
+
+  it("익명 포스트 조회 테스트", async () => {
+    // when
+    const res = await request(server)
+      .get(`/api/posts/${anonymousPostId}`)
+      .send();
+
+    // then
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.isOk).toEqual(true);
+    expect(res.body.post.title).toEqual("anonymous");
+    expect(res.body.post.author).not.toEqual("testuser2");
+    expect(res.body.post.anonymous).toEqual(true);
+  });
+
+  it("익명 포스트에서 일반 포스트로 수정 로직 테스트", async () => {
+    const title = "update anony";
+    const contents = "contentntntntnt";
+    const subject = "recruit";
+
+    const res = await request(server)
+      .put(`/api/posts/${anonymousPostId}`)
+      .set("authorization", token)
+      .send({
+        title,
+        contents,
+        subject,
+      });
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.isOk).toEqual(true);
+
+    const res2 = await request(server)
+      .get(`/api/posts/${anonymousPostId}`)
+      .send();
+
+    expect(res2.body.post.title).toEqual("update anony");
+    expect(res2.body.post.author).toEqual("testuser2");
+    expect(res2.body.post.anonymous).toEqual(false);
   });
 
   afterAll(async () => {

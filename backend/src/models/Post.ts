@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { IPostDocument, IPostModel } from "post";
+import { IPostDocument, IPostModel, subjects } from "post";
 import { IUserDocument } from "user";
 import { CommentSchema } from "./Comment";
 
@@ -57,6 +57,10 @@ PostSchema.statics.findPostById = async (postId: string) => {
   return post;
 };
 
+function isAnonymous(subject: subjects) {
+  return ["review", "chat"].includes(subject);
+}
+
 PostSchema.statics.createPost = async (
   user: IUserDocument,
   postDto: Partial<IPostDocument>
@@ -67,18 +71,24 @@ PostSchema.statics.createPost = async (
     contents,
     subject,
     author: user,
+    anonymous: isAnonymous(subject),
   });
   return post;
 };
 
 PostSchema.statics.updatePost = async (
   postId: string,
-  postDto: Partial<IPostDocument>
+  postDto: Pick<IPostDocument, "title" | "contents" | "subject">
 ) => {
-  const { title, contents } = postDto;
+  const { title, contents, subject } = postDto;
   const post = await Post.findOneAndUpdate(
     { id: postId },
-    { title, contents },
+    {
+      title,
+      contents,
+      subject,
+      anonymous: isAnonymous(subject),
+    },
     { new: true }
   );
   return post;

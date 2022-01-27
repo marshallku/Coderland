@@ -2,6 +2,8 @@ import { Document, Model, PopulatedDoc } from "mongoose";
 import { ICommentDocument } from "comment";
 import { IUserDocument } from "user";
 
+export type subjects = "review" | "article" | "dev" | "recruit" | "chat";
+
 export interface IPost {
   title: string;
   contents: string;
@@ -9,7 +11,7 @@ export interface IPost {
   comments: ICommentDocument[];
   views: number;
   likes: number;
-  subject: "review" | "article" | "dev" | "recruit" | "chat";
+  subject: subjects;
   anonymous: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -25,7 +27,7 @@ export interface IPostModel extends Model<IPostDocument> {
   ) => Promise<IPostDocument>;
   updatePost: (
     postId: string,
-    postDto: Partial<IPostDocument>
+    postDto: Pick<IPostDocument, "title" | "contents" | "subject">
   ) => Promise<IPostDocument>;
   deletePost: (postId: string) => Promise<void>;
 }

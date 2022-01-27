@@ -41,8 +41,8 @@ export default (app: Router) => {
     checkPermission,
     asyncHandler(async (req, res) => {
       const { postId } = req.params;
-      const { title, contents } = req.body;
-      await updatePost(postId, { title, contents });
+      const { title, contents, subject } = req.body;
+      await updatePost(postId, { title, contents, subject });
       res.status(200).json({ isOk: true, postId });
     })
   );
