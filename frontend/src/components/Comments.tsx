@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CommentList } from "../@types/Comments";
+import CommentLikeBtn from "./CommentLikeBtn";
 import "./Comments.css";
 
 export default function Comments() {
@@ -8,16 +8,18 @@ export default function Comments() {
 
   const handleCommentSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    const newComment = {
-      id: String(Date.now()),
-      text: commentText,
-      author: "익명의 도도새",
-      createdAt: new Date(Date.now()),
-      likes: 0,
-      reply: 0,
-    };
-    setCommentList([...commentList, newComment]);
-    setCommentText("");
+    if (commentText) {
+      const newComment = {
+        id: String(Date.now()),
+        text: commentText,
+        author: "익명의 도도새",
+        createdAt: new Date(Date.now()),
+        likes: 0,
+        reply: 0,
+      };
+      setCommentList([...commentList, newComment]);
+      setCommentText("");
+    }
   };
 
   return (
@@ -47,9 +49,7 @@ export default function Comments() {
               <span className="comment__date">
                 {createdAt.toLocaleDateString("ko-KR")}
               </span>
-              <button className="comment__likes">
-                좋아요 {likes === 0 ? "" : likes}
-              </button>
+              <CommentLikeBtn likes={likes} />
               <button className="comment__reply">
                 대댓글 {reply === 0 ? "" : reply}
               </button>

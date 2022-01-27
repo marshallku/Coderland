@@ -1,0 +1,7 @@
+.comment__likes {
+  cursor: pointer;
+}
+
+.comment__likes--liked {
+  color: var(--primary);
+}
