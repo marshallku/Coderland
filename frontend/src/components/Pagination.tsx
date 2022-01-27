@@ -1,6 +1,4 @@
 import "./Pagination.css";
-import leftArrow from "../../static/icon/left-arrow.svg";
-import rightArrow from "../../static/icon/right-arrow.svg";
 
 export default function Pagination({
   postsPerPage,
@@ -16,7 +14,7 @@ export default function Pagination({
 
   return (
     <div className="pagination">
-      <img className="pagination__arrow" src={leftArrow} alt="leftArrow" />
+      <i className="pagination__arrow icon-navigate_before" />
       <ul className="pagination__number-box">
         {pageNumber.map((number) => (
           <li
@@ -28,7 +26,7 @@ export default function Pagination({
           </li>
         ))}
       </ul>
-      <img className="pagination__arrow" src={rightArrow} alt="rightArrow" />
+      <i className="pagination__arrow icon-navigate_next" />
     </div>
   );
 }
