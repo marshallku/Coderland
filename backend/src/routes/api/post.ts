@@ -9,9 +9,12 @@ import {
 } from "../../services/post";
 import asyncHandler from "../../utils/async-handler";
 import loginRequired from "../middlewares/login-required";
+import commentRouter from "./comment";
 
 export default (app: Router) => {
   const route = Router();
+
+  route.use("/:postId/comments", commentRouter);
 
   route.get(
     "/",

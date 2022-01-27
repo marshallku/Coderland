@@ -3,7 +3,7 @@ import "regenerator-runtime";
 import db from "mongoose";
 import server from "../src/app";
 import { createToken } from "../src/passport/strategies/jwt";
-import configs from "../src/config/configs";
+import configs from "../src/config";
 import { User } from "../src/models/User";
 
 describe("구글 기능 테스트", () => {

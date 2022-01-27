@@ -1,5 +1,4 @@
 import { Document, Model, PopulatedDoc } from "mongoose";
-import { ICommentDocument } from "comment";
 import { IUserDocument } from "user";
 import { IPagination } from "pagination";
 
@@ -9,7 +8,7 @@ export interface IPost {
   title: string;
   contents: string;
   author: PopulatedDoc<IUserDocument>;
-  comments: ICommentDocument[];
+  commentCount: number;
   views: number;
   likes: number;
   subject: subjects;
