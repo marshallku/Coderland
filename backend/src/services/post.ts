@@ -4,7 +4,12 @@ import { Post } from "../models/Post";
 
 export async function findPostById(postId: string) {
   const post = await Post.findPostById(postId);
-  return post;
+  const { author, anonymous, ...rest } = post.toObject();
+  return {
+    ...rest,
+    anonymous,
+    author: anonymous ? "anonymity" : author.nickname,
+  };
 }
 
 export async function createPost(
@@ -17,7 +22,7 @@ export async function createPost(
 
 export async function updatePost(
   postId: string,
-  postDto: Partial<IPostDocument>
+  postDto: Pick<IPostDocument, "title" | "contents" | "subject">
 ) {
   const post = await Post.updatePost(postId, postDto);
   return post.id;
