@@ -1,0 +1,10 @@
+.editor__item:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.editor__item:last-child {
+  display: flex;
+  margin-top: 60px;
+  justify-content: flex-end;
+  gap: 10px;
+}
