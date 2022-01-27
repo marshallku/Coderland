@@ -1,10 +1,9 @@
 import request from "supertest";
 import "regenerator-runtime";
 import db from "mongoose";
+import jwt, { SignOptions } from "jsonwebtoken";
 import server from "../src/app";
-import { createToken } from "../src/passport/strategies/jwt";
 import configs from "../src/config";
-import { User } from "../src/models/User";
 
 describe("구글 기능 테스트", () => {
   it("구글 로그인 페이지 리다이렉트 테스트", async () => {
@@ -30,8 +29,11 @@ describe("유저 기능 테스트", () => {
       grade: 0,
     });
 
-    const user = await User.findOrCreate({ googleId: "1230419308012123" });
-    token += createToken(user);
+    const payload = { googleId: "1230419308012123" };
+    const signOpts: SignOptions = {
+      expiresIn: "7d",
+    };
+    token += jwt.sign(payload, configs.jwtSecret, signOpts);
   });
 
   it("유저 정보 가져오기", async () => {

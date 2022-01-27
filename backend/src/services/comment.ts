@@ -11,5 +11,13 @@ export async function createComment(
 
 export async function findAllComments(postId: string, page: number) {
   const [comments, pagination] = await Comment.findAllComments(postId, page);
-  return [comments, pagination];
+  const parsedComments = comments.map((comment) => {
+    const { author, anonymous, ...rest } = comment.toObject();
+    return {
+      ...rest,
+      anonymous,
+      author: anonymous ? "anonymity" : author.nickname,
+    };
+  });
+  return [parsedComments, pagination];
 }

@@ -44,6 +44,7 @@ UserSchema.statics.findOrCreate = async (
   if (googleUser) {
     return googleUser;
   }
+
   const newUser = await User.create({
     googleId: decoded.googleId,
     nickname: user.displayName,
