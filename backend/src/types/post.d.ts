@@ -25,6 +25,7 @@ export interface IPostModel extends Model<IPostDocument> {
     page: number
   ) => Promise<[IPostDocument[], IPagination]>;
   findPostById: (postId: string) => Promise<IPostDocument>;
+  viewCount: (post: IPostDocument) => Promise<IPostDocument>;
   createPost: (
     user: IUserDocument,
     postDto: Partial<IPostDocument>

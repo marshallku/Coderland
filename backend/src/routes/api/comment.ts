@@ -50,8 +50,8 @@ route.delete(
   loginRequired,
   checkCommentPermission,
   asyncHandler(async (req, res) => {
-    const { commentId } = req.params;
-    await deleteComment(commentId);
+    const { postId, commentId } = req.params;
+    await deleteComment(postId, commentId);
     res.status(200).json({ isOk: true, commentId });
   })
 );

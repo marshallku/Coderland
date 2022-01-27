@@ -49,7 +49,14 @@ CommentSchema.statics.createComment = async (
   commentDto
 ) => {
   const { postId, contents } = commentDto;
-  const post = await Post.findById(postId);
+  const post = await Post.findByIdAndUpdate(
+    postId,
+    {
+      $inc: { commentCount: 1 },
+    },
+    { new: true }
+  );
+
   const comment = await Comment.create({
     contents,
     postId: post,
@@ -90,7 +97,11 @@ CommentSchema.statics.updateComment = async (
   await Comment.findOneAndUpdate({ id: commentId }, { contents });
 };
 
-CommentSchema.statics.deleteComment = async (commentId) => {
+CommentSchema.statics.deleteComment = async (postId, commentId) => {
+  await Post.findByIdAndUpdate(postId, {
+    $inc: { commentCount: -1 },
+  });
+
   await Comment.findOneAndDelete({ id: commentId });
 };
 

@@ -5,8 +5,12 @@ export async function createComment(
   user: IUserDocument,
   commentDto: { postId: string; contents: string }
 ) {
-  const comment = await Comment.createComment(user, commentDto);
-  return comment._id;
+  try {
+    const comment = await Comment.createComment(user, commentDto);
+    return comment._id;
+  } catch (error) {
+    throw new Error("존재하지 않는 글입니다.");
+  }
 }
 
 export async function findAllComments(postId: string, page: number) {
@@ -23,9 +27,17 @@ export async function findAllComments(postId: string, page: number) {
 }
 
 export async function updateComment(commentId: string, contents: string) {
-  await Comment.updateComment(commentId, contents);
+  try {
+    await Comment.updateComment(commentId, contents);
+  } catch (error) {
+    throw new Error("존재하지 않는 글입니다.");
+  }
 }
 
-export async function deleteComment(commentId: string) {
-  await Comment.deleteComment(commentId);
+export async function deleteComment(postId: string, commentId: string) {
+  try {
+    await Comment.deleteComment(postId, commentId);
+  } catch (error) {
+    throw new Error("존재하지 않는 글입니다.");
+  }
 }
