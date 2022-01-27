@@ -56,6 +56,7 @@ const tmpComments = [
     author: "하트 여왕",
     createdAt: "2022-01-24T10:23:38.981Z",
     updatedAt: "2022-01-25T10:23:38.981Z",
+    likes: 1,
   },
   {
     _id: "60f6af69124eef28ad1676e3",
@@ -64,6 +65,7 @@ const tmpComments = [
     author: "3월의 토끼",
     createdAt: "2022-01-24T10:23:38.981Z",
     updatedAt: "2022-01-25T10:23:38.981Z",
+    likes: 3,
   },
   {
     _id: "80f6ac6812485f2ead1876e7",
@@ -72,6 +74,7 @@ const tmpComments = [
     author: "하트 여왕",
     createdAt: "2022-01-24T10:23:38.981Z",
     updatedAt: "2022-01-25T10:23:38.981Z",
+    likes: 10,
   },
 ];
 

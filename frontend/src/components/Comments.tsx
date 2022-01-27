@@ -1,21 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { dummyComments } from "../api/dummy";
+import useApi from "../api/useApi";
 import CommentLikeBtn from "./CommentLikeBtn";
 import "./Comments.css";
 
 export default function Comments() {
   const [commentText, setCommentText] = useState<string>("");
-  const [commentList, setCommentList] = useState<CommentList[]>([]);
+  const [commentList, setCommentList] = useState<IComment[]>([]);
+
+  const comments = useApi(dummyComments);
+
+  useEffect(() => {
+    setCommentList(comments || []);
+  }, [commentList]);
 
   const handleCommentSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (commentText) {
-      const newComment = {
-        id: String(Date.now()),
-        text: commentText,
+      const newComment: IComment = {
+        _id: String(Date.now()),
+        contents: commentText,
         author: "익명의 도도새",
-        createdAt: new Date(Date.now()),
+        createdAt: new Date(Date.now()).toISOString(),
+        updatedAt: new Date(Date.now()).toISOString(),
         likes: 0,
-        reply: 0,
       };
       setCommentList([...commentList, newComment]);
       setCommentText("");
@@ -41,17 +49,33 @@ export default function Comments() {
           </form>
         </div>
 
-        {commentList.map(({ id, text, author, createdAt, likes, reply }) => (
-          <div className="comment" key={id} id={id}>
-            <p className="comment__author">{author}</p>
-            <p className="comment__text">{text}</p>
+        {commentList.map(({ _id, contents, author, createdAt, likes }) => (
+          <div className="comment" key={_id}>
+            <div className="comment__author-wrap">
+              <span className="comment__author">{author}</span>
+              <button
+                className="comment__edit-button"
+                aria-label="댓글 수정 버튼"
+              >
+                <i className="icon-create" />
+              </button>
+              <button
+                className="comment__delete-button"
+                aria-label="댓글 삭제 버튼"
+              >
+                <i className="icon-clear" />
+              </button>
+            </div>
+            <p className="comment__text">{contents}</p>
             <div className="comment__info">
               <span className="comment__date">
-                {createdAt.toLocaleDateString("ko-KR")}
+                {/* TODO: time format 유틸리티 함수 사용 */}
+                {createdAt.substring(0, 10)}
               </span>
               <CommentLikeBtn likes={likes} />
               <button className="comment__reply">
-                대댓글 {reply === 0 ? "" : reply}
+                <i className="icon-chat" />
+                답글
               </button>
             </div>
           </div>
