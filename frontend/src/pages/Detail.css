@@ -18,7 +18,7 @@
   display: flex;
   border-bottom: 1px solid var(--gray-5);
   padding-bottom: 1rem;
-  margin-bottom: 1.5rem;
+  justify-content: space-between;
 }
 
 .header-subcontainer__author {
@@ -30,8 +30,12 @@
   color: var(--gray-3);
 }
 
+.header-subcontainer__likes__true {
+  color: var(--red-base);
+}
+
 .content {
-  height: 30vh;
   border-bottom: 1px solid var(--gray-5);
-  margin-bottom: 1.5rem;
+  margin: 1.5rem 0;
+  padding-bottom: 1.5rem;
 }
