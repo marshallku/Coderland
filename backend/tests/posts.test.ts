@@ -3,7 +3,7 @@ import "regenerator-runtime";
 import db from "mongoose";
 import { IUserDocument } from "../src/types/user";
 import server from "../src/app";
-import configs from "../src/config/configs";
+import configs from "../src/config";
 import { createToken } from "../src/passport/strategies/jwt";
 
 jest.setTimeout(10000);
@@ -279,6 +279,10 @@ describe("일반 포스트 기능 테스트", () => {
     await connection
       .collection("users")
       .deleteOne({ googleId: "1230707070702022" });
+    await connection
+      .collection("users")
+      .deleteOne({ googleId: "1230809419304811" });
+
     await connection.collection("posts").deleteMany({});
     db.disconnect();
   });

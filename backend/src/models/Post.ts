@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import { IPostDocument, IPostModel, subjects } from "post";
 import { IUserDocument } from "user";
-import { CommentSchema } from "./Comment";
 import configs from "../config";
 
 export const PostSchema = new mongoose.Schema<IPostDocument>(
@@ -20,7 +19,10 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
       ref: "User",
       required: true,
     },
-    comments: [CommentSchema],
+    commentCount: {
+      type: Number,
+      default: 0,
+    },
     views: {
       type: Number,
       default: 0,
@@ -48,7 +50,8 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
 
 PostSchema.statics.findAllPosts = async (subject: string, page: number) => {
   const { perPage } = configs;
-  const totalPage = await Post.countDocuments({ subject });
+  const total = await Post.countDocuments({ subject });
+  const totalPage = Math.ceil(total / perPage);
   const posts = await Post.find({ subject })
     .populate("author", "nickname")
     .sort("-createdAt")
