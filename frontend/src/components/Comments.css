@@ -3,46 +3,58 @@
 }
 
 .comments-wrap h3 {
-  font-size: 16px;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
-.comment-form-wrap {
-  position: relative;
+.comment-form {
+  height: 2.5rem;
+  display: flex;
+  border: 1px solid var(--gray-4);
+  border-radius: 5px;
+  padding-left: auto;
+  margin-bottom: 8px;
 }
 
 .comment-form__input {
   width: 100%;
-  height: 34px;
-  border: 1px solid var(--gray-4);
-  border-radius: 3px;
-  padding-left: 8px;
-  margin-bottom: 8px;
+  padding: 0 10px;
 }
 
 .comment-form__button {
-  width: 48px;
-  height: 30px;
-  position: absolute;
-  right: 2px;
-  top: 2px;
+  width: 4rem;
   background-color: var(--primary-pressed);
   color: var(--gray-6);
-  font-weight: 600;
-  border-radius: 3px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .comment {
   padding: 12px 20px;
   border-bottom: 1px solid var(--gray-5);
-  line-height: 1.5em;
+  line-height: 1.5rem;
 }
 
-.reply-wrap {
-  padding-left: 16px;
+.comment__author-wrap,
+.comment__info {
+  font-size: 0.88rem;
+  color: var(--gray-3);
 }
 
-.comment__info > button {
-  margin-left: 6px;
+.comment__author-wrap button,
+.comment__info button {
+  margin-left: 12px;
+  cursor: pointer;
+}
+
+.comment__author {
+  color: var(--primary);
+}
+
+.comment__info {
+  margin-top: 4px;
+}
+
+.comment__info button i {
+  margin-right: 4px;
 }

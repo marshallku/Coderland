@@ -1,8 +1,8 @@
-interface CommentList {
-  id: string;
-  text: string;
+interface IComment {
+  _id: string;
+  contents: string;
   author: string;
-  createdAt: Date;
+  createdAt: string;
+  updatedAt: string;
   likes: number;
-  reply: number;
 }

@@ -20,6 +20,7 @@ export default function CommentLikeBtn(props: { likes: number }) {
       type="button"
       onClick={handleLikeClick}
     >
+      <i className="icon-thumb_up" />
       좋아요 {likesCount === 0 ? "" : likesCount}
     </button>
   );
