@@ -2,7 +2,13 @@ import { Document, Model, PopulatedDoc } from "mongoose";
 import { IUserDocument } from "user";
 import { IPagination } from "pagination";
 
-export type subjects = "review" | "article" | "dev" | "recruit" | "chat";
+export type subjects =
+  | "review"
+  | "article"
+  | "dev"
+  | "recruit"
+  | "chat"
+  | "gathering";
 
 export interface IPost {
   title: string;
