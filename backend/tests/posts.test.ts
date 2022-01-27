@@ -81,6 +81,23 @@ describe("일반 포스트 기능 테스트", () => {
     expect(res.body.post.anonymous).toEqual(false);
   });
 
+  it("일반 포스트 리스트 조회 테스트", async () => {
+    // when
+    const res = await request(server)
+      .get("/api/posts")
+      .query({ subject: "article" })
+      .send();
+
+    // then
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.isOk).toEqual(true);
+    expect(res.body.posts[0].author).toEqual("testuser2");
+    expect(res.body.posts[0].anonymous).toEqual(false);
+    expect(Object.keys(res.body)).toEqual(
+      expect.arrayContaining(["isOk", "posts", "pagination"])
+    );
+  });
+
   it("Fail 익명 포스트 생성 테스트 로그인 없이", async () => {
     // given
     const title = "new title2222";
@@ -212,6 +229,24 @@ describe("일반 포스트 기능 테스트", () => {
     expect(res.body.post.title).toEqual("anonymous");
     expect(res.body.post.author).not.toEqual("testuser2");
     expect(res.body.post.anonymous).toEqual(true);
+  });
+
+  it("익명 포스트 리스트 조회 테스트", async () => {
+    // when
+    const res = await request(server)
+      .get("/api/posts")
+      .query({ subject: "review" })
+      .send();
+
+    // then
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.isOk).toEqual(true);
+    expect(res.body.posts[0].author).not.toEqual("testuser2");
+    expect(res.body.posts[0].anonymous).toEqual(true);
+    expect(typeof res.body.posts[0].commentCount).toEqual("number");
+    expect(Object.keys(res.body)).toEqual(
+      expect.arrayContaining(["isOk", "posts", "pagination"])
+    );
   });
 
   it("익명 포스트에서 일반 포스트로 수정 로직 테스트", async () => {

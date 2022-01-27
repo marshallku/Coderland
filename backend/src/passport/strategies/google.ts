@@ -3,7 +3,7 @@ import {
   StrategyOptions,
 } from "passport-google-oauth20";
 import { User } from "../../models/User";
-import configs from "../../config/configs";
+import configs from "../../config";
 
 const { clientID, clientSecret, port } = configs;
 

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { IPostDocument, IPostModel, subjects } from "post";
 import { IUserDocument } from "user";
 import { CommentSchema } from "./Comment";
+import configs from "../config";
 
 export const PostSchema = new mongoose.Schema<IPostDocument>(
   {
@@ -44,6 +45,23 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
     versionKey: false,
   }
 );
+
+PostSchema.statics.findAllPosts = async (subject: string, page: number) => {
+  const { perPage } = configs;
+  const totalPage = await Post.countDocuments({ subject });
+  const posts = await Post.find({ subject })
+    .populate("author", "nickname")
+    .sort("-createdAt")
+    .skip((page - 1) * perPage)
+    .limit(perPage);
+  return [
+    posts,
+    {
+      page,
+      nextPage: page < totalPage,
+    },
+  ];
+};
 
 PostSchema.statics.findPostById = async (postId: string) => {
   const post = await Post.findOne({ id: postId }).populate(

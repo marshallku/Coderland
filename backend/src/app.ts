@@ -5,7 +5,7 @@ import pino from "pino";
 import asyncHandler from "./utils/async-handler";
 import route from "./routes/index";
 import passportInit from "./passport/index";
-import configs from "./config/configs";
+import configs from "./config";
 
 const app = express();
 

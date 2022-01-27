@@ -8,4 +8,5 @@ export default {
   clientID: process.env.GOOGLE_ID,
   clientSecret: process.env.GOOGLE_SECRET,
   jwtSecret: process.env.JWT_SECRET_KEY,
+  perPage: 10,
 };

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import checkPermission from "../../utils/check-permission";
 import {
+  findAllPosts,
   findPostById,
   createPost,
   updatePost,
@@ -11,6 +12,20 @@ import loginRequired from "../middlewares/login-required";
 
 export default (app: Router) => {
   const route = Router();
+
+  route.get(
+    "/",
+    asyncHandler(async (req, res) => {
+      const subject = String(req.query.subject);
+      const page = Number(req.query.page) || 1;
+      const [posts, pagination] = await findAllPosts(subject, page);
+      res.status(200).json({
+        isOk: true,
+        posts,
+        pagination,
+      });
+    })
+  );
 
   route.get(
     "/:postId",
