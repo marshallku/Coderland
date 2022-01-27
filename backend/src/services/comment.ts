@@ -21,3 +21,11 @@ export async function findAllComments(postId: string, page: number) {
   });
   return [parsedComments, pagination];
 }
+
+export async function updateComment(commentId: string, contents: string) {
+  await Comment.updateComment(commentId, contents);
+}
+
+export async function deleteComment(commentId: string) {
+  await Comment.deleteComment(commentId);
+}

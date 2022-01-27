@@ -1,6 +1,12 @@
 import { Router } from "express";
-import { createComment, findAllComments } from "../../services/comment";
+import {
+  createComment,
+  findAllComments,
+  updateComment,
+  deleteComment,
+} from "../../services/comment";
 import asyncHandler from "../../utils/async-handler";
+import checkCommentPermission from "../middlewares/check-comment-permission";
 import loginRequired from "../middlewares/login-required";
 
 const route = Router({ mergeParams: true });
@@ -24,6 +30,29 @@ route.get(
     const page = Number(req.query.page) || 1;
     const [comments, pagination] = await findAllComments(postId, page);
     res.status(200).json({ isOk: true, comments, pagination });
+  })
+);
+
+route.put(
+  "/:commentId",
+  loginRequired,
+  checkCommentPermission,
+  asyncHandler(async (req, res) => {
+    const { commentId } = req.params;
+    const { contents } = req.body;
+    await updateComment(commentId, contents);
+    res.status(200).json({ isOk: true, commentId });
+  })
+);
+
+route.delete(
+  "/:commentId",
+  loginRequired,
+  checkCommentPermission,
+  asyncHandler(async (req, res) => {
+    const { commentId } = req.params;
+    await deleteComment(commentId);
+    res.status(200).json({ isOk: true, commentId });
   })
 );
 

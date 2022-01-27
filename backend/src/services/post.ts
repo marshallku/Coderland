@@ -16,13 +16,17 @@ export async function findAllPosts(subject: string, page: number) {
 }
 
 export async function findPostById(postId: string) {
-  const post = await Post.findPostById(postId);
-  const { author, anonymous, ...rest } = post.toObject();
-  return {
-    ...rest,
-    anonymous,
-    author: anonymous ? "anonymity" : author.nickname,
-  };
+  try {
+    const post = await Post.findPostById(postId);
+    const { author, anonymous, ...rest } = post.toObject();
+    return {
+      ...rest,
+      anonymous,
+      author: anonymous ? "anonymity" : author.nickname,
+    };
+  } catch (error) {
+    throw new Error("존재하지 않는 글입니다.");
+  }
 }
 
 export async function createPost(

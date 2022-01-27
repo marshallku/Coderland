@@ -67,14 +67,7 @@ PostSchema.statics.findAllPosts = async (subject: string, page: number) => {
 };
 
 PostSchema.statics.findPostById = async (postId: string) => {
-  const post = await Post.findOne({ id: postId }).populate(
-    "author",
-    "nickname"
-  );
-  if (!post) {
-    throw new Error("존재하지 않는 글입니다.");
-  }
-
+  const post = await Post.findById(postId).populate("author", "nickname");
   return post;
 };
 

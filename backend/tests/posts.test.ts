@@ -81,6 +81,16 @@ describe("일반 포스트 기능 테스트", () => {
     expect(res.body.post.anonymous).toEqual(false);
   });
 
+  it("Fail 일반 포스트 조회 존재하지 않는 글", async () => {
+    // when
+    const res = await request(server).get("/api/posts/nonlskdjfqjeofi").send();
+
+    // then
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.isOk).toEqual(false);
+    expect(res.body.msg).toEqual("존재하지 않는 글입니다.");
+  });
+
   it("일반 포스트 리스트 조회 테스트", async () => {
     // when
     const res = await request(server)
