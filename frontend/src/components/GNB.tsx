@@ -1,4 +1,4 @@
-import favicon from "../../static/icon/favicon.svg";
+import favicon from "../../static/image/favicon.svg";
 import "./GNB.css";
 
 export default function GlobalNavigationBar({
