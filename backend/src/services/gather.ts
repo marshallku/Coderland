@@ -22,3 +22,10 @@ export async function findGatherById(gatherId: string) {
     throw new Error("존재하지 않는 글입니다.");
   }
 }
+
+export async function updateGather(
+  gatherId: string,
+  gatherDto: Partial<IGatherDocument>
+) {
+  await Gather.updateGather(gatherId, gatherDto);
+}

@@ -8,7 +8,6 @@ export interface IGather {
   area: string;
   isCompleted: boolean;
   memberCount: number;
-  memberLimitCount: number;
   members: PopulatedDoc<IUserDocument>[];
   tags: string[];
 }
@@ -25,5 +24,11 @@ export interface IGatherModel extends Model<IGatherDocument> {
     user: IUserDocument,
     gatherDto: Partial<IGatherDocument>
   ) => Promise<IGatherDocument>;
+
   findGatherById: (gatherId: string) => Promise<IGatherDocument>;
+
+  updateGather: (
+    gatherId: string,
+    gatherDto: Partial<IGatherDocument>
+  ) => Promise<void>;
 }

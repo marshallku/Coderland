@@ -41,8 +41,7 @@ export async function updatePost(
   postId: string,
   postDto: Pick<IPostDocument, "title" | "contents" | "subject">
 ) {
-  const post = await Post.updatePost(postId, postDto);
-  return post.id;
+  await Post.updatePost(postId, postDto);
 }
 
 export async function deletePost(postId: string) {
