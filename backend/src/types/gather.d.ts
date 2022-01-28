@@ -13,9 +13,7 @@ export interface IGather {
   tags: string[];
 }
 
-export interface IGatherDocument
-  extends Omit<IPostDocument, "anonymous">,
-    IGather {
+export interface IGatherDocument extends IPostDocument, IGather {
   subject: "gathering";
   category: categories;
 }

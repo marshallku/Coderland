@@ -1,5 +1,5 @@
 import { Router } from "express";
-import checkPermission from "../middlewares/check-permission";
+import { checkPermission, loginRequired } from "../middlewares";
 import {
   findAllPosts,
   findPostById,
@@ -7,8 +7,7 @@ import {
   updatePost,
   deletePost,
 } from "../../services/post";
-import asyncHandler from "../../utils/async-handler";
-import loginRequired from "../middlewares/login-required";
+import { asyncHandler } from "../../utils";
 import commentRouter from "./comment";
 
 export default (app: Router) => {

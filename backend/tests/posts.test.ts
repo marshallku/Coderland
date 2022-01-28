@@ -78,7 +78,6 @@ describe("일반 포스트 기능 테스트", () => {
     expect(res.body.isOk).toEqual(true);
     expect(res.body.post.title).toEqual("new title");
     expect(res.body.post.author).toEqual("testuser2");
-    expect(res.body.post.anonymous).toEqual(false);
   });
 
   it("Fail 일반 포스트 조회 존재하지 않는 글", async () => {
@@ -102,7 +101,6 @@ describe("일반 포스트 기능 테스트", () => {
     expect(res.statusCode).toEqual(200);
     expect(res.body.isOk).toEqual(true);
     expect(res.body.posts[0].author).toEqual("testuser2");
-    expect(res.body.posts[0].anonymous).toEqual(false);
     expect(Object.keys(res.body)).toEqual(
       expect.arrayContaining(["isOk", "posts", "pagination"])
     );
@@ -153,7 +151,6 @@ describe("일반 포스트 기능 테스트", () => {
     expect(res2.body.isOk).toEqual(true);
     expect(res2.body.post.title).toEqual("update title");
     expect(res2.body.post.author).not.toEqual("testuser2");
-    expect(res2.body.post.anonymous).toEqual(true);
   });
 
   it("Fail 포스트 수정 로직 권한 없음", async () => {
@@ -238,7 +235,6 @@ describe("일반 포스트 기능 테스트", () => {
     expect(res.body.isOk).toEqual(true);
     expect(res.body.post.title).toEqual("anonymous");
     expect(res.body.post.author).not.toEqual("testuser2");
-    expect(res.body.post.anonymous).toEqual(true);
   });
 
   it("익명 포스트 리스트 조회 테스트", async () => {
@@ -252,7 +248,6 @@ describe("일반 포스트 기능 테스트", () => {
     expect(res.statusCode).toEqual(200);
     expect(res.body.isOk).toEqual(true);
     expect(res.body.posts[0].author).not.toEqual("testuser2");
-    expect(res.body.posts[0].anonymous).toEqual(true);
     expect(typeof res.body.posts[0].commentCount).toEqual("number");
     expect(Object.keys(res.body)).toEqual(
       expect.arrayContaining(["isOk", "posts", "pagination"])
@@ -282,7 +277,6 @@ describe("일반 포스트 기능 테스트", () => {
 
     expect(res2.body.post.title).toEqual("update anony");
     expect(res2.body.post.author).toEqual("testuser2");
-    expect(res2.body.post.anonymous).toEqual(false);
   });
 
   afterAll(async () => {
