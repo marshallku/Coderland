@@ -8,23 +8,21 @@ import Search from "./pages/Search";
 
 export default function App() {
   return (
-    <>
-      <BrowserRouter>
-        <GlobalNavigation />
-        <div className="main-container">
-          <div className="container-wrap">
-            <main className="container">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/gather" element={<Gather />} />
-                <Route path="/posts/:id" element={<Detail />} />
-                <Route path="/add/:subject" element={<Add />} />
-                <Route path="/search/*" element={<Search />} />
-              </Routes>
-            </main>
-          </div>
+    <BrowserRouter>
+      <GlobalNavigation />
+      <div className="main-container">
+        <div className="container-wrap">
+          <main className="container">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/gather" element={<Gather />} />
+              <Route path="/posts/:id" element={<Detail />} />
+              <Route path="/add/:subject" element={<Add />} />
+              <Route path="/search/*" element={<Search />} />
+            </Routes>
+          </main>
         </div>
-      </BrowserRouter>
-    </>
+      </div>
+    </BrowserRouter>
   );
 }

@@ -2,7 +2,31 @@ import React, { useEffect, useRef } from "react";
 import "./Input.css";
 
 export function Input(props: InputProps) {
-  const { id, label, type, required, value, setValue } = props;
+  const {
+    id,
+    label,
+    className,
+    type,
+    required,
+    accept,
+    alt,
+    autoComplete,
+    capture,
+    checked,
+    disabled,
+    form,
+    list,
+    max,
+    maxLength,
+    min,
+    minLength,
+    multiple,
+    name,
+    pattern,
+    readOnly,
+    value,
+    setValue,
+  } = props;
 
   const handleChange = (event: React.FormEvent) => {
     const { target } = event;
@@ -16,28 +40,27 @@ export function Input(props: InputProps) {
     <div className="input">
       <input
         id={id}
-        className={`input__input ${props.className || ""}`}
+        className={`input__input ${className || ""}`}
         type={type || "text"}
         placeholder=" "
-        accept={props.accept}
-        alt={props.alt}
-        autoComplete={props.autoComplete}
-        autoFocus={props.autoFocus}
-        capture={props.capture}
-        checked={props.checked}
-        disabled={props.disabled}
-        form={props.form}
-        list={props.list}
-        max={props.max}
-        maxLength={props.maxLength}
-        min={props.min}
-        minLength={props.minLength}
-        multiple={props.multiple}
-        name={props.name}
-        pattern={props.pattern}
-        readOnly={props.readOnly}
-        required={props.required}
-        aria-label={props.label}
+        accept={accept}
+        alt={alt}
+        autoComplete={autoComplete}
+        capture={capture}
+        checked={checked}
+        disabled={disabled}
+        form={form}
+        list={list}
+        max={max}
+        maxLength={maxLength}
+        min={min}
+        minLength={minLength}
+        multiple={multiple}
+        name={name}
+        pattern={pattern}
+        readOnly={readOnly}
+        required={required}
+        aria-label={label}
         value={value}
         onChange={handleChange}
       />
@@ -50,7 +73,18 @@ export function Input(props: InputProps) {
 }
 
 export function Textarea(props: TextareaProps) {
-  const { id, label, required, value, setValue } = props;
+  const {
+    id,
+    label,
+    required,
+    className,
+    cols,
+    maxLength,
+    minLength,
+    wrap,
+    value,
+    setValue,
+  } = props;
   const textarea = useRef<HTMLTextAreaElement>(null);
 
   const resize = () => {
@@ -69,8 +103,6 @@ export function Textarea(props: TextareaProps) {
 
     if (!(target instanceof HTMLTextAreaElement) || !setValue) return;
 
-    console.log(target.value);
-
     setValue(target.value);
   };
 
@@ -80,15 +112,14 @@ export function Textarea(props: TextareaProps) {
     <div className="input">
       <textarea
         id={id}
-        className={`input__input ${props.className || ""}`}
+        className={`input__input ${className || ""}`}
         placeholder=" "
-        autoFocus={props.autoFocus}
-        cols={props.cols}
-        maxLength={props.maxLength}
-        minLength={props.minLength}
-        required={props.required}
-        wrap={props.wrap}
-        aria-label={props.label}
+        cols={cols}
+        maxLength={maxLength}
+        minLength={minLength}
+        required={required}
+        wrap={wrap}
+        aria-label={label}
         ref={textarea}
         onKeyDown={resize}
         onKeyUp={resize}

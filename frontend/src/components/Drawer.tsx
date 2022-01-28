@@ -22,7 +22,9 @@ function DrawerLink({ title, to, cb }: DrawerItem) {
       className={`drawer__link${match ? " drawer__link--highlight" : ""}`}
       style={cssProperty}
       onClick={() => {
-        match || setCssProperty(randomCssProperty);
+        if (!match) {
+          setCssProperty(randomCssProperty);
+        }
         cb?.();
       }}
     >
@@ -53,12 +55,14 @@ export default function Drawer({
           <DrawerLink cb={hideDrawer} title="잡담" to="/chat" />
         </nav>
       </section>
-      <div
+      <button
         className={`drawer-closer${
           drawerRevealed ? " drawer-closer--revealed" : ""
         }`}
         onClick={hideDrawer}
-      ></div>
+        type="button"
+        aria-label="드로어 닫기"
+      />
     </>
   );
 }

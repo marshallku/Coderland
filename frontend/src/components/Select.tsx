@@ -8,16 +8,29 @@ export default function Select({ id, list }: SelectProps) {
   );
 
   return (
-    <div
-      className={`select${open ? " select--open" : ""}`}
-      onClick={() => setOpen(!open)}
-    >
+    <div className={`select${open ? " select--open" : ""}`}>
       <input type="hidden" id={id} value={selected.key} />
-      <div className="select__title">{selected.name}</div>
+      <button
+        type="button"
+        className="select__title"
+        onClick={() => setOpen(!open)}
+      >
+        {selected.name}
+      </button>
       <ul className="select__list">
         {list.map(({ key, name }) => (
-          <li key={key} value={key} onClick={() => setSelected({ key, name })}>
-            {name}
+          <li>
+            <button
+              type="button"
+              key={key}
+              value={key}
+              onClick={() => {
+                setOpen(false);
+                setSelected({ key, name });
+              }}
+            >
+              {name}
+            </button>
           </li>
         ))}
       </ul>
