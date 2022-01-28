@@ -53,8 +53,8 @@ export default function Detail() {
             </div>
           </div>
           <div className="header-container-right">
-            <div
-              role="button"
+            <button
+              type="button"
               aria-label="북마크 버튼"
               className={
                 bookmarkStatus
@@ -62,9 +62,9 @@ export default function Detail() {
                   : "icon-bookmark_outline"
               }
               onClick={handleBookmarkClick}
-            ></div>
-            <div
-              role="button"
+            />
+            <button
+              type="button"
               aria-label="좋아요 버튼"
               className={`icon-thumb_up${
                 likesStatus ? " header-container__likes--true" : ""
@@ -72,7 +72,7 @@ export default function Detail() {
               onClick={handleLikesClick}
             >
               {selected?.post.likes}
-            </div>
+            </button>
             <div className="header-container__views icon-visibility">
               {selected?.post.view}
             </div>
@@ -82,8 +82,8 @@ export default function Detail() {
       <MarkdownViewer
         value={selected?.post.contents || ""}
         className="content"
-      ></MarkdownViewer>
-      <Comments></Comments>
+      />
+      <Comments />
     </div>
   );
 }
