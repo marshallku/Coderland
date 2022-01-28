@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import GlobalNavigation from "./components/GlobalNavigation";
 import Home from "./pages/Home";
-import Recruit from "./pages/Recruit";
+import Gather from "./pages/Gather";
 import Detail from "./pages/Detail";
 import Add from "./pages/Add";
 
@@ -15,7 +15,7 @@ export default function App() {
             <main className="container">
               <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/recruit" element={<Recruit />} />
+                <Route path="/gather" element={<Gather />} />
                 <Route path="/posts/:id" element={<Detail />} />
                 <Route path="/add/:subject" element={<Add />} />
               </Routes>
