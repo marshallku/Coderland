@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  findAllGathers,
   createGather,
   findGatherById,
   updateGather,
@@ -11,6 +12,16 @@ import loginRequired from "../middlewares/login-required";
 
 export default (app: Router) => {
   const route = Router();
+
+  route.get(
+    "/",
+    asyncHandler(async (req, res) => {
+      const category = String(req.query.category);
+      const page = Number(req.query.page) || 1;
+      const [gathers, pagination] = await findAllGathers(category, page);
+      res.status(200).json({ isOk: true, gathers, pagination });
+    })
+  );
 
   route.get(
     "/:gatherId",

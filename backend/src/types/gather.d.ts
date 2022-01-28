@@ -1,6 +1,7 @@
 import { Model, PopulatedDoc } from "mongoose";
 import { IUserDocument } from "user";
 import { IPostDocument } from "post";
+import { IPagination } from "pagination";
 
 type categories = "study" | "code" | "team";
 
@@ -20,6 +21,11 @@ export interface IGatherDocument
 }
 
 export interface IGatherModel extends Model<IGatherDocument> {
+  findAllGathers: (
+    category: string,
+    page: number
+  ) => Promise<[IGatherDocument[], IPagination]>;
+
   createGather: (
     user: IUserDocument,
     gatherDto: Partial<IGatherDocument>

@@ -6,7 +6,6 @@ export const UserSchema = new mongoose.Schema<IUserDocument>(
     googleId: {
       type: String,
       required: true,
-      unique: true,
     },
     nickname: {
       type: String,
