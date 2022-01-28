@@ -1,27 +1,27 @@
 import "./PostList.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
-import { dummyPosts } from "../data/dummy";
+import { dummyPosts } from "../api/dummy";
 import Posts from "./Posts";
 import Pagination from "./Pagination";
 
 export default function PostList() {
-  const [currentPosts, setCurrentPosts] = useState<IPostList[]>();
-  const [totalPosts, setTotalPosts] = useState<IPostList[]>();
+  const [currentPosts, setCurrentPosts] =
+    useState<Omit<IPost, "contents" | "subject">[]>();
+  const [totalPosts, setTotalPosts] =
+    useState<Omit<IPost, "contents" | "subject">[]>();
   const [isLoading, setLoading] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(10);
 
-  function paginate(pageNumber: number) {
+  const paginate = useCallback((pageNumber: number) => {
     setCurrentPage(pageNumber);
-  }
+  }, []);
 
   useEffect(() => {
     async function getTotalAndCurrentPosts() {
-      const serverTotalPosts = await dummyPosts.then((result) => {
-        return result;
-      });
+      const serverTotalPosts = await dummyPosts.then((result) => result);
       setTotalPosts(serverTotalPosts);
 
       const indexOfLastPost = currentPage * postsPerPage;
