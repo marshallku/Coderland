@@ -19,6 +19,10 @@
   color: var(--gray-3);
 }
 
+.comment__author-wrap {
+  margin-bottom: 4px;
+}
+
 .comment__author-wrap button {
   margin-left: 12px;
   cursor: pointer;
@@ -39,4 +43,9 @@
 
 .comment__info button i {
   margin-right: 4px;
+}
+
+.comment__edit--on,
+.comment__reply--on {
+  color: var(--primary);
 }
