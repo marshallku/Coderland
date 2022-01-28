@@ -12,6 +12,11 @@
   line-height: 2;
   border: var(--border-thickness) solid var(--gray-5);
   border-radius: var(--border-radius);
+}
+
+.select button {
+  display: block;
+  width: 100%;
   cursor: pointer;
 }
 
@@ -56,7 +61,7 @@
   pointer-events: all;
 }
 
-.select__list > li:not(:last-child) {
+.select__list > li:not(:last-child) > button {
   padding-bottom: 10px;
   margin-bottom: 10px;
   border-bottom: var(--border-thickness) solid var(--gray-5);

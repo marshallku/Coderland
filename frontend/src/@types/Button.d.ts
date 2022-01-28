@@ -2,7 +2,7 @@ interface ButtonProps {
   value: string;
   type?: React.ButtonHTMLAttributes<HTMLButtonElement>["type"];
   disabled?: boolean;
-  style?:
+  buttonStyle?:
     | "primary-ghost"
     | "primary-second"
     | "primary"

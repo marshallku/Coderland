@@ -3,7 +3,7 @@ import "./Button.css";
 export default function Button({
   value,
   type = "button",
-  style = "primary",
+  buttonStyle = "primary",
   disabled,
   size = "medium",
 }: ButtonProps) {
@@ -11,7 +11,7 @@ export default function Button({
     <button
       // eslint-disable-next-line react/button-has-type
       type={type}
-      className={`button button--${style} button--${size}`}
+      className={`button button--${buttonStyle} button--${size}`}
       disabled={disabled}
     >
       {value}
