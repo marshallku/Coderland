@@ -3,6 +3,7 @@ import {
   createGather,
   findGatherById,
   updateGather,
+  deleteGather,
 } from "../../services/gather";
 import asyncHandler from "../../utils/async-handler";
 import checkGatherPermission from "../middlewares/check-gather-permission";
@@ -53,6 +54,17 @@ export default (app: Router) => {
         area,
         tags,
       });
+      res.status(200).json({ isOk: true, gatherId });
+    })
+  );
+
+  route.delete(
+    "/:gatherId",
+    loginRequired,
+    checkGatherPermission,
+    asyncHandler(async (req, res) => {
+      const { gatherId } = req.params;
+      await deleteGather(gatherId);
       res.status(200).json({ isOk: true, gatherId });
     })
   );

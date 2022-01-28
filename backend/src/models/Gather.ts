@@ -81,6 +81,10 @@ GatherSchema.statics.updateGather = async (gatherId, gatherDto) => {
   await Gather.findByIdAndUpdate(gatherId, gatherDto);
 };
 
+GatherSchema.statics.deleteGather = async (gatherId) => {
+  await Gather.findByIdAndDelete(gatherId);
+};
+
 const Gather = mongoose.model<IGatherDocument, IGatherModel>(
   "Gather",
   GatherSchema
