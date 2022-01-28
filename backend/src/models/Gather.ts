@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { IGatherDocument, IGatherModel } from "gather";
 import { UserSchema } from "./User";
+import configs from "../config";
 
 export const GatherSchema = new mongoose.Schema<IGatherDocument>(
   {
@@ -54,15 +55,37 @@ export const GatherSchema = new mongoose.Schema<IGatherDocument>(
     },
     memberCount: {
       type: Number,
-      default: 0,
+      default: 1,
     },
-    members: [UserSchema],
+    members: {
+      type: [UserSchema],
+    },
   },
   {
     timestamps: true,
     versionKey: false,
   }
 );
+
+function isSelected(category: string) {
+  return ["study", "code", "team"].includes(category);
+}
+
+GatherSchema.statics.findAllGathers = async (category, page) => {
+  const condition = isSelected(category) ? { category } : {};
+
+  const total = await Gather.countDocuments(condition);
+  const { perPage } = configs;
+  const totalPage = Math.ceil(total / perPage);
+
+  const gathers = await Gather.find(condition)
+    .populate("author", "nickname")
+    .sort("-createdAt")
+    .skip((page - 1) * perPage)
+    .limit(perPage);
+
+  return [gathers, { page, nextPage: page < totalPage }];
+};
 
 GatherSchema.statics.findGatherById = async (gatherId) => {
   const gather = await Gather.findById(gatherId).populate("author", "nickname");
@@ -73,7 +96,9 @@ GatherSchema.statics.createGather = async (user, gatherDto) => {
   const gather = await Gather.create({
     ...gatherDto,
     author: user,
+    members: [user],
   });
+
   return gather;
 };
 

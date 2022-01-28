@@ -2,6 +2,18 @@ import { IUserDocument } from "user";
 import { IGatherDocument } from "gather";
 import { Gather } from "../models/Gather";
 
+export async function findAllGathers(category: string, page: number) {
+  const [gathers, pagination] = await Gather.findAllGathers(category, page);
+  const parsedGathers = gathers.map((gather) => {
+    const { author, ...rest } = gather.toObject();
+    return {
+      ...rest,
+      author: author.nickname,
+    };
+  });
+  return [parsedGathers, pagination];
+}
+
 export async function createGather(
   user: IUserDocument,
   gatherDto: Partial<IGatherDocument>
