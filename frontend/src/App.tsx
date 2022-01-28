@@ -5,6 +5,7 @@ import Gather from "./pages/Gather";
 import Detail from "./pages/Detail";
 import Add from "./pages/Add";
 import Search from "./pages/Search";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
               <Route path="/posts/:id" element={<Detail />} />
               <Route path="/add/:subject" element={<Add />} />
               <Route path="/search/*" element={<Search />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
         </div>
