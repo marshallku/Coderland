@@ -1,11 +1,10 @@
 @font-face {
   font-family: "coderland";
-  src: url("/static/icon/coderland.eot?dvdkgf");
-  src: url("/static/icon/coderland.eot?dvdkgf#iefix")
-      format("embedded-opentype"),
-    url("/static/icon/coderland.ttf?dvdkgf") format("truetype"),
-    url("/static/icon/coderland.woff?dvdkgf") format("woff"),
-    url("/static/icon/coderland.svg?dvdkgf#coderland") format("svg");
+  src: url("/static/icon/coderland.eot?3s523");
+  src: url("/static/icon/coderland.eot?3s523#iefix") format("embedded-opentype"),
+    url("/static/icon/coderland.ttf?3s523") format("truetype"),
+    url("/static/icon/coderland.woff?3s523") format("woff"),
+    url("/static/icon/coderland.svg?3s523#coderland") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -742,6 +741,12 @@
 .icon-refresh:before {
   content: "\e9b0";
 }
+.icon-first_page:before {
+  content: "\ea01";
+}
+.icon-last_page:before {
+  content: "\ea02";
+}
 .icon-arrow_left:before {
   content: "\e9b1";
 }
@@ -753,6 +758,9 @@
 }
 .icon-arrow_forward_ios:before {
   content: "\e9b4";
+}
+.icon-do_not_disturb_alt:before {
+  content: "\ea03";
 }
 .icon-folder_special:before {
   content: "\e9b5";
@@ -795,6 +803,18 @@
 }
 .icon-radio_button_on:before {
   content: "\ea00";
+}
+.icon-star:before {
+  content: "\ea04";
+}
+.icon-star_half:before {
+  content: "\ea05";
+}
+.icon-star_outline:before {
+  content: "\ea06";
+}
+.icon-autorenew:before {
+  content: "\ea07";
 }
 .icon-bookmark:before {
   content: "\e9c2";
