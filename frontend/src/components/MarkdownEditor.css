@@ -27,8 +27,3 @@
   border-radius: var(--border-radius);
   line-height: 2;
 }
-
-.markdown-editor__textarea {
-  height: 30rem;
-  resize: none;
-}

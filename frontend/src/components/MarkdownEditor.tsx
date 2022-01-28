@@ -1,10 +1,12 @@
 import { useState } from "react";
 import MarkdownViewer from "./MarkdownViewer";
 import "./MarkdownEditor.css";
+import { Textarea } from "./Input";
 
 export default function MarkdownEditor(props: MarkdownEditorProps) {
+  const { id, label, name } = props;
   const [mode, setMode] = useState<EditorMode>("edit");
-  const { value, setValue } = props;
+  const [value, setValue] = useState("");
   const highlight = (target: EditorMode) =>
     target === mode ? "highlight" : "";
 
@@ -16,6 +18,7 @@ export default function MarkdownEditor(props: MarkdownEditorProps) {
             <button
               className={`markdown-editor__button ${highlight("edit")}`}
               onClick={() => setMode("edit")}
+              type="button"
             >
               편집
             </button>
@@ -24,6 +27,7 @@ export default function MarkdownEditor(props: MarkdownEditorProps) {
             <button
               className={`markdown-editor__button ${highlight("view")}`}
               onClick={() => setMode("view")}
+              type="button"
             >
               보기
             </button>
@@ -32,11 +36,13 @@ export default function MarkdownEditor(props: MarkdownEditorProps) {
       </nav>
       <div className="markdown-editor__container">
         {mode === "edit" ? (
-          <textarea
+          <Textarea
+            id={id || "markdown-content"}
             className="markdown-editor__textarea"
-            placeholder="내용을 입력해주세요. (마크다운 지원)"
+            name={name}
+            label={label || "내용을 입력해주세요. (마크다운 지원)"}
             value={value}
-            onChange={(event) => setValue(event.target.value)}
+            setValue={setValue}
           />
         ) : (
           <MarkdownViewer className="markdown-editor__preview" value={value} />
