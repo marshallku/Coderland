@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import favicon from "../../static/image/favicon.svg";
+import Dropdown from "./Dropdown";
 import "./GNB.css";
 
 export default function GlobalNavigationBar({
@@ -23,11 +24,32 @@ export default function GlobalNavigationBar({
         <Link to="/search" className="gnb__button">
           <i role="img" aria-label="검색" className="icon-search" />
         </Link>
-        {/* TODO: Dropdown 메뉴 구현 */}
-        <button type="button" className="gnb__button">
-          <i role="img" aria-label="알림" className="icon-notifications" />
-        </button>
-        {/* TODO: 유저 프로필 이미지 추가 */}
+        <Dropdown
+          ButtonChildren={
+            <i role="img" aria-label="알림" className="icon-notifications" />
+          }
+          ContentChildren={
+            <>
+              <h4>알림 목록</h4>
+              {/* TODO: 알림 목록 구현 */}
+              <ul>
+                <li>알림</li>
+              </ul>
+            </>
+          }
+        />
+        <Dropdown
+          ButtonChildren={<img src={favicon} alt="유저 프로필" />}
+          ContentChildren={
+            <>
+              {/* TODO: 유저 정보 추가 */}
+              <img src={favicon} alt="유저 프로필" />
+              <div>
+                <div>로그아웃</div>
+              </div>
+            </>
+          }
+        />
         <button
           type="button"
           className={`hbg gnb__button${
