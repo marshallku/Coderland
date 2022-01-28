@@ -38,7 +38,7 @@ const add = (a: number, b: number) => a + b;
 
 `;
 
-const tmpUser = {
+const tmpUser: IUser = {
   googleId: "1230419308012123",
   nickname: "트럼프 병정",
   name: "홍길동",
@@ -48,43 +48,61 @@ const tmpUser = {
   gitlab: "https://kdt-gitlab.elice.io/marshallku",
 };
 
-const tmpComments = [
+const tmpUser2: IUser = {
+  googleId: "1230419308012123",
+  nickname: "3월의 토끼",
+  name: "김태연",
+  profile: "https://i.imgur.com/0kXBBC3.png",
+  grade: 0,
+  track: "SW 엔지니어 트랙 1기",
+  gitlab: "https://kdt-gitlab.elice.io/marshallku",
+};
+
+const tmpComments: Array<IComment> = [
   {
     _id: "6af3af681248ec28ad187628",
     contents:
       "엘리스 SW 엔지니어 트랙은 디지털 융합 신기술 훈련, 기업 맞춤형 국기훈련입니다.",
     author: "하트 여왕",
+    postId: "",
+    likes: 1,
     createdAt: "2022-01-24T10:23:38.981Z",
     updatedAt: "2022-01-25T10:23:38.981Z",
-    likes: 1,
   },
   {
     _id: "60f6af69124eef28ad1676e3",
     contents:
-      "엘리스 SW 엔지니어 트랙은 디지털 융합 신기술 훈련, 기업 맞춤형 국기훈련입니다.",
+      "엘리스 AI 트랙은 디지털 융합 신기술 훈련, 기업 맞춤형 국기훈련입니다.",
     author: "3월의 토끼",
+    postId: "",
+    likes: 3,
     createdAt: "2022-01-24T10:23:38.981Z",
     updatedAt: "2022-01-25T10:23:38.981Z",
-    likes: 3,
   },
   {
     _id: "80f6ac6812485f2ead1876e7",
     contents:
-      "엘리스 SW 엔지니어 트랙은 디지털 융합 신기술 훈련, 기업 맞춤형 국기훈련입니다.",
+      "엘리스 트랙은 디지털 융합 신기술 훈련, 기업 맞춤형 국기훈련입니다.",
     author: "하트 여왕",
+    postId: "",
+    likes: 10,
     createdAt: "2022-01-24T10:23:38.981Z",
     updatedAt: "2022-01-25T10:23:38.981Z",
-    likes: 10,
   },
 ];
 
-export const dummyPosts = dummyAsync([
+const tmpPagination: IPagination = {
+  currentPage: 3,
+  lastPage: 8,
+};
+
+const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f6af6812485f28ad1876e7",
     title: "First Post",
     view: 30,
     likes: 20,
-    comments: 5,
+    commentCount: 5,
     author: "도도새",
     createdAt: "2022-01-24T10:23:38.981Z",
     updatedAt: "2022-01-25T10:23:38.981Z",
@@ -94,49 +112,14 @@ export const dummyPosts = dummyAsync([
     title: "Second Post",
     view: 40,
     likes: 30,
-    comments: 5,
+    commentCount: 5,
     author: "도도새",
     createdAt: "2022-01-26T10:23:38.981Z",
     updatedAt: "2022-01-26T10:23:38.981Z",
   },
-]);
+];
 
-export const dummyAnonymousPosts = dummyAsync([
-  {
-    _id: "60ff4d48bc8a5cbbed7b5338",
-    title: "First Anonymous Post",
-    view: 30,
-    likes: 20,
-    comments: 5,
-    author: "익명의 도도새",
-    createdAt: "2022-01-24T10:23:38.981Z",
-    updatedAt: "2022-01-25T10:23:38.981Z",
-  },
-  {
-    _id: "60ff4faebc8a5cbbed7b5348",
-    title: "Second Anonymous Post",
-    view: 40,
-    likes: 30,
-    comments: 5,
-    author: "익명의 도도새",
-    createdAt: "2022-01-26T10:23:38.981Z",
-    updatedAt: "2022-01-26T10:23:38.981Z",
-  },
-]);
-
-export const dummyAnonymousPost = dummyAsync({
-  _id: "60f6af6812485f28ad1876e7",
-  title: "First Anonymous Post",
-  view: 30,
-  likes: 20,
-  author: "익명의 도도새",
-  createdAt: "2022-01-24T10:23:38.981Z",
-  updatedAt: "2022-01-25T10:23:38.981Z",
-  contents: dummyMarkDown,
-  comments: tmpComments,
-});
-
-export const dummyGathers = dummyAsync([
+const tmpGatherList: Array<IGatherPost> = [
   {
     _id: "611b6748bfc2290fd11ec5a5",
     title: "모집 완료 안 된 글",
@@ -149,21 +132,8 @@ export const dummyGathers = dummyAsync([
     isCompleted: false,
     area: "서울시 종로구",
     memberCount: 3,
-    memberLimitCount: 5,
-  },
-  {
-    _id: "611b6748bfc9c90fd11ec5a5",
-    title: "모집 완료는 안 됐으나 사람은 꽉 찬 글",
-    contents: "하트 여왕과 함께하는 파이썬 스터디",
-    author: "하트 여왕",
-    likes: 30,
-    views: 40,
-    createdAt: "2022-01-24T10:23:38.981Z",
-    updatedAt: "2022-01-25T10:23:38.981Z",
-    isCompleted: false,
-    area: "서울시 마포구",
-    memberCount: 5,
-    memberLimitCount: 5,
+    tags: ["html5", "css3", "javascript"],
+    members: [tmpUser],
   },
   {
     _id: "611e6748bff22900d11ec5a5",
@@ -177,45 +147,68 @@ export const dummyGathers = dummyAsync([
     isCompleted: true,
     area: "서울시 강남구",
     memberCount: 3,
-    memberLimitCount: 5,
+    tags: ["typescript"],
+    members: [tmpUser, tmpUser2],
   },
-]);
+];
 
-export const dummyGather = dummyAsync({
-  _id: "611b6748bfc2290fd11ec5a5",
-  title: "모집 완료 안 된 글",
-  contents: "도도새와 함께하는 사이드 프로젝트",
-  author: "도도새",
-  comments: tmpComments,
-  views: 30,
-  likes: 40,
-  createdAt: "2022-01-24T10:23:38.981Z",
-  updatedAt: "2022-01-25T10:23:38.981Z",
-  isCompleted: false,
-  area: "서울시 종로구",
-  memberCount: 3,
-  members: [
-    {
-      googleId: "1230419308012123",
-      nickname: "트럼프 병정",
-      name: "홍길동",
-      profile: "https://i.imgur.com/0kXBBC3.png",
-      grade: 0,
-      track: "SW 엔지니어 트랙 1기",
-      gitlab: "https://kdt-gitlab.elice.io/marshallku",
-    },
-    {
-      googleId: "1230419308012123",
-      nickname: "3월의 토끼",
-      name: "김태연",
-      profile: "https://i.imgur.com/0kXBBC3.png",
-      grade: 0,
-      track: "SW 엔지니어 트랙 1기",
-      gitlab: "https://kdt-gitlab.elice.io/marshallku",
-    },
-  ],
+export const dummyPosts = dummyAsync(tmpPostList);
+
+export const dummyPostsResponse: Promise<IPostListResponse> = dummyAsync({
+  isOk: true,
+  posts: tmpPostList,
+  pagination: tmpPagination,
+});
+
+export const dummyPostResponse: Promise<IPostResponse> = dummyAsync({
+  isOk: true,
+  post: {
+    _id: "60f6af6812485f28ad1876e7",
+    title: "First Post",
+    contents: dummyMarkDown,
+    subject: "chat",
+    view: 30,
+    likes: 20,
+    commentCount: 5,
+    author: "도도새",
+    createdAt: "2022-01-24T10:23:38.981Z",
+    updatedAt: "2022-01-25T10:23:38.981Z",
+  },
+});
+
+export const dummyGathers = dummyAsync(tmpGatherList);
+
+export const dummyGathersResponse: Promise<IGatherPostListResponse> =
+  dummyAsync({
+    isOk: true,
+    posts: tmpGatherList,
+    pagination: tmpPagination,
+  });
+
+export const dummyGatherResponse: Promise<IGatherPostResponse> = dummyAsync({
+  isOk: true,
+  gather: {
+    _id: "611b6748bfc2290fd11ec5a5",
+    title: "모집 완료 안 된 글",
+    contents: "도도새와 함께하는 사이드 프로젝트",
+    author: "도도새",
+    views: 30,
+    likes: 40,
+    createdAt: "2022-01-24T10:23:38.981Z",
+    updatedAt: "2022-01-25T10:23:38.981Z",
+    isCompleted: false,
+    area: "서울시 종로구",
+    memberCount: 3,
+    tags: ["html5", "css3", "javascript"],
+    members: [tmpUser],
+  },
 });
 
 export const dummyComments = dummyAsync(tmpComments);
+
+export const dummyCommentsResponse: Promise<ICommentListResponse> = dummyAsync({
+  isOk: true,
+  comments: tmpComments,
+});
 
 export const dummyUser = dummyAsync(tmpUser);
