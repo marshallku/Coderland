@@ -6,11 +6,11 @@ import server from "../src/app";
 import configs from "../src/config";
 import { createToken } from "../src/passport/strategies/jwt";
 
-describe("댓글 통합 테스트", () => {
+describe("모집 글 댓글 테스트", () => {
   const connection = db.createConnection(`${configs.mongoUri}/coderland`);
   let token = "Bearer ";
   let notAccessToken = "Bearer ";
-  let postId: string;
+  let gatherId: string;
   let commentId: string;
 
   beforeAll(async () => {
@@ -45,34 +45,40 @@ describe("댓글 통합 테스트", () => {
     notAccessToken += createToken(notOwner);
   });
 
-  it("일반 포스트 생성", async () => {
-    // given
-    const title = "to test comment title";
-    const contents = "new contents";
-    const subject = "article";
-    const category = "none";
+  it("모임 게시글 생성 테스트", async () => {
+    const title = "모집 게시글 타이틀";
+    const contents = "모집 게시글 내용";
+    const subject = "gathering";
+    const category = "study";
+    const area = "서울";
+    const tags = ["자바스크립트", "타입스크립트", "리액트"];
 
-    // when
     const res = await request(server)
-      .post("/api/posts")
+      .post("/api/gathers")
       .set("authorization", token)
-      .send({ title, contents, subject, category });
+      .send({
+        title,
+        contents,
+        subject,
+        category,
+        area,
+        tags,
+      });
 
-    // then
     expect(res.statusCode).toEqual(201);
     expect(res.body.isOk).toEqual(true);
     expect(Object.keys(res.body)).toEqual(
-      expect.arrayContaining(["isOk", "postId"])
+      expect.arrayContaining(["isOk", "gatherId"])
     );
 
-    postId = res.body.postId;
+    gatherId = res.body.gatherId;
   });
 
-  it("일반 포스트 코멘트 생성 테스트", async () => {
+  it("모집 글 코멘트 생성 테스트", async () => {
     const contents = "comment contents";
 
     const res = await request(server)
-      .post(`/api/posts/${postId}/comments`)
+      .post(`/api/gathers/${gatherId}/comments`)
       .set("authorization", token)
       .send({ contents });
 
@@ -85,17 +91,17 @@ describe("댓글 통합 테스트", () => {
     commentId = res.body.commentId;
   });
 
-  it("포스트 댓글 갯수 확인", async () => {
-    const res = await request(server).get(`/api/posts/${postId}`).send();
+  it("모집 글 댓글 갯수 확인", async () => {
+    const res = await request(server).get(`/api/gathers/${gatherId}`).send();
 
-    expect(res.body.post.commentCount).toEqual(1);
+    expect(res.body.gather.commentCount).toEqual(1);
   });
 
   it("Fail 없는 포스트 코멘트 생성 테스트", async () => {
     const contents = "comment contents";
 
     const res = await request(server)
-      .post("/api/posts/sadlkjflkasd/comments")
+      .post("/api/gathers/slkdfjlksdj/comments")
       .set("authorization", token)
       .send({ contents });
 
@@ -104,9 +110,9 @@ describe("댓글 통합 테스트", () => {
     expect(res.body.msg).toEqual("존재하지 않는 글입니다.");
   });
 
-  it("일반 포스트 코멘트 리스트 테스트", async () => {
+  it("모집 글 코멘트 리스트 테스트", async () => {
     const res = await request(server)
-      .get(`/api/posts/${postId}/comments`)
+      .get(`/api/gathers/${gatherId}/comments`)
       .send();
 
     expect(res.statusCode).toEqual(200);
@@ -120,7 +126,7 @@ describe("댓글 통합 테스트", () => {
     const contents = "update comment";
 
     const res = await request(server)
-      .put(`/api/posts/${postId}/comments`)
+      .put(`/api/gathers/${gatherId}/comments`)
       .set("authorization", token)
       .send({ contents, commentId });
 
@@ -128,7 +134,7 @@ describe("댓글 통합 테스트", () => {
     expect(res.body.isOk).toEqual(true);
 
     const res1 = await request(server)
-      .get(`/api/posts/${postId}/comments`)
+      .get(`/api/gathers/${gatherId}/comments`)
       .send();
 
     expect(res1.body.comments[0].contents).toEqual("update comment");
@@ -138,7 +144,7 @@ describe("댓글 통합 테스트", () => {
     const contents = "update comment";
 
     const res = await request(server)
-      .put(`/api/posts/${postId}/comments`)
+      .put(`/api/gathers/${gatherId}/comments`)
       .send({ contents, commentId });
 
     expect(res.statusCode).toEqual(403);
@@ -150,7 +156,7 @@ describe("댓글 통합 테스트", () => {
     const contents = "update comment";
 
     const res = await request(server)
-      .put(`/api/posts/${postId}/comments`)
+      .put(`/api/gathers/${gatherId}/comments`)
       .set("authorization", notAccessToken)
       .send({ contents, commentId });
 
@@ -159,9 +165,9 @@ describe("댓글 통합 테스트", () => {
     expect(res.body.msg).toEqual("권한이 없어요...");
   });
 
-  it("Fail 일반 포스트 댓글 삭제 비로그인", async () => {
+  it("Fail 모집 글 댓글 삭제 비로그인", async () => {
     const res = await request(server)
-      .delete(`/api/posts/${postId}/comments`)
+      .delete(`/api/gathers/${gatherId}/comments`)
       .send({ commentId });
 
     expect(res.statusCode).toEqual(403);
@@ -169,9 +175,9 @@ describe("댓글 통합 테스트", () => {
     expect(res.body.msg).toEqual("로그인이 필요합니다!");
   });
 
-  it("Fail 일반 포스트 댓글 삭제 권한 문제", async () => {
+  it("Fail 모집 글 댓글 삭제 권한 문제", async () => {
     const res = await request(server)
-      .delete(`/api/posts/${postId}/comments`)
+      .delete(`/api/gathers/${gatherId}/comments`)
       .set("authorization", notAccessToken)
       .send({ commentId });
 
@@ -180,9 +186,9 @@ describe("댓글 통합 테스트", () => {
     expect(res.body.msg).toEqual("권한이 없어요...");
   });
 
-  it("Fail 일반 포스트 댓글 삭제 없는 댓글", async () => {
+  it("Fail 모집 글 댓글 삭제 없는 댓글", async () => {
     const res = await request(server)
-      .delete(`/api/posts/${postId}/comments`)
+      .delete(`/api/gathers/${gatherId}/comments`)
       .set("authorization", token)
       .send({ commentId: "alskdjfklsjd" });
 
@@ -191,9 +197,9 @@ describe("댓글 통합 테스트", () => {
     expect(res.body.msg).toEqual("존재하지 않는 댓글입니다.");
   });
 
-  it("일반 포스트 댓글 삭제", async () => {
+  it("모집 글 댓글 삭제", async () => {
     const res = await request(server)
-      .delete(`/api/posts/${postId}/comments`)
+      .delete(`/api/gathers/${gatherId}/comments`)
       .set("authorization", token)
       .send({ commentId });
 
@@ -204,62 +210,15 @@ describe("댓글 통합 테스트", () => {
     );
   });
 
-  it("포스트 댓글 갯수 확인", async () => {
-    const res = await request(server).get(`/api/posts/${postId}`).send();
+  it("모집 글 댓글 갯수 확인", async () => {
+    const res = await request(server).get(`/api/gathers/${gatherId}`).send();
 
-    expect(res.body.post.commentCount).toEqual(0);
-  });
-
-  let anonymousPostId: string;
-  it("익명 포스트 생성", async () => {
-    // given
-    const title = "to test comment";
-    const contents = "new contents";
-    const subject = "chat";
-    const category = "none";
-
-    // when
-    const res = await request(server)
-      .post("/api/posts")
-      .set("authorization", token)
-      .send({ title, contents, subject, category });
-
-    // then
-    expect(res.statusCode).toEqual(201);
-    expect(res.body.isOk).toEqual(true);
-    expect(Object.keys(res.body)).toEqual(
-      expect.arrayContaining(["isOk", "postId"])
-    );
-
-    anonymousPostId = res.body.postId;
-  });
-
-  it("익명 포스트 댓글 추가", async () => {
-    const contents = "anony comment";
-
-    const res = await request(server)
-      .post(`/api/posts/${anonymousPostId}/comments`)
-      .set("authorization", token)
-      .send({ contents });
-
-    expect(res.statusCode).toEqual(201);
-    expect(res.body.isOk).toEqual(true);
-  });
-
-  it("익명 포스트 댓글 리스트 조회", async () => {
-    const res = await request(server)
-      .get(`/api/posts/${anonymousPostId}/comments`)
-      .send();
-
-    expect(res.statusCode).toEqual(200);
-    expect(res.body.isOk).toEqual(true);
-    expect(res.body.comments[0].author).not.toEqual("testuser2");
-    expect(res.body.comments[0].author).toEqual("anonymity");
+    expect(res.body.gather.commentCount).toEqual(0);
   });
 
   afterAll(async () => {
     await connection.collection("users").deleteMany({});
-    await connection.collection("posts").deleteMany({});
+    await connection.collection("gathers").deleteMany({});
     await connection.collection("comments").deleteMany({});
     await db.disconnect();
   });

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { Comment } from "../../models/Comment";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-  const { commentId } = req.params;
+  const { commentId } = req.body;
   const { user } = req;
   try {
     const comment = await Comment.findCommentById(commentId);
