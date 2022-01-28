@@ -21,6 +21,10 @@
   justify-content: space-between;
 }
 
+.header-container__subject {
+  color: var(--forest-base);
+}
+
 .header-container__author {
   color: var(--purple-base);
   margin-right: 2rem;
@@ -28,6 +32,10 @@
 
 .header-container__created {
   color: var(--gray-3);
+}
+
+.header-container__bookmark--true {
+  color: var(--red-base);
 }
 
 .header-container__likes--true {
