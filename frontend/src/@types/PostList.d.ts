@@ -1,13 +1,8 @@
-interface IPostList {
-  _id: string;
-  title: string;
-  view: number;
-  likes: number;
-  comments: number;
-  author: string;
+interface IPostsProps {
+  postList?: Array<Omit<IPost, "contents" | "subject">>;
+  isLoading: Boolean;
 }
 
-interface IPostsProps {
-  postList?: Array<IPostList>;
-  isLoading: Boolean;
+interface IPostItemProps {
+  postList?: Array<Omit<IPost, "contents" | "subject">>;
 }

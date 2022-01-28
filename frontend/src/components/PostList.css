@@ -30,6 +30,21 @@
 }
 
 .post__author {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--forest-base);
+}
+
+.post__view,
+.post__comments,
+.post__likes {
+  display: flex;
+  flex-wrap: wrap;
+  color: var(--gray-2);
+  font-size: 0.875rem;
+}
+
+.comments__icon,
+.likes__icon,
+.view__icon {
+  margin-right: 5px;
 }

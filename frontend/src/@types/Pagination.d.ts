@@ -1,5 +1,5 @@
 interface IPaginationProps {
   postsPerPage: number;
-  totalPosts: number | undefined;
+  totalPosts?: number;
   paginate: (pageNumber: number) => void;
 }
