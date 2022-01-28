@@ -1,6 +1,7 @@
 interface MarkdownEditorProps {
-  value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  id?: string;
+  name?: string;
+  label?: string;
 }
 
 declare type EditorMode = "edit" | "view";

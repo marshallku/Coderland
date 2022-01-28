@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import Button from "../components/Button";
 import { Input, Textarea } from "../components/Input";
+import MarkdownEditor from "../components/MarkdownEditor";
 import "./Add.css";
 
 export default function Add() {
@@ -13,7 +14,11 @@ export default function Add() {
           <Input id="title" name="title" label="제목을 작성해주세요" />
         </div>
         <div className="editor__item">
-          <Textarea id="contents" name="contents" label="내용을 작성해주세요" />
+          <MarkdownEditor
+            id="contents"
+            name="contents"
+            label="내용을 작성해주세요"
+          />
         </div>
         <div className="editor__item">
           <Button value="임시저장" style="multipurpose" />

@@ -1,8 +1,16 @@
-import { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import "./Input.css";
 
 export function Input(props: InputProps) {
-  const { id, label, type, required } = props;
+  const { id, label, type, required, value, setValue } = props;
+
+  const handleChange = (event: React.FormEvent) => {
+    const { target } = event;
+
+    if (!(target instanceof HTMLTextAreaElement) || !setValue) return;
+
+    setValue(target.value);
+  };
 
   return (
     <div className="input">
@@ -30,6 +38,8 @@ export function Input(props: InputProps) {
         readOnly={props.readOnly}
         required={props.required}
         aria-label={props.label}
+        value={value}
+        onChange={handleChange}
       />
       <label htmlFor={id} className="input__label">
         {label}
@@ -40,7 +50,7 @@ export function Input(props: InputProps) {
 }
 
 export function Textarea(props: TextareaProps) {
-  const { id, label, required } = props;
+  const { id, label, required, value, setValue } = props;
   const textarea = useRef<HTMLTextAreaElement>(null);
 
   const resize = () => {
@@ -52,6 +62,19 @@ export function Textarea(props: TextareaProps) {
     element.style.height = `${element.scrollHeight}px`;
     window.scrollTo(0, scrollY);
   };
+
+  const handleChange = (event: React.FormEvent) => {
+    const { target } = event;
+    resize();
+
+    if (!(target instanceof HTMLTextAreaElement) || !setValue) return;
+
+    console.log(target.value);
+
+    setValue(target.value);
+  };
+
+  useEffect(resize, []);
 
   return (
     <div className="input">
@@ -67,9 +90,10 @@ export function Textarea(props: TextareaProps) {
         wrap={props.wrap}
         aria-label={props.label}
         ref={textarea}
-        onChange={resize}
         onKeyDown={resize}
         onKeyUp={resize}
+        value={value}
+        onChange={handleChange}
       />
       <label htmlFor={id} className="input__label">
         {label}
