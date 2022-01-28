@@ -6,3 +6,7 @@ interface IComment {
   updatedAt: string;
   likes: number;
 }
+
+interface LikeProps {
+  likes: number;
+}

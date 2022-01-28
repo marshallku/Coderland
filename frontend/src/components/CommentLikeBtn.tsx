@@ -1,9 +1,9 @@
 import { useState } from "react";
 import "./CommentLikeBtn.css";
 
-export default function CommentLikeBtn(props: { likes: number }) {
-  const [likesCount, setLikesCount] = useState<number>(props.likes);
-  const [isLiked, setIsLiked] = useState<boolean>(false);
+export default function CommentLikeBtn({ likes }: LikeProps) {
+  const [likesCount, setLikesCount] = useState(likes);
+  const [isLiked, setIsLiked] = useState(false);
 
   const handleLikeClick = () => {
     if (isLiked) {
