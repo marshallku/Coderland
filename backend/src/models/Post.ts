@@ -95,17 +95,12 @@ PostSchema.statics.updatePost = async (
   postDto: Pick<IPostDocument, "title" | "contents" | "subject">
 ) => {
   const { title, contents, subject } = postDto;
-  const post = await Post.findOneAndUpdate(
-    { id: postId },
-    {
-      title,
-      contents,
-      subject,
-      anonymous: isAnonymous(subject),
-    },
-    { new: true }
-  );
-  return post;
+  await Post.findByIdAndUpdate(postId, {
+    title,
+    contents,
+    subject,
+    anonymous: isAnonymous(subject),
+  });
 };
 
 PostSchema.statics.deletePost = async (postId: string) => {

@@ -56,10 +56,6 @@ export const GatherSchema = new mongoose.Schema<IGatherDocument>(
       type: Number,
       default: 0,
     },
-    memberLimitCount: {
-      type: Number,
-      required: true,
-    },
     members: [UserSchema],
   },
   {
@@ -79,6 +75,10 @@ GatherSchema.statics.createGather = async (user, gatherDto) => {
     author: user,
   });
   return gather;
+};
+
+GatherSchema.statics.updateGather = async (gatherId, gatherDto) => {
+  await Gather.findByIdAndUpdate(gatherId, gatherDto);
 };
 
 const Gather = mongoose.model<IGatherDocument, IGatherModel>(

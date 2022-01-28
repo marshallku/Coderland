@@ -1,6 +1,11 @@
 import { Router } from "express";
-import { createGather, findGatherById } from "../../services/gather";
+import {
+  createGather,
+  findGatherById,
+  updateGather,
+} from "../../services/gather";
 import asyncHandler from "../../utils/async-handler";
+import checkGatherPermission from "../middlewares/check-gather-permission";
 import loginRequired from "../middlewares/login-required";
 
 export default (app: Router) => {
@@ -20,25 +25,35 @@ export default (app: Router) => {
     loginRequired,
     asyncHandler(async (req, res) => {
       const { user } = req;
-      const {
-        title,
-        contents,
-        subject,
-        category,
-        memberLimitCount,
-        area,
-        tags,
-      } = req.body;
+      const { title, contents, subject, category, area, tags } = req.body;
       const gatherId = await createGather(user, {
         title,
         contents,
         subject,
         category,
-        memberLimitCount: Number(memberLimitCount),
         area,
         tags,
       });
       res.status(201).json({ isOk: true, gatherId });
+    })
+  );
+
+  route.put(
+    "/:gatherId",
+    loginRequired,
+    checkGatherPermission,
+    asyncHandler(async (req, res) => {
+      const { gatherId } = req.params;
+      const { title, contents, subject, category, area, tags } = req.body;
+      await updateGather(gatherId, {
+        title,
+        contents,
+        subject,
+        category,
+        area,
+        tags,
+      });
+      res.status(200).json({ isOk: true, gatherId });
     })
   );
 

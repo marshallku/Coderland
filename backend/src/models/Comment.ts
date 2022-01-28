@@ -94,7 +94,7 @@ CommentSchema.statics.updateComment = async (
   commentId: string,
   contents: string
 ) => {
-  await Comment.findOneAndUpdate({ id: commentId }, { contents });
+  await Comment.findByIdAndUpdate(commentId, { contents });
 };
 
 CommentSchema.statics.deleteComment = async (postId, commentId) => {

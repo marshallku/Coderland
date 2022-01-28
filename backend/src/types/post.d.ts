@@ -30,15 +30,20 @@ export interface IPostModel extends Model<IPostDocument> {
     subject: string,
     page: number
   ) => Promise<[IPostDocument[], IPagination]>;
+
   findPostById: (postId: string) => Promise<IPostDocument>;
+
   viewCount: (post: IPostDocument) => Promise<IPostDocument>;
+
   createPost: (
     user: IUserDocument,
     postDto: Partial<IPostDocument>
   ) => Promise<IPostDocument>;
+
   updatePost: (
     postId: string,
     postDto: Pick<IPostDocument, "title" | "contents" | "subject">
-  ) => Promise<IPostDocument>;
+  ) => Promise<void>;
+
   deletePost: (postId: string) => Promise<void>;
 }
