@@ -17,8 +17,8 @@ export default (app: Router) => {
     "/",
     asyncHandler(async (req, res) => {
       const category = String(req.query.category);
-      const page = Number(req.query.page) || 1;
-      const [gathers, pagination] = await findAllGathers(category, page);
+      const currentPage = Number(req.query.currentPage) || 1;
+      const [gathers, pagination] = await findAllGathers(category, currentPage);
       res.status(200).json({ isOk: true, gathers, pagination });
     })
   );

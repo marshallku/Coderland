@@ -17,14 +17,18 @@ export interface ICommentDocument extends IComment, Document {}
 
 export interface ICommentModel extends Model<ICommentDocument> {
   findCommentById: (commentId: string) => Promise<ICommentDocument>;
+
   createComment: (
     user: IUserDocument,
     commentDto: { postId: string; contents: string }
   ) => Promise<ICommentDocument>;
+
   findAllComments: (
     postId: string,
-    page: number
+    currentPage: number
   ) => Promise<[ICommentDocument[], IPagination]>;
+
   updateComment: (commentId: string, contents: string) => Promise<void>;
+
   deleteComment: (postId: string, commentId: string) => Promise<void>;
 }

@@ -23,7 +23,7 @@ export interface IGatherDocument
 export interface IGatherModel extends Model<IGatherDocument> {
   findAllGathers: (
     category: string,
-    page: number
+    currentPage: number
   ) => Promise<[IGatherDocument[], IPagination]>;
 
   createGather: (

@@ -20,8 +20,8 @@ export default (app: Router) => {
     "/",
     asyncHandler(async (req, res) => {
       const subject = String(req.query.subject);
-      const page = Number(req.query.page) || 1;
-      const [posts, pagination] = await findAllPosts(subject, page);
+      const currentPage = Number(req.query.currentPage) || 1;
+      const [posts, pagination] = await findAllPosts(subject, currentPage);
       res.status(200).json({
         isOk: true,
         posts,

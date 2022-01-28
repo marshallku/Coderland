@@ -69,7 +69,7 @@ CommentSchema.statics.createComment = async (
 
 CommentSchema.statics.findAllComments = async (
   postId: string,
-  page: number
+  currentPage: number
 ) => {
   const postObjId = new mongoose.Types.ObjectId(postId);
 
@@ -77,17 +77,17 @@ CommentSchema.statics.findAllComments = async (
   const total = await Comment.countDocuments({
     postId: postObjId,
   });
-  const totalPage = Math.ceil(total / perPage);
+  const lastPage = Math.ceil(total / perPage);
 
   const comments = await Comment.find({
     postId: postObjId,
   })
     .populate("author", "nickname")
     .sort("created")
-    .skip((page - 1) * perPage)
+    .skip((currentPage - 1) * perPage)
     .limit(perPage);
 
-  return [comments, { page, nextPage: page < totalPage }];
+  return [comments, { currentPage, lastPage }];
 };
 
 CommentSchema.statics.updateComment = async (
