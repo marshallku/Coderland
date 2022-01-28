@@ -1,10 +1,11 @@
 @font-face {
   font-family: "coderland";
-  src: url("/static/icon/coderland.eot?3s523");
-  src: url("/static/icon/coderland.eot?3s523#iefix") format("embedded-opentype"),
-    url("/static/icon/coderland.ttf?3s523") format("truetype"),
-    url("/static/icon/coderland.woff?3s523") format("woff"),
-    url("/static/icon/coderland.svg?3s523#coderland") format("svg");
+  src: url("/static/icon/coderland.eot?1r8qn6");
+  src: url("/static/icon/coderland.eot?1r8qn6#iefix")
+      format("embedded-opentype"),
+    url("/static/icon/coderland.ttf?1r8qn6") format("truetype"),
+    url("/static/icon/coderland.woff?1r8qn6") format("woff"),
+    url("/static/icon/coderland.svg?1r8qn6#coderland") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -22,64 +23,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-elice .path1:before {
-  content: "\e9f2";
-  color: rgb(82, 79, 161);
-}
-.icon-elice .path2:before {
-  content: "\e9f3";
-  margin-left: -3.3466796875em;
-  color: rgb(255, 255, 255);
-}
-.icon-elice .path3:before {
-  content: "\e9f4";
-  margin-left: -3.3466796875em;
-  color: rgb(255, 255, 255);
-}
-.icon-elice .path4:before {
-  content: "\e9f5";
-  margin-left: -3.3466796875em;
-  color: rgb(255, 255, 255);
-}
-.icon-elice .path5:before {
-  content: "\e9f6";
-  margin-left: -3.3466796875em;
-  color: rgb(255, 255, 255);
-}
-.icon-elice .path6:before {
-  content: "\e9f7";
-  margin-left: -3.3466796875em;
-  color: rgb(255, 255, 255);
-}
-.icon-elice .path7:before {
-  content: "\e9f8";
-  margin-left: -3.3466796875em;
-  color: rgb(255, 255, 255);
-}
-.icon-elice .path8:before {
-  content: "\e9f9";
-  margin-left: -3.3466796875em;
-  color: rgb(255, 255, 255);
-}
-.icon-elice .path9:before {
-  content: "\e9fa";
-  margin-left: -3.3466796875em;
-  color: rgb(255, 255, 255);
-}
-.icon-elice .path10:before {
-  content: "\e9fb";
-  margin-left: -3.3466796875em;
-  color: rgb(255, 255, 255);
-}
-.icon-elice-alt .path1:before {
-  content: "\e9fc";
-  color: rgb(82, 79, 161);
-}
-.icon-elice-alt .path2:before {
-  content: "\e9fd";
-  margin-left: -1.0771484375em;
-  color: rgb(255, 255, 255);
-}
 .icon-android:before {
   content: "\e900";
   color: #3ddc84;
