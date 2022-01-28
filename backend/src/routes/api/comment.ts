@@ -27,8 +27,8 @@ route.get(
   "/",
   asyncHandler(async (req, res) => {
     const { postId } = req.params;
-    const page = Number(req.query.page) || 1;
-    const [comments, pagination] = await findAllComments(postId, page);
+    const currentPage = Number(req.query.currentPage) || 1;
+    const [comments, pagination] = await findAllComments(postId, currentPage);
     res.status(200).json({ isOk: true, comments, pagination });
   })
 );

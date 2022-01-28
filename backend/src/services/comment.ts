@@ -13,13 +13,15 @@ export async function createComment(
   }
 }
 
-export async function findAllComments(postId: string, page: number) {
-  const [comments, pagination] = await Comment.findAllComments(postId, page);
+export async function findAllComments(postId: string, currentPage: number) {
+  const [comments, pagination] = await Comment.findAllComments(
+    postId,
+    currentPage
+  );
   const parsedComments = comments.map((comment) => {
     const { author, anonymous, ...rest } = comment.toObject();
     return {
       ...rest,
-      anonymous,
       author: anonymous ? "anonymity" : author.nickname,
     };
   });

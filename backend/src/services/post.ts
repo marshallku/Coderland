@@ -2,8 +2,8 @@ import { IUserDocument } from "user";
 import { IPostDocument } from "post";
 import { Post } from "../models/Post";
 
-export async function findAllPosts(subject: string, page: number) {
-  const [posts, pagination] = await Post.findAllPosts(subject, page);
+export async function findAllPosts(subject: string, currentPage: number) {
+  const [posts, pagination] = await Post.findAllPosts(subject, currentPage);
   const parsedPosts = posts.map((post) => {
     const { author, anonymous, ...rest } = post.toObject();
     return {
@@ -21,7 +21,6 @@ export async function findPostById(postId: string) {
     const { author, anonymous, ...rest } = post.toObject();
     return {
       ...rest,
-      anonymous,
       author: anonymous ? "anonymity" : author.nickname,
     };
   } catch (error) {

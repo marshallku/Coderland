@@ -48,20 +48,23 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
   }
 );
 
-PostSchema.statics.findAllPosts = async (subject: string, page: number) => {
+PostSchema.statics.findAllPosts = async (
+  subject: string,
+  currentPage: number
+) => {
   const { perPage } = configs;
   const total = await Post.countDocuments({ subject });
-  const totalPage = Math.ceil(total / perPage);
+  const lastPage = Math.ceil(total / perPage);
   const posts = await Post.find({ subject })
     .populate("author", "nickname")
     .sort("-createdAt")
-    .skip((page - 1) * perPage)
+    .skip((currentPage - 1) * perPage)
     .limit(perPage);
   return [
     posts,
     {
-      page,
-      nextPage: page < totalPage,
+      currentPage,
+      lastPage,
     },
   ];
 };

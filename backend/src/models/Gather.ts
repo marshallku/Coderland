@@ -71,20 +71,20 @@ function isSelected(category: string) {
   return ["study", "code", "team"].includes(category);
 }
 
-GatherSchema.statics.findAllGathers = async (category, page) => {
+GatherSchema.statics.findAllGathers = async (category, currentPage) => {
   const condition = isSelected(category) ? { category } : {};
 
   const total = await Gather.countDocuments(condition);
   const { perPage } = configs;
-  const totalPage = Math.ceil(total / perPage);
+  const lastPage = Math.ceil(total / perPage);
 
   const gathers = await Gather.find(condition)
     .populate("author", "nickname")
     .sort("-createdAt")
-    .skip((page - 1) * perPage)
+    .skip((currentPage - 1) * perPage)
     .limit(perPage);
 
-  return [gathers, { page, nextPage: page < totalPage }];
+  return [gathers, { currentPage, lastPage }];
 };
 
 GatherSchema.statics.findGatherById = async (gatherId) => {

@@ -28,7 +28,7 @@ export interface IPostDocument extends IPost, Document {}
 export interface IPostModel extends Model<IPostDocument> {
   findAllPosts: (
     subject: string,
-    page: number
+    currentPage: number
   ) => Promise<[IPostDocument[], IPagination]>;
 
   findPostById: (postId: string) => Promise<IPostDocument>;
