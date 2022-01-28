@@ -136,7 +136,7 @@ export const dummyAnonymousPost = dummyAsync({
   comments: tmpComments,
 });
 
-export const dummyRecruits = dummyAsync([
+export const dummyGathers = dummyAsync([
   {
     _id: "611b6748bfc2290fd11ec5a5",
     title: "모집 완료 안 된 글",
@@ -181,7 +181,7 @@ export const dummyRecruits = dummyAsync([
   },
 ]);
 
-export const dummyRecruit = dummyAsync({
+export const dummyGather = dummyAsync({
   _id: "611b6748bfc2290fd11ec5a5",
   title: "모집 완료 안 된 글",
   contents: "도도새와 함께하는 사이드 프로젝트",
