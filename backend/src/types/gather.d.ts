@@ -31,4 +31,6 @@ export interface IGatherModel extends Model<IGatherDocument> {
     gatherId: string,
     gatherDto: Partial<IGatherDocument>
   ) => Promise<void>;
+
+  deleteGather: (gatherId: string) => Promise<void>;
 }

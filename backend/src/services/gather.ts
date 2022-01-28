@@ -29,3 +29,7 @@ export async function updateGather(
 ) {
   await Gather.updateGather(gatherId, gatherDto);
 }
+
+export async function deleteGather(gatherId: string) {
+  await Gather.deleteGather(gatherId);
+}

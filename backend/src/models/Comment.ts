@@ -102,7 +102,7 @@ CommentSchema.statics.deleteComment = async (postId, commentId) => {
     $inc: { commentCount: -1 },
   });
 
-  await Comment.findOneAndDelete({ id: commentId });
+  await Comment.findByIdAndDelete(commentId);
 };
 
 const Comment = mongoose.model<ICommentDocument, ICommentModel>(

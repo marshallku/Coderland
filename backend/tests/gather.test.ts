@@ -198,6 +198,52 @@ describe("모임 게시글 기능 테스트", () => {
     expect(res.body.msg).toEqual("로그인이 필요합니다!");
   });
 
+  it("Fail 권한 없이 모집 글 삭제 기능 테스트", async () => {
+    const res = await request(server)
+      .delete(`/api/gathers/${gatherId}`)
+      .set("authorization", notAccessToken)
+      .send();
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.isOk).toEqual(false);
+    expect(res.body.msg).toEqual("권한이 없어요...");
+  });
+
+  it("Fail 없는 모집 글 삭제 기능 테스트", async () => {
+    const res = await request(server)
+      .delete("/api/gathers/sldkfjqpeqwdas")
+      .set("authorization", token)
+      .send();
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.isOk).toEqual(false);
+    expect(res.body.msg).toEqual("존재하지 않는 글입니다.");
+  });
+
+  it("Fail 로그인 없이 글 삭제 기능 테스트", async () => {
+    const res = await request(server).delete(`/api/gathers/${gatherId}`).send();
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.isOk).toEqual(false);
+    expect(res.body.msg).toEqual("로그인이 필요합니다!");
+  });
+
+  it("모집 글 삭제 기능 테스트", async () => {
+    const res = await request(server)
+      .delete(`/api/gathers/${gatherId}`)
+      .set("authorization", token)
+      .send();
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.isOk).toEqual(true);
+
+    const res1 = await request(server).get(`/api/gathers/${gatherId}`).send();
+
+    expect(res1.statusCode).toEqual(403);
+    expect(res1.body.isOk).toEqual(false);
+    expect(res1.body.msg).toEqual("존재하지 않는 글입니다.");
+  });
+
   afterAll(async () => {
     await connection.collection("users").deleteMany({});
     await connection.collection("gathers").deleteMany({});
