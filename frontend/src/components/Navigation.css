@@ -3,11 +3,18 @@
   width: 100%;
   padding: 0 10px;
   border-bottom: 1px solid var(--gray-5);
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.navigation::-webkit-scrollbar {
+  display: none;
 }
 
 .navigation__item {
   padding: 0.5rem;
   line-height: 1.5;
+  flex-shrink: 0;
 }
 
 .navigation__item--highlight {
