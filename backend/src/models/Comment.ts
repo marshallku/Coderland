@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
 import { IUserDocument } from "user";
-import { ICommentDocument, ICommentModel } from "comment";
+import { ICommentDocument, ICommentModel, ParentDocument } from "comment";
 import configs from "../config/index";
-import { Post } from "./Post";
 
 export const CommentSchema = new mongoose.Schema<ICommentDocument>(
   {
@@ -15,9 +14,8 @@ export const CommentSchema = new mongoose.Schema<ICommentDocument>(
       ref: "User",
       required: true,
     },
-    postId: {
+    parentId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Post",
       required: true,
     },
     likes: {
@@ -46,21 +44,14 @@ CommentSchema.statics.findCommentById = async (commentId: string) => {
 
 CommentSchema.statics.createComment = async (
   user: IUserDocument,
-  commentDto
+  commentDto: { parent: ParentDocument; contents: string }
 ) => {
-  const { postId, contents } = commentDto;
-  const post = await Post.findByIdAndUpdate(
-    postId,
-    {
-      $inc: { commentCount: 1 },
-    },
-    { new: true }
-  );
+  const { parent, contents } = commentDto;
 
   const comment = await Comment.create({
     contents,
-    postId: post,
-    anonymous: post.anonymous,
+    parentId: parent.id,
+    anonymous: parent.anonymous,
     author: user,
   });
 
@@ -68,19 +59,17 @@ CommentSchema.statics.createComment = async (
 };
 
 CommentSchema.statics.findAllComments = async (
-  postId: string,
+  parentId: string,
   currentPage: number
 ) => {
-  const postObjId = new mongoose.Types.ObjectId(postId);
-
   const { perPage } = configs;
   const total = await Comment.countDocuments({
-    postId: postObjId,
+    parentId,
   });
   const lastPage = Math.ceil(total / perPage);
 
   const comments = await Comment.find({
-    postId: postObjId,
+    parentId,
   })
     .populate("author", "nickname")
     .sort("created")
@@ -97,11 +86,7 @@ CommentSchema.statics.updateComment = async (
   await Comment.findByIdAndUpdate(commentId, { contents });
 };
 
-CommentSchema.statics.deleteComment = async (postId, commentId) => {
-  await Post.findByIdAndUpdate(postId, {
-    $inc: { commentCount: -1 },
-  });
-
+CommentSchema.statics.deleteComment = async (commentId) => {
   await Comment.findByIdAndDelete(commentId);
 };
 

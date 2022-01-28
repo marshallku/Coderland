@@ -1,6 +1,6 @@
 import { Router } from "express";
-import asyncHandler from "../../utils/async-handler";
-import loginRequired from "../middlewares/login-required";
+import { asyncHandler } from "../../utils";
+import { loginRequired } from "../middlewares";
 
 export default (app: Router) => {
   const route = Router();

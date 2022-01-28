@@ -6,9 +6,8 @@ import {
   updateGather,
   deleteGather,
 } from "../../services/gather";
-import asyncHandler from "../../utils/async-handler";
-import checkGatherPermission from "../middlewares/check-gather-permission";
-import loginRequired from "../middlewares/login-required";
+import { asyncHandler } from "../../utils";
+import { checkGatherPermission, loginRequired } from "../middlewares";
 
 export default (app: Router) => {
   const route = Router();
