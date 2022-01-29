@@ -30,4 +30,16 @@ replyRouter.put(
   })
 );
 
+replyRouter.delete(
+  "/",
+  loginRequired,
+  asyncHandler(async (req, res) => {
+    const { user } = req;
+    const { replyId, commentId } = req.body;
+    const replyService = new ReplyService(Comment);
+    await replyService.deleteReply(user, { commentId, replyId });
+    res.status(200).json({ isOk: true });
+  })
+);
+
 export default replyRouter;
