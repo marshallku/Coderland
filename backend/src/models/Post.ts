@@ -143,8 +143,8 @@ PostSchema.statics.updatePost = async (
   postDto: Partial<IPostDocument>,
   gatherDto: Partial<IPostDocument>
 ) => {
-  const { subject } = postDto;
-  const dto = createDto(subject, postDto, gatherDto);
+  const { subject, title, contents } = postDto;
+  const dto = createDto(subject, { title, contents }, gatherDto);
   await Post.findByIdAndUpdate(postId, {
     ...dto,
     anonymous: isAnonymous(subject),

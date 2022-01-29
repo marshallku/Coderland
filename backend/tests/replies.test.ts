@@ -11,6 +11,7 @@ describe("답글 통합 테스트", () => {
   let token = "Bearer ";
   let postId: string;
   let commentId: string;
+  let replyId: string;
 
   beforeAll(async () => {
     await connection.collection("users").insertOne({
@@ -77,16 +78,13 @@ describe("답글 통합 테스트", () => {
       .send({ commentId, contents });
 
     expect(res.statusCode).toEqual(201);
-  });
 
-  it("일반 포스트 조회 테스트", async () => {
-    // when
-    const res = await request(server)
+    const res1 = await request(server)
       .get(`/api/posts/${postId}/comments`)
       .send();
 
-    expect(res.statusCode).toEqual(200);
-    expect(Object.keys(res.body.comments[0].replies[0])).toEqual(
+    expect(res1.statusCode).toEqual(200);
+    expect(Object.keys(res1.body.comments[0].replies[0])).toEqual(
       expect.arrayContaining([
         "_id",
         "author",
@@ -94,6 +92,37 @@ describe("답글 통합 테스트", () => {
         "createdAt",
         "updatedAt",
       ])
+    );
+
+    replyId = res1.body.comments[0].replies[0]._id;
+  });
+
+  it("답글 수정 테스트", async () => {
+    const contents = "update reply contents";
+
+    const res = await request(server)
+      .put(`/api/posts/${postId}/replies`)
+      .set("authorization", token)
+      .send({ commentId, replyId, contents });
+
+    expect(res.statusCode).toEqual(200);
+
+    const res1 = await request(server)
+      .get(`/api/posts/${postId}/comments`)
+      .send();
+
+    expect(res1.statusCode).toEqual(200);
+    expect(Object.keys(res1.body.comments[0].replies[0])).toEqual(
+      expect.arrayContaining([
+        "_id",
+        "author",
+        "contents",
+        "createdAt",
+        "updatedAt",
+      ])
+    );
+    expect(res1.body.comments[0].replies[0].contents).toEqual(
+      "update reply contents"
     );
   });
 

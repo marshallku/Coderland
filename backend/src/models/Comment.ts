@@ -118,6 +118,19 @@ CommentSchema.statics.createReply = async (commentId, author, contents) => {
   });
 };
 
+CommentSchema.statics.updateReply = async (user, replyDto) => {
+  const { commentId, replyId, contents } = replyDto;
+  await Comment.findByIdAndUpdate(
+    commentId,
+    {
+      $set: { "replies.$[idx].contents": contents },
+    },
+    {
+      arrayFilters: [{ "idx._id": replyId }],
+    }
+  );
+};
+
 const Comment = mongoose.model<ICommentDocument, ICommentModel>(
   "Comment",
   CommentSchema

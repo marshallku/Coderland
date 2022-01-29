@@ -1,4 +1,4 @@
-import { ICommentModel } from "comment";
+import { ICommentModel, IReplyDto } from "comment";
 import { IUserDocument } from "user";
 
 export default class ReplyService {
@@ -10,5 +10,9 @@ export default class ReplyService {
 
   async createReply(commentId: string, user: IUserDocument, contents: string) {
     await this.CommentModel.createReply(commentId, user, contents);
+  }
+
+  async updateReply(user: IUserDocument, replyDto: IReplyDto) {
+    await this.CommentModel.updateReply(user, replyDto);
   }
 }
