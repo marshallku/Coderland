@@ -1,0 +1,37 @@
+.post-list__post {
+  display: grid;
+  padding: 20px;
+  grid-template-columns: 8fr 1fr 1fr 1fr 1fr;
+  justify-items: center;
+  align-items: center;
+  border-bottom: 1px solid #e1e2e4;
+}
+
+.post-list__post:last-of-type {
+  border-bottom: none;
+}
+
+.post__title {
+  padding-left: 40px;
+  justify-self: flex-start;
+}
+
+.post__author {
+  font-size: 0.75rem;
+  color: var(--forest-base);
+}
+
+.post__view,
+.post__comments,
+.post__likes {
+  display: flex;
+  flex-wrap: wrap;
+  color: var(--gray-2);
+  font-size: 0.875rem;
+}
+
+.comments__icon,
+.likes__icon,
+.view__icon {
+  margin-right: 5px;
+}

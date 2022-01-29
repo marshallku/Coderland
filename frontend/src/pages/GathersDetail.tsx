@@ -80,10 +80,11 @@ export default function Detail() {
             {`모집 ${selected?.gather.isCompleted ? "완료" : "중"}`}
           </div>
           <div className="gather-container__area">{selected?.gather.area}</div>
-
-          {/* TODO: 기술스택 추가하여 표시 필요
-          <div className="gather-container__tags">{selected?.tags}</div> */}
-
+          <div className="gather-container__tags">
+            {selected?.gather.tags.map((tag) => (
+              <div className={`icon-${tag}`}>{` ${tag}`}</div>
+            ))}
+          </div>
           <div className="gather-container__memberCount">
             현재원 : {selected?.gather.memberCount}
           </div>
