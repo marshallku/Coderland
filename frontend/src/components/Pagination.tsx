@@ -2,16 +2,17 @@ import "./Pagination.css";
 import { useLayoutEffect, useState } from "react";
 
 export default function Pagination({
-  postsPerPage,
-  totalPosts,
   paginate,
+  paginateInfo,
 }: IPaginationProps) {
-  if (!totalPosts) {
+  if (!paginateInfo) {
     return <div>게시글이 없습니다.</div>;
   }
   const [pageNumbers, setPageNumbers] = useState<number[]>([]);
-  const [currentPageNumber, setCurrentPageNumber] = useState(1);
-  const totalPageNumber = Math.ceil(totalPosts / postsPerPage);
+  const [currentPageNumber, setCurrentPageNumber] = useState(
+    paginateInfo?.currentPage
+  );
+  const totalPageNumber = paginateInfo?.lastPage;
 
   const getPage = (newPageNumber: number) => {
     if (newPageNumber <= totalPageNumber && newPageNumber >= 1) {
