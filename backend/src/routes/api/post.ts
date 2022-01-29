@@ -57,11 +57,11 @@ export default (app: Router) => {
     loginRequired,
     asyncHandler(async (req, res) => {
       const { user } = req;
-      const { title, contents, subject, category, area, tags } = req.body;
+      const { title, contents, subject, category, area, tags, icon } = req.body;
       const postId = await createPost(
         user,
         { title, contents, subject },
-        { category, area, tags }
+        { category, area, tags, icon }
       );
       res.status(201).json({ isOk: true, postId });
     })
@@ -74,11 +74,11 @@ export default (app: Router) => {
     checkPermission,
     asyncHandler(async (req, res) => {
       const { postId } = req.params;
-      const { title, contents, subject, category, area, tags } = req.body;
+      const { title, contents, subject, category, area, tags, icon } = req.body;
       await updatePost(
         postId,
         { title, contents, subject },
-        { category, area, tags }
+        { category, area, tags, icon }
       );
       res.status(200).json({ isOk: true, postId });
     })

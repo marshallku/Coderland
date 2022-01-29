@@ -78,6 +78,16 @@ describe("일반 포스트 기능 테스트", () => {
     expect(res.body.isOk).toEqual(true);
     expect(res.body.post.title).toEqual("new title");
     expect(res.body.post.author).toEqual("testuser2");
+    expect.arrayContaining([
+      "_id",
+      "title",
+      "contents",
+      "author",
+      "likes",
+      "views",
+      "createdAt",
+      "updatedAt",
+    ]);
   });
 
   it("Fail 일반 포스트 조회 존재하지 않는 글", async () => {
