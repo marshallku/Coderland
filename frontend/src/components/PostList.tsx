@@ -6,7 +6,7 @@ import Posts from "./Posts";
 import Pagination from "./Pagination";
 import Loader from "./Loader";
 
-export default function PostList({ postType }: any) {
+export default function PostList({ subject }: IPostListProps) {
   const [currentPosts, setCurrentPosts] = useState<
     IPostListResponse | IGatherPostListResponse
   >();
@@ -20,10 +20,10 @@ export default function PostList({ postType }: any) {
   useEffect(() => {
     async function getCardOrListPosts() {
       let postsResponse;
-      if (postType === "postList") {
-        postsResponse = await dummyPostsResponse.then((result) => result);
-      } else {
+      if (subject === "gathering") {
         postsResponse = await dummyGathersResponse.then((result) => result);
+      } else {
+        postsResponse = await dummyPostsResponse.then((result) => result);
       }
       const indexOfLastPost = currentPage * postsPerPage;
       const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -42,7 +42,7 @@ export default function PostList({ postType }: any) {
   }
   return (
     <div className="post-list">
-      <Posts postType={postType} postList={currentPosts.posts} />
+      <Posts subject={subject} postList={currentPosts.posts} />
       <Pagination paginate={paginate} paginateInfo={currentPosts?.pagination} />
     </div>
   );

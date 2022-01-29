@@ -10,3 +10,9 @@
   border-radius: 40px;
   width: 100%;
 }
+
+.post-list__wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
