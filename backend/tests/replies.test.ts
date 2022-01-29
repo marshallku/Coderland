@@ -126,6 +126,22 @@ describe("답글 통합 테스트", () => {
     );
   });
 
+  it("답글 삭제 테스트", async () => {
+    const res = await request(server)
+      .delete(`/api/posts/${postId}/replies`)
+      .set("authorization", token)
+      .send({ commentId, replyId });
+
+    expect(res.statusCode).toEqual(200);
+
+    const res1 = await request(server)
+      .get(`/api/posts/${postId}/comments`)
+      .send();
+
+    expect(res1.statusCode).toEqual(200);
+    expect(res1.body.comments[0].replies.length).toEqual(0);
+  });
+
   // ======================익 명 테 스 트=========================
 
   it("익명 포스트 생성", async () => {

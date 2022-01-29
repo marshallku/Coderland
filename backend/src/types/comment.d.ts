@@ -56,8 +56,10 @@ export interface ICommentModel extends Model<ICommentDocument> {
     contents: string
   ) => Promise<void>;
 
-  updateReply: (
+  updateReply: (user: IUserDocument, replyDto: IReplyDto) => Promise<void>;
+
+  deleteReply: (
     user: IUserDocument,
-    replyDto: { commentId: string; replyId: string; contents: string }
+    replyDto: Pick<IReplyDto, "commentId" | "replyId">
   ) => Promise<void>;
 }

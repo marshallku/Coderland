@@ -131,6 +131,13 @@ CommentSchema.statics.updateReply = async (user, replyDto) => {
   );
 };
 
+CommentSchema.statics.deleteReply = async (user, replyDto) => {
+  const { commentId, replyId } = replyDto;
+  await Comment.findByIdAndUpdate(commentId, {
+    $pull: { replies: { _id: replyId } },
+  });
+};
+
 const Comment = mongoose.model<ICommentDocument, ICommentModel>(
   "Comment",
   CommentSchema

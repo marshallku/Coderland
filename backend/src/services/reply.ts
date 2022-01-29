@@ -13,6 +13,21 @@ export default class ReplyService {
   }
 
   async updateReply(user: IUserDocument, replyDto: IReplyDto) {
-    await this.CommentModel.updateReply(user, replyDto);
+    try {
+      await this.CommentModel.updateReply(user, replyDto);
+    } catch (error) {
+      throw new Error("뭔가가 잘못되었어요...");
+    }
+  }
+
+  async deleteReply(
+    user: IUserDocument,
+    replyDto: Pick<IReplyDto, "commentId" | "replyId">
+  ) {
+    try {
+      await this.CommentModel.deleteReply(user, replyDto);
+    } catch (error) {
+      throw new Error("뭔가가 잘못되었어요...");
+    }
   }
 }
