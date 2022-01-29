@@ -63,6 +63,10 @@
   align-items: center;
 }
 
+.gather-container__tags div {
+  margin-bottom: 0.5rem;
+}
+
 .gather-container__members img {
   width: 2rem;
   height: 2rem;
