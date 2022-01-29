@@ -48,6 +48,7 @@ describe("모임 게시글 기능 테스트", () => {
     const category = "study";
     const area = "서울";
     const tags = ["자바스크립트", "타입스크립트", "리액트"];
+    const icon = "icon-javascript";
 
     const res = await request(server)
       .post("/api/posts")
@@ -59,6 +60,7 @@ describe("모임 게시글 기능 테스트", () => {
         category,
         area,
         tags,
+        icon,
       });
 
     expect(res.statusCode).toEqual(201);
@@ -109,6 +111,24 @@ describe("모임 게시글 기능 테스트", () => {
     );
     expect(res.body.post.title).toEqual("모집 게시글 타이틀");
     expect(res.body.post.author).toEqual("testuuu");
+    expect(Object.keys(res.body.post)).toEqual(
+      expect.arrayContaining([
+        "_id",
+        "title",
+        "contents",
+        "author",
+        "likes",
+        "views",
+        "createdAt",
+        "updatedAt",
+        "isCompleted",
+        "area",
+        "tags",
+        "icon",
+        "memberCount",
+        "members",
+      ])
+    );
   });
 
   it("Fail 없는 모임 게시글 조회 테스트", async () => {

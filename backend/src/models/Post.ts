@@ -71,6 +71,9 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
       type: String,
       default: "none",
     },
+    icon: {
+      type: String,
+    },
     area: {
       type: String,
     },

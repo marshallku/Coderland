@@ -32,6 +32,7 @@ export interface IGatherPost extends IPost {
   isCompleted?: boolean;
   members?: IUserDocument[];
   tags?: string[];
+  icon?: string;
 }
 
 export interface IPostDocument extends IGatherPost, Document {}
