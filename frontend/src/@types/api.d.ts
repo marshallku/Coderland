@@ -38,7 +38,7 @@ interface IGatherPost {
   area: string;
   tags: Array<string>;
   members: Array<IUser>;
-  memberCount: number;
+  icon: string;
 }
 
 interface IComment {
