@@ -1,6 +1,7 @@
 import { IUserDocument } from "user";
 import { ICommentModel } from "comment";
 import { IPostModel } from "post";
+import parseReply from "../utils/parse-reply";
 
 export default class CommentService {
   ParentModel: IPostModel | ICommentModel;
@@ -39,9 +40,10 @@ export default class CommentService {
       currentPage
     );
     const parsedComments = comments.map((comment) => {
-      const { author, anonymous, ...rest } = comment.toObject();
+      const { author, anonymous, replies, ...rest } = comment.toObject();
       return {
         ...rest,
+        replies: parseReply(replies, anonymous),
         author: anonymous ? "anonymity" : author.nickname,
       };
     });

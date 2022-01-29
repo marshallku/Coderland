@@ -6,11 +6,13 @@ import { asyncHandler } from "../../utils";
 import { checkPermission, loginRequired } from "../middlewares";
 
 import commentRouter from "./comment";
+import replyRouter from "./reply";
 
 export default (app: Router) => {
   const route = Router();
 
   route.use("/:postId/comments", commentRouter);
+  route.use("/:postId/replies", replyRouter);
 
   // 글 목록 조회
   route.get(

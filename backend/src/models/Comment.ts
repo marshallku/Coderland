@@ -1,7 +1,27 @@
 import mongoose from "mongoose";
 import { IUserDocument } from "user";
-import { ICommentDocument, ICommentModel, ParentDocument } from "comment";
+import {
+  ICommentDocument,
+  ICommentModel,
+  ParentDocument,
+  IReplyDocument,
+} from "comment";
 import configs from "../config/index";
+import { UserSchema } from "./User";
+
+const ReplySchema = new mongoose.Schema<IReplyDocument>(
+  {
+    contents: {
+      type: String,
+      required: true,
+    },
+    author: { type: UserSchema },
+  },
+  {
+    timestamps: true,
+    versionKey: false,
+  }
+);
 
 export const CommentSchema = new mongoose.Schema<ICommentDocument>(
   {
@@ -27,6 +47,7 @@ export const CommentSchema = new mongoose.Schema<ICommentDocument>(
       type: Boolean,
       default: false,
     },
+    replies: [ReplySchema],
   },
   {
     timestamps: true,
@@ -88,6 +109,13 @@ CommentSchema.statics.updateComment = async (
 
 CommentSchema.statics.deleteComment = async (commentId) => {
   await Comment.findByIdAndDelete(commentId);
+};
+
+CommentSchema.statics.createReply = async (commentId, author, contents) => {
+  const replyId = new mongoose.Types.ObjectId();
+  await Comment.findByIdAndUpdate(commentId, {
+    $push: { replies: { _id: replyId, author, contents } },
+  });
 };
 
 const Comment = mongoose.model<ICommentDocument, ICommentModel>(

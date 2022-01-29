@@ -3,6 +3,15 @@ import { IUserDocument } from "user";
 import { IPostDocument } from "post";
 import { IPagination } from "pagination";
 
+export interface IReply {
+  contents: string;
+  author: PopulatedDoc<IUserDocument>;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IReplyDocument extends IReply, Document {}
+
 type ParentDocument = IPostDocument | ICommentDocument;
 
 export interface IComment {
@@ -11,6 +20,7 @@ export interface IComment {
   parentId: mongoose.Types.ObjectId;
   likes: number;
   anonymous: boolean;
+  replies: IReplyDocument[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -33,4 +43,10 @@ export interface ICommentModel extends Model<ICommentDocument> {
   updateComment: (commentId: string, contents: string) => Promise<void>;
 
   deleteComment: (commentId: string) => Promise<void>;
+
+  createReply: (
+    commentId: string,
+    author: IUserDocument,
+    contents: string
+  ) => Promise<void>;
 }
