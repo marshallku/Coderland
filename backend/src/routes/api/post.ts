@@ -1,31 +1,28 @@
 import { Router } from "express";
-import {
-  checkPermission,
-  checkCommentPermission,
-  loginRequired,
-} from "../middlewares";
-import {
-  findAllPosts,
-  findPostById,
-  createPost,
-  updatePost,
-  deletePost,
-} from "../../services/post";
-import CommentService from "../../services/comment";
-import { Post, Comment } from "../../models";
+import PostService from "../../services/post";
+import { Post } from "../../models";
+
 import { asyncHandler } from "../../utils";
+import { checkPermission, loginRequired } from "../middlewares";
+
+import commentRouter from "./comment";
+import replyRouter from "./reply";
 
 export default (app: Router) => {
   const route = Router();
 
-  // 익명/일반 글 목록 조회
+  route.use("/:postId/comments", commentRouter);
+  route.use("/:postId/replies", replyRouter);
+
+  // 글 목록 조회
   route.get(
     "/",
     asyncHandler(async (req, res) => {
       const subject = String(req.query.subject);
       const category = String(req.query.category);
       const currentPage = Number(req.query.currentPage) || 1;
-      const [posts, pagination] = await findAllPosts(
+      const postService = new PostService(Post);
+      const [posts, pagination] = await postService.findAllPosts(
         subject,
         category,
         currentPage
@@ -38,12 +35,13 @@ export default (app: Router) => {
     })
   );
 
-  // 익명/일반 글 상세 조회
+  // 글 상세 조회
   route.get(
     "/:postId",
     asyncHandler(async (req, res) => {
       const { postId } = req.params;
-      const post = await findPostById(postId);
+      const postService = new PostService(Post);
+      const post = await postService.findPostById(postId);
       res.status(200).json({
         isOk: true,
         post,
@@ -51,14 +49,15 @@ export default (app: Router) => {
     })
   );
 
-  // 익명/일반 글 작성
+  // 글 작성
   route.post(
     "/",
     loginRequired,
     asyncHandler(async (req, res) => {
       const { user } = req;
       const { title, contents, subject, category, area, tags, icon } = req.body;
-      const postId = await createPost(
+      const postService = new PostService(Post);
+      const postId = await postService.createPost(
         user,
         { title, contents, subject },
         { category, area, tags, icon }
@@ -67,7 +66,7 @@ export default (app: Router) => {
     })
   );
 
-  // 익명/일반 글 수정
+  // 글 수정
   route.put(
     "/:postId",
     loginRequired,
@@ -75,7 +74,8 @@ export default (app: Router) => {
     asyncHandler(async (req, res) => {
       const { postId } = req.params;
       const { title, contents, subject, category, area, tags, icon } = req.body;
-      await updatePost(
+      const postService = new PostService(Post);
+      await postService.updatePost(
         postId,
         { title, contents, subject },
         { category, area, tags, icon }
@@ -84,70 +84,16 @@ export default (app: Router) => {
     })
   );
 
-  // 익명/일반 글 삭제
+  // 글 삭제
   route.delete(
     "/:postId",
     loginRequired,
     checkPermission,
     asyncHandler(async (req, res) => {
       const { postId } = req.params;
-      await deletePost(postId);
+      const postService = new PostService(Post);
+      await postService.deletePost(postId);
       res.status(200).json({ isOk: true, postId });
-    })
-  );
-
-  // 댓글 작성
-  route.post(
-    "/:postId/comments",
-    loginRequired,
-    asyncHandler(async (req, res) => {
-      const { user } = req;
-      const { postId } = req.params;
-      const { contents } = req.body;
-      const commentService = new CommentService(Post, Comment, postId);
-      const commentId = await commentService.createComment(user, contents);
-      res.status(201).json({ isOk: true, commentId });
-    })
-  );
-
-  // 댓글 목록
-  route.get(
-    "/:postId/comments",
-    asyncHandler(async (req, res) => {
-      const { postId } = req.params;
-      const currentPage = Number(req.query.currentPage) || 1;
-      const commentService = new CommentService(Post, Comment, postId);
-      const [comments, pagination] = await commentService.findAllComments(
-        currentPage
-      );
-      res.status(200).json({ isOk: true, comments, pagination });
-    })
-  );
-
-  // 댓글 수정
-  route.put(
-    "/:postId/comments",
-    loginRequired,
-    checkCommentPermission,
-    asyncHandler(async (req, res) => {
-      const { contents, commentId } = req.body;
-      const commentService = new CommentService(Post, Comment);
-      await commentService.updateComment(commentId, contents);
-      res.status(200).json({ isOk: true, commentId });
-    })
-  );
-
-  // 댓글 삭제
-  route.delete(
-    "/:postId/comments",
-    loginRequired,
-    checkCommentPermission,
-    asyncHandler(async (req, res) => {
-      const { postId } = req.params;
-      const { commentId } = req.body;
-      const commentService = new CommentService(Post, Comment, postId);
-      await commentService.deleteComment(commentId);
-      res.status(200).json({ isOk: true, commentId });
     })
   );
 
