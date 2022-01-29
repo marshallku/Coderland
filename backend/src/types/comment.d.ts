@@ -10,6 +10,12 @@ export interface IReply {
   updatedAt: Date;
 }
 
+export interface IReplyDto {
+  commentId: string;
+  replyId: string;
+  contents: string;
+}
+
 export interface IReplyDocument extends IReply, Document {}
 
 type ParentDocument = IPostDocument | ICommentDocument;
@@ -48,5 +54,10 @@ export interface ICommentModel extends Model<ICommentDocument> {
     commentId: string,
     author: IUserDocument,
     contents: string
+  ) => Promise<void>;
+
+  updateReply: (
+    user: IUserDocument,
+    replyDto: { commentId: string; replyId: string; contents: string }
   ) => Promise<void>;
 }

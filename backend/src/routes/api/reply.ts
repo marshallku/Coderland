@@ -18,4 +18,16 @@ replyRouter.post(
   })
 );
 
+replyRouter.put(
+  "/",
+  loginRequired,
+  asyncHandler(async (req, res) => {
+    const { user } = req;
+    const { replyId, commentId, contents } = req.body;
+    const replyService = new ReplyService(Comment);
+    await replyService.updateReply(user, { commentId, replyId, contents });
+    res.status(200).json({ isOk: true });
+  })
+);
+
 export default replyRouter;

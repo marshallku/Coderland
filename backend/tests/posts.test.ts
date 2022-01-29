@@ -134,7 +134,7 @@ describe("일반 포스트 기능 테스트", () => {
     expect(res.body.msg).toEqual("로그인이 필요합니다!");
   });
 
-  it("일반 포스트에서 익명 포스트로 수정 로직", async () => {
+  it("포스트 수정 로직 주제 수정 안됨", async () => {
     // given
     const title = "update title";
     const contents = "update contents";
@@ -160,7 +160,7 @@ describe("일반 포스트 기능 테스트", () => {
     expect(res2.statusCode).toEqual(200);
     expect(res2.body.isOk).toEqual(true);
     expect(res2.body.post.title).toEqual("update title");
-    expect(res2.body.post.author).not.toEqual("testuser2");
+    expect(res2.body.post.subject).toEqual("article");
   });
 
   it("Fail 포스트 수정 로직 권한 없음", async () => {
