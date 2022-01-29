@@ -1,8 +1,15 @@
+type TPostList = Array<Omit<IPost, "contents" | "subject">>;
+
+type TPostCard = Array<IGatherPost>;
+
 interface IPostsProps {
-  postList?: Array<Omit<IPost, "contents" | "subject">>;
-  isLoading: Boolean;
+  postType: string;
+  postList: TPostList | TPostCard;
 }
 
 interface IPostItemProps {
-  postList?: Array<Omit<IPost, "contents" | "subject">>;
+  postList: TPostList;
+}
+interface IPostCardItemProps {
+  postList: TPostCard;
 }

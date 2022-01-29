@@ -1,13 +1,14 @@
-import Loader from "./Loader";
+import PostCardItem from "./PostCardItem";
 import PostListItem from "./PostListItem";
 
-export default function Posts({ postList, isLoading }: IPostsProps) {
-  if (isLoading) {
-    return <Loader />;
-  }
+export default function Posts({ postType, postList }: IPostsProps) {
   return (
     <div className="post-list__wrapper">
-      <PostListItem postList={postList} />
+      {postType === "postList" ? (
+        <PostListItem postList={postList as TPostList} />
+      ) : (
+        <PostCardItem postList={postList as TPostCard} />
+      )}{" "}
     </div>
   );
 }
