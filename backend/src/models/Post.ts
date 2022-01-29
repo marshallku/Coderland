@@ -1,7 +1,33 @@
 import mongoose from "mongoose";
 import { IPostDocument, IPostModel, subjects } from "post";
 import { IUserDocument } from "user";
+import { UserSchema } from "./User";
 import configs from "../config";
+
+function conditionBySubject(subject: string, category: string) {
+  if (["study", "code", "team"].includes(category)) {
+    return { subject, category };
+  }
+  return { subject };
+}
+
+function isAnonymous(subject: subjects) {
+  return ["review", "chat"].includes(subject);
+}
+
+function createDto(
+  subject: string,
+  postDto: Partial<IPostDocument>,
+  gatherDto: Partial<IPostDocument>
+) {
+  if (subject === "gathering") {
+    return {
+      ...postDto,
+      ...gatherDto,
+    };
+  }
+  return postDto;
+}
 
 export const PostSchema = new mongoose.Schema<IPostDocument>(
   {
@@ -41,6 +67,23 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
       type: Boolean,
       default: false,
     },
+    category: {
+      type: String,
+      default: "none",
+    },
+    area: {
+      type: String,
+    },
+    tags: {
+      type: [String],
+    },
+    isCompleted: {
+      type: Boolean,
+      default: false,
+    },
+    members: {
+      type: [UserSchema],
+    },
   },
   {
     timestamps: true,
@@ -50,16 +93,19 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
 
 PostSchema.statics.findAllPosts = async (
   subject: string,
+  category: string,
   currentPage: number
 ) => {
   const { perPage } = configs;
-  const total = await Post.countDocuments({ subject });
+  const condition = conditionBySubject(subject, category);
+  const total = await Post.countDocuments(condition);
   const lastPage = Math.ceil(total / perPage);
-  const posts = await Post.find({ subject })
+  const posts = await Post.find(condition)
     .populate("author", "nickname")
     .sort("-createdAt")
     .skip((currentPage - 1) * perPage)
     .limit(perPage);
+
   return [
     posts,
     {
@@ -74,19 +120,15 @@ PostSchema.statics.findPostById = async (postId: string) => {
   return post;
 };
 
-function isAnonymous(subject: subjects) {
-  return ["review", "chat"].includes(subject);
-}
-
 PostSchema.statics.createPost = async (
   user: IUserDocument,
-  postDto: Partial<IPostDocument>
+  postDto: Partial<IPostDocument>,
+  gatherDto: Partial<IPostDocument>
 ) => {
-  const { title, contents, subject } = postDto;
+  const { subject } = postDto;
+  const dto = createDto(subject, postDto, gatherDto);
   const post = await Post.create({
-    title,
-    contents,
-    subject,
+    ...dto,
     author: user,
     anonymous: isAnonymous(subject),
   });
@@ -95,13 +137,13 @@ PostSchema.statics.createPost = async (
 
 PostSchema.statics.updatePost = async (
   postId: string,
-  postDto: Pick<IPostDocument, "title" | "contents" | "subject">
+  postDto: Partial<IPostDocument>,
+  gatherDto: Partial<IPostDocument>
 ) => {
-  const { title, contents, subject } = postDto;
+  const { subject } = postDto;
+  const dto = createDto(subject, postDto, gatherDto);
   await Post.findByIdAndUpdate(postId, {
-    title,
-    contents,
-    subject,
+    ...dto,
     anonymous: isAnonymous(subject),
   });
 };

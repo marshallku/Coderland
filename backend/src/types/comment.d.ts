@@ -2,9 +2,8 @@ import mongoose, { Document, Model, PopulatedDoc } from "mongoose";
 import { IUserDocument } from "user";
 import { IPostDocument } from "post";
 import { IPagination } from "pagination";
-import { IGatherDocument } from "gather";
 
-type ParentDocument = IPostDocument | IGatherDocument | ICommentDocument;
+type ParentDocument = IPostDocument | ICommentDocument;
 
 export interface IComment {
   contents: string;

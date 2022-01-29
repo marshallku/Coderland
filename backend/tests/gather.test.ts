@@ -9,7 +9,7 @@ import configs from "../src/config";
 describe("모임 게시글 기능 테스트", () => {
   const connection = db.createConnection(`${configs.mongoUri}/coderland`);
   let token = "Bearer ";
-  let gatherId: string;
+  let postId: string;
   let notAccessToken = "Bearer ";
 
   beforeAll(async () => {
@@ -50,7 +50,7 @@ describe("모임 게시글 기능 테스트", () => {
     const tags = ["자바스크립트", "타입스크립트", "리액트"];
 
     const res = await request(server)
-      .post("/api/gathers")
+      .post("/api/posts")
       .set("authorization", token)
       .send({
         title,
@@ -64,55 +64,55 @@ describe("모임 게시글 기능 테스트", () => {
     expect(res.statusCode).toEqual(201);
     expect(res.body.isOk).toEqual(true);
     expect(Object.keys(res.body)).toEqual(
-      expect.arrayContaining(["isOk", "gatherId"])
+      expect.arrayContaining(["isOk", "postId"])
     );
 
-    gatherId = res.body.gatherId;
+    postId = res.body.postId;
   });
 
   it("모임 게시글 리스트 조회 테스트", async () => {
     const res = await request(server)
-      .get("/api/gathers")
-      .query({ category: "study" })
+      .get("/api/posts")
+      .query({ subject: "gathering", category: "study" })
       .send();
 
     expect(res.statusCode).toEqual(200);
     expect(res.body.isOk).toEqual(true);
     expect(Object.keys(res.body)).toEqual(
-      expect.arrayContaining(["isOk", "gathers", "pagination"])
+      expect.arrayContaining(["isOk", "posts", "pagination"])
     );
-    expect(res.body.gathers.length).toEqual(1);
-    expect(res.body.gathers[0].author).toEqual("testuuu");
+    expect(res.body.posts.length).toEqual(1);
+    expect(res.body.posts[0].author).toEqual("testuuu");
   });
 
   it("비어있는 리스트 모임 게시글 리스트 조회 테스트", async () => {
     const res = await request(server)
-      .get("/api/gathers")
+      .get("/api/posts")
       .query({ category: "code" })
       .send();
 
     expect(res.statusCode).toEqual(200);
     expect(res.body.isOk).toEqual(true);
     expect(Object.keys(res.body)).toEqual(
-      expect.arrayContaining(["isOk", "gathers", "pagination"])
+      expect.arrayContaining(["isOk", "posts", "pagination"])
     );
-    expect(res.body.gathers.length).toEqual(0);
+    expect(res.body.posts.length).toEqual(0);
   });
 
   it("모임 게시글 조회 테스트", async () => {
-    const res = await request(server).get(`/api/gathers/${gatherId}`).send();
+    const res = await request(server).get(`/api/posts/${postId}`).send();
 
     expect(res.statusCode).toEqual(200);
     expect(res.body.isOk).toEqual(true);
     expect(Object.keys(res.body)).toEqual(
-      expect.arrayContaining(["isOk", "gather"])
+      expect.arrayContaining(["isOk", "post"])
     );
-    expect(res.body.gather.title).toEqual("모집 게시글 타이틀");
-    expect(res.body.gather.author).toEqual("testuuu");
+    expect(res.body.post.title).toEqual("모집 게시글 타이틀");
+    expect(res.body.post.author).toEqual("testuuu");
   });
 
   it("Fail 없는 모임 게시글 조회 테스트", async () => {
-    const res = await request(server).get("/api/gathers/salkjdfksdjflk").send();
+    const res = await request(server).get("/api/posts/salkjdfksdjflk").send();
 
     expect(res.statusCode).toEqual(403);
     expect(res.body.isOk).toEqual(false);
@@ -128,7 +128,7 @@ describe("모임 게시글 기능 테스트", () => {
     const tags = ["노드", "익스프레스", "타입스크립트"];
 
     const res = await request(server)
-      .put(`/api/gathers/${gatherId}`)
+      .put(`/api/posts/${postId}`)
       .set("authorization", token)
       .send({
         title,
@@ -142,15 +142,15 @@ describe("모임 게시글 기능 테스트", () => {
     expect(res.statusCode).toEqual(200);
     expect(res.body.isOk).toEqual(true);
 
-    const res1 = await request(server).get(`/api/gathers/${gatherId}`).send();
+    const res1 = await request(server).get(`/api/posts/${postId}`).send();
 
     expect(res1.statusCode).toEqual(200);
     expect(res1.body.isOk).toEqual(true);
-    expect(res1.body.gather.title).toEqual("업데이트 게시글 타이틀");
-    expect(res1.body.gather.contents).toEqual("업데이트 게시글 내용");
-    expect(res1.body.gather.category).toEqual("team");
-    expect(res1.body.gather.area).toEqual("게더타운");
-    expect(res1.body.gather.tags).toEqual(
+    expect(res1.body.post.title).toEqual("업데이트 게시글 타이틀");
+    expect(res1.body.post.contents).toEqual("업데이트 게시글 내용");
+    expect(res1.body.post.category).toEqual("team");
+    expect(res1.body.post.area).toEqual("게더타운");
+    expect(res1.body.post.tags).toEqual(
       expect.arrayContaining(["노드", "익스프레스", "타입스크립트"])
     );
   });
@@ -164,7 +164,7 @@ describe("모임 게시글 기능 테스트", () => {
     const tags = ["노드", "익스프레스", "타입스크립트"];
 
     const res = await request(server)
-      .put("/api/gathers/sdlfkjsadfioqef")
+      .put("/api/posts/sdlfkjsadfioqef")
       .set("authorization", token)
       .send({
         title,
@@ -189,7 +189,7 @@ describe("모임 게시글 기능 테스트", () => {
     const tags = ["노드", "익스프레스", "타입스크립트"];
 
     const res = await request(server)
-      .put(`/api/gathers/${gatherId}`)
+      .put(`/api/posts/${postId}`)
       .set("authorization", notAccessToken)
       .send({
         title,
@@ -213,7 +213,7 @@ describe("모임 게시글 기능 테스트", () => {
     const area = "게더타운";
     const tags = ["노드", "익스프레스", "타입스크립트"];
 
-    const res = await request(server).put(`/api/gathers/${gatherId}`).send({
+    const res = await request(server).put(`/api/posts/${postId}`).send({
       title,
       contents,
       subject,
@@ -229,7 +229,7 @@ describe("모임 게시글 기능 테스트", () => {
 
   it("Fail 권한 없이 모집 글 삭제 기능 테스트", async () => {
     const res = await request(server)
-      .delete(`/api/gathers/${gatherId}`)
+      .delete(`/api/posts/${postId}`)
       .set("authorization", notAccessToken)
       .send();
 
@@ -240,7 +240,7 @@ describe("모임 게시글 기능 테스트", () => {
 
   it("Fail 없는 모집 글 삭제 기능 테스트", async () => {
     const res = await request(server)
-      .delete("/api/gathers/sldkfjqpeqwdas")
+      .delete("/api/posts/sldkfjqpeqwdas")
       .set("authorization", token)
       .send();
 
@@ -250,7 +250,7 @@ describe("모임 게시글 기능 테스트", () => {
   });
 
   it("Fail 로그인 없이 글 삭제 기능 테스트", async () => {
-    const res = await request(server).delete(`/api/gathers/${gatherId}`).send();
+    const res = await request(server).delete(`/api/posts/${postId}`).send();
 
     expect(res.statusCode).toEqual(403);
     expect(res.body.isOk).toEqual(false);
@@ -259,14 +259,14 @@ describe("모임 게시글 기능 테스트", () => {
 
   it("모집 글 삭제 기능 테스트", async () => {
     const res = await request(server)
-      .delete(`/api/gathers/${gatherId}`)
+      .delete(`/api/posts/${postId}`)
       .set("authorization", token)
       .send();
 
     expect(res.statusCode).toEqual(200);
     expect(res.body.isOk).toEqual(true);
 
-    const res1 = await request(server).get(`/api/gathers/${gatherId}`).send();
+    const res1 = await request(server).get(`/api/posts/${postId}`).send();
 
     expect(res1.statusCode).toEqual(403);
     expect(res1.body.isOk).toEqual(false);
@@ -275,7 +275,7 @@ describe("모임 게시글 기능 테스트", () => {
 
   afterAll(async () => {
     await connection.collection("users").deleteMany({});
-    await connection.collection("gathers").deleteMany({});
+    await connection.collection("posts").deleteMany({});
   });
 });
 
@@ -299,7 +299,7 @@ describe("모든 모집 글 리스트 조회 테스트", () => {
 
   it("모든 모집 글 리스트 조회 테스트", async () => {
     await request(server)
-      .post("/api/gathers")
+      .post("/api/posts")
       .set("authorization", token)
       .send({
         title: "titlelkj",
@@ -311,7 +311,7 @@ describe("모든 모집 글 리스트 조회 테스트", () => {
       });
 
     await request(server)
-      .post("/api/gathers")
+      .post("/api/posts")
       .set("authorization", token)
       .send({
         title: "titlasdfsdfelkj",
@@ -323,7 +323,7 @@ describe("모든 모집 글 리스트 조회 테스트", () => {
       });
 
     await request(server)
-      .post("/api/gathers")
+      .post("/api/posts")
       .set("authorization", token)
       .send({
         title: "titlwerqerelkj",
@@ -334,24 +334,27 @@ describe("모든 모집 글 리스트 조회 테스트", () => {
         tags: ["자바스크립트", "타입스크립트"],
       });
 
-    const res = await request(server).get("/api/gathers").send();
+    const res = await request(server)
+      .get("/api/posts")
+      .query({ subject: "gathering" })
+      .send();
 
     expect(res.statusCode).toEqual(200);
     expect(res.body.isOk).toEqual(true);
-    expect(res.body.gathers.length).toEqual(3);
+    expect(res.body.posts.length).toEqual(3);
 
     const res1 = await request(server)
-      .get("/api/gathers")
-      .query({ category: "team" })
+      .get("/api/posts")
+      .query({ subject: "gathering", category: "team" })
       .send();
 
     expect(res1.statusCode).toEqual(200);
     expect(res1.body.isOk).toEqual(true);
-    expect(res1.body.gathers.length).toEqual(1);
+    expect(res1.body.posts.length).toEqual(1);
   });
 
   afterAll(async () => {
     await connection.collection("users").deleteMany({});
-    await connection.collection("gathers").deleteMany({});
+    await connection.collection("posts").deleteMany({});
   });
 });

@@ -1,17 +1,16 @@
 import { IUserDocument } from "user";
 import { ICommentModel } from "comment";
 import { IPostModel } from "post";
-import { IGatherModel } from "gather";
 
 export default class CommentService {
-  ParentModel: IPostModel | IGatherModel | ICommentModel;
+  ParentModel: IPostModel | ICommentModel;
 
   parentId: string | undefined;
 
   CommentModel: ICommentModel;
 
   constructor(
-    ParentModel: IPostModel | IGatherModel | ICommentModel,
+    ParentModel: IPostModel | ICommentModel,
     CommentModel: ICommentModel,
     parentId?: string
   ) {
