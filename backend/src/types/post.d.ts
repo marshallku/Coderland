@@ -10,6 +10,8 @@ export type subjects =
   | "chat"
   | "gathering";
 
+export type categories = "study" | "code" | "team" | "none";
+
 export interface IPost {
   title: string;
   contents: string;
@@ -23,26 +25,36 @@ export interface IPost {
   updatedAt: Date;
 }
 
-export interface IPostDocument extends IPost, Document {}
+export interface IGatherPost extends IPost {
+  // subejct가 gathering일 때만 포함될 내용
+  category?: categories;
+  area?: string;
+  isCompleted?: boolean;
+  members?: IUserDocument[];
+  tags?: string[];
+}
+
+export interface IPostDocument extends IGatherPost, Document {}
 
 export interface IPostModel extends Model<IPostDocument> {
   findAllPosts: (
     subject: string,
+    category: string,
     currentPage: number
   ) => Promise<[IPostDocument[], IPagination]>;
 
   findPostById: (postId: string) => Promise<IPostDocument>;
 
-  viewCount: (post: IPostDocument) => Promise<IPostDocument>;
-
   createPost: (
     user: IUserDocument,
-    postDto: Partial<IPostDocument>
+    postDto: Partial<IPostDocument>,
+    gatherDto: Partial<IPostDocument>
   ) => Promise<IPostDocument>;
 
   updatePost: (
     postId: string,
-    postDto: Pick<IPostDocument, "title" | "contents" | "subject">
+    postDto: Partial<IPostDocument>,
+    gatherDto: Partial<IPostDocument>
   ) => Promise<void>;
 
   deletePost: (postId: string) => Promise<void>;

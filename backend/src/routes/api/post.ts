@@ -23,8 +23,13 @@ export default (app: Router) => {
     "/",
     asyncHandler(async (req, res) => {
       const subject = String(req.query.subject);
+      const category = String(req.query.category);
       const currentPage = Number(req.query.currentPage) || 1;
-      const [posts, pagination] = await findAllPosts(subject, currentPage);
+      const [posts, pagination] = await findAllPosts(
+        subject,
+        category,
+        currentPage
+      );
       res.status(200).json({
         isOk: true,
         posts,
@@ -52,8 +57,12 @@ export default (app: Router) => {
     loginRequired,
     asyncHandler(async (req, res) => {
       const { user } = req;
-      const { title, contents, subject } = req.body;
-      const postId = await createPost(user, { title, contents, subject });
+      const { title, contents, subject, category, area, tags } = req.body;
+      const postId = await createPost(
+        user,
+        { title, contents, subject },
+        { category, area, tags }
+      );
       res.status(201).json({ isOk: true, postId });
     })
   );
@@ -65,8 +74,12 @@ export default (app: Router) => {
     checkPermission,
     asyncHandler(async (req, res) => {
       const { postId } = req.params;
-      const { title, contents, subject } = req.body;
-      await updatePost(postId, { title, contents, subject });
+      const { title, contents, subject, category, area, tags } = req.body;
+      await updatePost(
+        postId,
+        { title, contents, subject },
+        { category, area, tags }
+      );
       res.status(200).json({ isOk: true, postId });
     })
   );
