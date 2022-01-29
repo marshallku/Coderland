@@ -59,4 +59,6 @@ export interface IPostModel extends Model<IPostDocument> {
   ) => Promise<void>;
 
   deletePost: (postId: string) => Promise<void>;
+
+  completePost: (postId: string) => Promise<void>;
 }

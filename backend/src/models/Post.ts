@@ -155,6 +155,12 @@ PostSchema.statics.deletePost = async (postId: string) => {
   await Post.findByIdAndDelete(postId);
 };
 
+PostSchema.statics.completePost = async (postId: string) => {
+  await Post.findByIdAndUpdate(postId, {
+    isCompleted: true,
+  });
+};
+
 const Post = mongoose.model<IPostDocument, IPostModel>("Post", PostSchema);
 
 export { Post };

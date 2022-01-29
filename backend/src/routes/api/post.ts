@@ -6,13 +6,11 @@ import { asyncHandler } from "../../utils";
 import { checkPermission, loginRequired } from "../middlewares";
 
 import commentRouter from "./comment";
-import replyRouter from "./reply";
 
 export default (app: Router) => {
   const route = Router();
 
   route.use("/:postId/comments", commentRouter);
-  route.use("/:postId/replies", replyRouter);
 
   // 글 목록 조회
   route.get(
@@ -94,6 +92,18 @@ export default (app: Router) => {
       const postService = new PostService(Post);
       await postService.deletePost(postId);
       res.status(200).json({ isOk: true, postId });
+    })
+  );
+
+  route.patch(
+    "/:postId",
+    loginRequired,
+    checkPermission,
+    asyncHandler(async (req, res) => {
+      const { postId } = req.params;
+      const postService = new PostService(Post);
+      await postService.completePost(postId);
+      res.status(200).json({ isOk: true });
     })
   );
 

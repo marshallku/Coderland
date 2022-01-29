@@ -50,4 +50,8 @@ export default class PostService {
   async deletePost(postId: string) {
     await this.PostModel.deletePost(postId);
   }
+
+  async completePost(postId: string) {
+    await this.PostModel.completePost(postId);
+  }
 }
