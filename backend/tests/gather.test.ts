@@ -175,6 +175,29 @@ describe("모임 게시글 기능 테스트", () => {
     );
   });
 
+  it("모집 글 모집 완료", async () => {
+    const res = await request(server)
+      .patch(`/api/posts/${postId}`)
+      .set("authorization", token)
+      .send();
+
+    expect(res.statusCode).toEqual(200);
+
+    const res1 = await request(server).get(`/api/posts/${postId}`).send();
+    expect(res1.body.post.isCompleted).toEqual(true);
+  });
+
+  it("Fail 권한 없이 모집 글 모집 완료", async () => {
+    const res = await request(server)
+      .patch(`/api/posts/${postId}`)
+      .set("authorization", notAccessToken)
+      .send();
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.isOk).toEqual(false);
+    expect(res.body.msg).toEqual("권한이 없어요...");
+  });
+
   it("Fail 없는 모집 게시글 수정", async () => {
     const title = "업데이트 게시글 타이틀";
     const contents = "업데이트 게시글 내용";
