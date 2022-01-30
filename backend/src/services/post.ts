@@ -1,6 +1,6 @@
 import { IUserDocument } from "user";
 import { IPostDocument, IPostModel } from "post";
-import parsePostBySubject from "../utils/parse-post";
+import { parsePostBySubject } from "../utils";
 
 export default class PostService {
   PostModel: IPostModel;
