@@ -1,7 +1,7 @@
 import { IUserDocument } from "user";
 import { ICommentModel } from "comment";
 import { IPostModel } from "post";
-import parseReply from "../utils/parse-reply";
+import { parseReply, createAuthorName } from "../utils";
 
 export default class CommentService {
   ParentModel: IPostModel | ICommentModel;
@@ -46,7 +46,7 @@ export default class CommentService {
         ...rest,
         isPostAuthor,
         replies: parseReply(replies, anonymous, author, isPostAuthor),
-        author: anonymous ? "anonymity" : author.nickname,
+        author: createAuthorName(anonymous, author),
       };
     });
     return [parsedComments, pagination];

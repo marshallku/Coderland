@@ -272,7 +272,7 @@ describe("답글 통합 테스트", () => {
     expect(res.statusCode).toEqual(201);
   });
 
-  it("일반 포스트 조회 테스트", async () => {
+  it("익명 포스트 조회 테스트", async () => {
     // when
     const res = await request(server)
       .get(`/api/posts/${postId}/comments`)
@@ -291,7 +291,7 @@ describe("답글 통합 테스트", () => {
     expect(res.body.comments[0].replies[0].isPostAuthor).toEqual(true); // 내 글 임
     expect(res.body.comments[0].replies[1].isPostAuthor).toEqual(false); // 내 글 아님
 
-    expect(res.body.comments[0].replies[0].author).toEqual("anonymity");
+    expect(res.body.comments[0].replies[0].author).not.toEqual("testuser2");
   });
 
   afterAll(async () => {

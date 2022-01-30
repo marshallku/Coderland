@@ -1,5 +1,6 @@
 import { LeanDocument } from "mongoose";
 import { IPostDocument } from "post";
+import { createAuthorName } from "./index";
 
 export default function parsePostBySubject(
   subject: string,
@@ -25,12 +26,12 @@ export default function parsePostBySubject(
       area,
       category,
       anonymous,
-      author: anonymous ? "anonymity" : author.nickname,
+      author: createAuthorName(anonymous, author),
     };
   }
   return {
     ...rest,
     anonymous,
-    author: anonymous ? "anonymity" : author.nickname,
+    author: createAuthorName(anonymous, author),
   };
 }

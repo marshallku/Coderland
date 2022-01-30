@@ -1,6 +1,7 @@
 import { LeanDocument } from "mongoose";
 import { IReplyDocument } from "comment";
 import { IUserDocument } from "user";
+import { createAuthorName } from "./index";
 
 export default (
   replies: LeanDocument<IReplyDocument>[],
@@ -15,7 +16,7 @@ export default (
       ...rest,
       isPostAuthor:
         isPostAuthor && commentAuthor._id.toString() === author._id.toString(),
-      author: anonymous ? "anonymity" : author.nickname,
+      author: createAuthorName(anonymous, author),
     };
   });
   return parsed;
