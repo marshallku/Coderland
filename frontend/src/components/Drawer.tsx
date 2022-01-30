@@ -9,7 +9,7 @@ function randomCssProperty(): React.CSSProperties {
   } as React.CSSProperties;
 }
 
-function DrawerLink({ title, to, cb }: DrawerItem) {
+function DrawerLink({ title, to, icon, cb }: DrawerItem) {
   const [cssProperty, setCssProperty] = useState<React.CSSProperties>(
     randomCssProperty()
   );
@@ -28,6 +28,7 @@ function DrawerLink({ title, to, cb }: DrawerItem) {
         cb?.();
       }}
     >
+      <i className={`icon-${icon}`} />
       {title}
     </Link>
   );
@@ -46,13 +47,33 @@ export default function Drawer({
       <section className={`drawer${drawerRevealed ? " drawer--revealed" : ""}`}>
         <h2 className="drawer__title">코더랜드</h2>
         <nav className="drawer__navigation">
-          <DrawerLink cb={hideDrawer} title="홈" to="/" />
-          <DrawerLink cb={hideDrawer} title="후기 / 회고" to="/review" />
-          <DrawerLink cb={hideDrawer} title="팀원 모집" to="/gather" />
-          <DrawerLink cb={hideDrawer} title="댓글 남겨줘" to="/article" />
-          <DrawerLink cb={hideDrawer} title="개발 정보" to="/dev" />
-          <DrawerLink cb={hideDrawer} title="채용 정보" to="/recruit" />
-          <DrawerLink cb={hideDrawer} title="잡담" to="/chat" />
+          <DrawerLink cb={hideDrawer} icon="home" title="홈" to="/" />
+          <DrawerLink
+            cb={hideDrawer}
+            icon="thumbs_up_down"
+            title="후기 / 회고"
+            to="/review"
+          />
+          <DrawerLink
+            cb={hideDrawer}
+            icon="person_add_alt_1"
+            title="팀원 모집"
+            to="/gather"
+          />
+          <DrawerLink
+            cb={hideDrawer}
+            icon="create"
+            title="댓글 남겨줘"
+            to="/article"
+          />
+          <DrawerLink cb={hideDrawer} icon="code" title="개발 정보" to="/dev" />
+          <DrawerLink
+            cb={hideDrawer}
+            icon="home_repair_service"
+            title="채용 정보"
+            to="/recruit"
+          />
+          <DrawerLink cb={hideDrawer} icon="chat" title="잡담" to="/chat" />
         </nav>
       </section>
       <button
