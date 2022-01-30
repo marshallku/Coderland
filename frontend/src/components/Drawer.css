@@ -3,11 +3,11 @@
   top: 60px;
   right: 0;
   max-width: calc(100% - 20px);
-  width: 400px;
+  width: 300px;
   height: 100%;
   padding: 10px 0;
   background-color: var(--gray-5);
-  transform: translate3d(400px, 0, 0);
+  transform: translate3d(300px, 0, 0);
   overflow-y: auto;
   overscroll-behavior: none;
   transition: transform 0.25s ease-in-out;
@@ -32,6 +32,8 @@
 
 .drawer__link {
   position: relative;
+  display: flex;
+  align-items: center;
   font-size: 1rem;
   line-height: 2;
   padding: 10px;
@@ -45,7 +47,7 @@
   width: var(--random-width);
   height: 100%;
   pointer-events: none;
-  background-color: var(--background-base);
+  background-color: var(--primary);
   border-radius: 0 2rem 2rem 0;
   transform: translate3d(-100%, 0, 0);
   transition: transform 0.25s ease-in-out;
@@ -54,6 +56,17 @@
 
 .drawer__link--highlight::before {
   transform: translate3d(0, 0, 0);
+}
+
+.drawer__link > i {
+  margin-right: 8px;
+  font-size: 0.8rem;
+  color: var(--primary);
+  transition: color 0.25s ease-in-out;
+}
+
+.drawer__link--highlight > i {
+  color: var(--gray-6);
 }
 
 .drawer-closer {
