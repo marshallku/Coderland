@@ -3,6 +3,7 @@ import { asyncHandler } from "../../utils";
 import { loginRequired } from "../middlewares";
 import { Comment } from "../../models";
 import ReplyService from "../../services/reply";
+import checkReplyPermission from "../middlewares/check-reply-permission";
 
 const replyRouter = Router({ mergeParams: true });
 
@@ -21,6 +22,7 @@ replyRouter.post(
 replyRouter.put(
   "/",
   loginRequired,
+  checkReplyPermission,
   asyncHandler(async (req, res) => {
     const { user } = req;
     const { replyId, commentId, contents } = req.body;
@@ -33,6 +35,7 @@ replyRouter.put(
 replyRouter.delete(
   "/",
   loginRequired,
+  checkReplyPermission,
   asyncHandler(async (req, res) => {
     const { user } = req;
     const { replyId, commentId } = req.body;
