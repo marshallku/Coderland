@@ -26,6 +26,7 @@ export interface IComment {
   parentId: mongoose.Types.ObjectId;
   likes: number;
   anonymous: boolean;
+  isPostAuthor: boolean;
   replies: IReplyDocument[];
   createdAt: Date;
   updatedAt: Date;
@@ -52,7 +53,7 @@ export interface ICommentModel extends Model<ICommentDocument> {
 
   createReply: (
     commentId: string,
-    author: IUserDocument,
+    user: IUserDocument,
     contents: string
   ) => Promise<void>;
 

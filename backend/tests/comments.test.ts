@@ -114,6 +114,7 @@ describe("댓글 통합 테스트", () => {
     expect(Object.keys(res.body)).toEqual(
       expect.arrayContaining(["isOk", "comments", "pagination"])
     );
+    expect(res.body.comments[0].isPostAuthor).toEqual(true);
   });
 
   it("댓글 수정 테스트", async () => {
