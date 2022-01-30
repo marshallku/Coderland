@@ -12,6 +12,7 @@ describe("답글 통합 테스트", () => {
   let postId: string;
   let commentId: string;
   let replyId: string;
+  let notAccessToken = "Bearer ";
 
   beforeAll(async () => {
     await connection.collection("users").insertOne({
@@ -27,6 +28,22 @@ describe("답글 통합 테스트", () => {
     });
 
     token += createToken(user);
+
+    await connection.collection("users").insertOne({
+      googleId: "1734981374981123",
+      nickname: "testuser2",
+      name: "family given2",
+      profile: "profile photo url2",
+      grade: 0,
+    });
+
+    const notOwner = <IUserDocument>(
+      await connection.collection("users").findOne({
+        googleId: "1734981374981123",
+      })
+    );
+
+    notAccessToken += createToken(notOwner);
   });
 
   it("일반 포스트 생성", async () => {
@@ -124,6 +141,54 @@ describe("답글 통합 테스트", () => {
     expect(res1.body.comments[0].replies[0].contents).toEqual(
       "update reply contents"
     );
+  });
+
+  it("Fail 없는 답글 수정 테스트", async () => {
+    const contents = "update reply contents";
+
+    const res = await request(server)
+      .put(`/api/posts/${postId}/replies`)
+      .set("authorization", token)
+      .send({ commentId, replyId: "sldkfjlkaaldkj", contents });
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.isOk).toEqual(false);
+    expect(res.body.msg).toEqual("존재하지 않는 글입니다.");
+  });
+
+  it("Fail 권한 없이 답글 수정 테스트", async () => {
+    const contents = "update reply contents";
+
+    const res = await request(server)
+      .put(`/api/posts/${postId}/replies`)
+      .set("authorization", notAccessToken)
+      .send({ commentId, replyId, contents });
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.isOk).toEqual(false);
+    expect(res.body.msg).toEqual("권한이 없습니다.");
+  });
+
+  it("Fail 권한 없이 답글 삭제 테스트", async () => {
+    const res = await request(server)
+      .delete(`/api/posts/${postId}/replies`)
+      .set("authorization", notAccessToken)
+      .send({ commentId, replyId });
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.isOk).toEqual(false);
+    expect(res.body.msg).toEqual("권한이 없습니다.");
+  });
+
+  it("Fail 없는 답글 삭제 테스트", async () => {
+    const res = await request(server)
+      .delete(`/api/posts/${postId}/replies`)
+      .set("authorization", token)
+      .send({ commentId, replyId: "asdlfkjkl" });
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.isOk).toEqual(false);
+    expect(res.body.msg).toEqual("존재하지 않는 글입니다.");
   });
 
   it("답글 삭제 테스트", async () => {
