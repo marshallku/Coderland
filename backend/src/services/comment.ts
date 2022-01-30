@@ -40,10 +40,12 @@ export default class CommentService {
       currentPage
     );
     const parsedComments = comments.map((comment) => {
-      const { author, anonymous, replies, ...rest } = comment.toObject();
+      const { author, anonymous, replies, isPostAuthor, ...rest } =
+        comment.toObject();
       return {
         ...rest,
-        replies: parseReply(replies, anonymous),
+        isPostAuthor,
+        replies: parseReply(replies, anonymous, author, isPostAuthor),
         author: anonymous ? "anonymity" : author.nickname,
       };
     });

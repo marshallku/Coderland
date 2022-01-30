@@ -47,6 +47,10 @@ export const CommentSchema = new mongoose.Schema<ICommentDocument>(
       type: Boolean,
       default: false,
     },
+    isPostAuthor: {
+      type: Boolean,
+      default: false,
+    },
     replies: [ReplySchema],
   },
   {
@@ -74,6 +78,7 @@ CommentSchema.statics.createComment = async (
     parentId: parent.id,
     anonymous: parent.anonymous,
     author: user,
+    isPostAuthor: parent.author.toString() === user.id,
   });
 
   return comment;
@@ -111,10 +116,16 @@ CommentSchema.statics.deleteComment = async (commentId) => {
   await Comment.findByIdAndDelete(commentId);
 };
 
-CommentSchema.statics.createReply = async (commentId, author, contents) => {
+CommentSchema.statics.createReply = async (commentId, user, contents) => {
   const replyId = new mongoose.Types.ObjectId();
   await Comment.findByIdAndUpdate(commentId, {
-    $push: { replies: { _id: replyId, author, contents } },
+    $push: {
+      replies: {
+        _id: replyId,
+        author: user,
+        contents,
+      },
+    },
   });
 };
 

@@ -110,6 +110,7 @@ describe("답글 통합 테스트", () => {
         "updatedAt",
       ])
     );
+    expect(res1.body.comments[0].replies[0].isPostAuthor).toEqual(true);
 
     replyId = res1.body.comments[0].replies[0]._id;
   });
@@ -260,6 +261,17 @@ describe("답글 통합 테스트", () => {
     expect(res.statusCode).toEqual(201);
   });
 
+  it("다른 사람 글 답글 생성 테스트", async () => {
+    const contents = "reply contents";
+
+    const res = await request(server)
+      .post(`/api/posts/${postId}/replies`)
+      .set("authorization", notAccessToken)
+      .send({ commentId, contents });
+
+    expect(res.statusCode).toEqual(201);
+  });
+
   it("일반 포스트 조회 테스트", async () => {
     // when
     const res = await request(server)
@@ -276,6 +288,9 @@ describe("답글 통합 테스트", () => {
         "updatedAt",
       ])
     );
+    expect(res.body.comments[0].replies[0].isPostAuthor).toEqual(true); // 내 글 임
+    expect(res.body.comments[0].replies[1].isPostAuthor).toEqual(false); // 내 글 아님
+
     expect(res.body.comments[0].replies[0].author).toEqual("anonymity");
   });
 
