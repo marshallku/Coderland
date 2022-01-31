@@ -31,7 +31,7 @@ export function Input(props: InputProps) {
   const handleChange = (event: React.FormEvent) => {
     const { target } = event;
 
-    if (!(target instanceof HTMLTextAreaElement) || !setValue) return;
+    if (!(target instanceof HTMLInputElement) || !setValue) return;
 
     setValue(target.value);
   };
