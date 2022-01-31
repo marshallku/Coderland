@@ -8,15 +8,27 @@
 }
 
 .comment-wrap {
-  padding: 12px 20px;
   border-bottom: 1px solid var(--gray-5);
+}
+
+.comment {
+  padding: 12px 20px;
   line-height: 1.5rem;
+}
+
+.comment--reply {
+  margin-left: 20px;
+  border-top: 1px solid var(--gray-5);
 }
 
 .comment__author-wrap,
 .comment__info {
   font-size: 0.88rem;
   color: var(--gray-3);
+}
+
+.comment__author-wrap {
+  margin-bottom: 4px;
 }
 
 .comment__author-wrap button {
@@ -39,4 +51,9 @@
 
 .comment__info button i {
   margin-right: 4px;
+}
+
+.comment__edit--on,
+.comment__reply--on {
+  color: var(--primary);
 }
