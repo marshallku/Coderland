@@ -26,51 +26,46 @@ export default function PostCardItem({ postList }: IPostCardItemProps) {
             tags,
             isCompleted,
           }) => (
-            <Link
+            <article
               key={_id}
-              className={`post-list__card ${isCompleted ? "complete" : ""}`}
-              to={`/posts/${_id}`}
+              className={`card-item ${
+                isCompleted ? "card-item--completed" : ""
+              }`}
             >
-              <div className="card-title">{title}</div>
-              <div className="card-contents">{contents}</div>
-              <i
-                className={`card-image icon-${icon}`}
-                role="img"
-                aria-label={`${icon} 아이콘`}
-              />
-              <div className="card-member">
-                <div className="card-member__wrapper">
-                  <i
-                    className="card-member__icon icon-person"
-                    role="img"
-                    aria-label="모집인원수를 나타내는 사람모양 아이콘"
-                  />
-                  <span className="card-member__text">
-                    인원 : {members.length}명
-                  </span>
+              <Link className="card-item__link" to={`/gathers/${_id}`}>
+                <div>
+                  <span
+                    className={`card-item__status ${
+                      isCompleted ? "card-item__status--completed" : ""
+                    }`}
+                  >{`모집${isCompleted ? "완료" : "중"}`}</span>
                 </div>
-                <span
-                  className={`card-member__is-completed ${
-                    isCompleted ? "complete" : ""
-                  }`}
-                >{`모집${isCompleted ? "완료" : "중"}`}</span>
-              </div>
-              <div className="card-area">
+                <h2 className="card-item-title">{title}</h2>
+                <p className="card-item-contents">{contents}</p>
                 <i
-                  className="card-area__icon icon-desktop_windows"
+                  className={`card-item__icon icon-${icon}`}
                   role="img"
-                  aria-label="장소를 나타내는 컴퓨터모양 아이콘"
+                  aria-label={`${icon} 로고`}
                 />
-                <span className="card-area__text">장소 : {area}</span>
-              </div>
-              <ul className="card-tags">
-                {tags.map((tag) => (
-                  <li className="card-tag" key={tag}>
-                    {tag}
-                  </li>
-                ))}
-              </ul>
-            </Link>
+                <header className="card-item__header">
+                  <div className="card-item__info">
+                    <i className="card-item__info-icon icon-person" />
+                    <span className="card-item__info-text">
+                      인원 : {members.length}명
+                    </span>
+                  </div>
+                  <div className="card-item__info">
+                    <i className="card-item__info-icon icon-desktop_windows" />
+                    <span className="card-item__info-text">장소 : {area}</span>
+                  </div>
+                  <ul className="card-item__tags">
+                    {tags.map((tag) => (
+                      <li key={tag}>{tag}</li>
+                    ))}
+                  </ul>
+                </header>
+              </Link>
+            </article>
           )
         )}
       </div>

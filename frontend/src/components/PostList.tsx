@@ -1,6 +1,4 @@
-import "./PostList.css";
 import { useState, useEffect, useCallback } from "react";
-
 import { dummyGathersResponse, dummyPostsResponse } from "../api/dummy";
 import Posts from "./Posts";
 import Pagination from "./Pagination";
@@ -33,9 +31,9 @@ export default function PostList({ subject }: IPostListProps) {
     return <Loader />;
   }
   return (
-    <div className="post-list">
+    <>
       <Posts subject={subject} postList={currentPosts.posts} />
       <Pagination paginate={paginate} paginateInfo={currentPosts.pagination} />
-    </div>
+    </>
   );
 }
