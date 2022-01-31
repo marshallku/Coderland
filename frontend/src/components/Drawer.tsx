@@ -14,7 +14,7 @@ function DrawerLink({ title, to, icon, cb }: DrawerItem) {
     randomCssProperty()
   );
   const resolved = useResolvedPath(to);
-  const match = useMatch({ path: resolved.pathname, end: true });
+  const match = useMatch({ path: resolved.pathname, end: to === "/" });
 
   return (
     <Link
