@@ -45,6 +45,9 @@ export default function GlobalNavigationBar({
               {/* TODO: 유저 정보 추가 */}
               <img src={favicon} alt="유저 프로필" />
               <div>
+                <div>
+                  <Link to="/user">정보 수정</Link>
+                </div>
                 <div>로그아웃</div>
               </div>
             </>
