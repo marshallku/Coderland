@@ -3,7 +3,16 @@ import { createContext, useContext, useState } from "react";
 const authContext = createContext<IAuth | null>(null);
 
 function useAuthProvider() {
-  const [user, setUser] = useState<IUser | null>(null);
+  // FIXME: 더미로 유저 추가해둠. 추후 null로 수정
+  const [user, setUser] = useState<IUser | null>({
+    googleId: "1230419308012123",
+    nickname: "트럼프 병정",
+    name: "홍길동",
+    profile: "https://i.imgur.com/xCvzudW.png",
+    grade: 0,
+    track: "SW 엔지니어 트랙 1기",
+    gitlab: "https://kdt-gitlab.elice.io/marshallku",
+  });
 
   return {
     signIn(cb?: () => unknown) {
