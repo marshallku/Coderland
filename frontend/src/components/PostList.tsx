@@ -10,7 +10,7 @@ export default function PostList({ subject }: IPostListProps) {
   const [currentPosts, setCurrentPosts] = useState<
     IPostListResponse | IGatherPostListResponse
   >();
-  const [currentPage, setCurrentPage] = useState<number>(3);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [postsPerPage] = useState(10);
 
   const paginate = useCallback((pageNumber: number) => {
@@ -27,12 +27,11 @@ export default function PostList({ subject }: IPostListProps) {
       }
       const indexOfLastPost = currentPage * postsPerPage;
       const indexOfFirstPost = indexOfLastPost - postsPerPage;
-      const currentPostsResponse = { ...postsResponse };
-      currentPostsResponse.posts = postsResponse.posts.slice(
+      postsResponse.posts = postsResponse.posts.slice(
         indexOfFirstPost,
         indexOfLastPost
       );
-      setCurrentPosts(currentPostsResponse);
+      setCurrentPosts(postsResponse);
     }
     getCardOrListPosts();
   }, [currentPage]);
@@ -43,7 +42,7 @@ export default function PostList({ subject }: IPostListProps) {
   return (
     <div className="post-list">
       <Posts subject={subject} postList={currentPosts.posts} />
-      <Pagination paginate={paginate} paginateInfo={currentPosts?.pagination} />
+      <Pagination paginate={paginate} paginateInfo={currentPosts.pagination} />
     </div>
   );
 }

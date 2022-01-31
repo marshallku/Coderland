@@ -36,6 +36,7 @@ interface IGatherPost {
   updatedAt: string;
   isCompleted: boolean;
   area: string;
+  category: TGatherCategory;
   tags: Array<string>;
   members: Array<IUser>;
   icon: string;
