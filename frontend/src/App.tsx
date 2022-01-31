@@ -8,8 +8,13 @@ import Search from "./pages/Search";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./data/Auth";
 import RequireAuth from "./routes/RequireAuth";
-import User from "./pages/User";
-import GroupInUser from "./components/GroupInUser";
+import User, {
+  UserInfo,
+  UserPosts,
+  UserGatherPosts,
+  UserComments,
+  UserBookmarks,
+} from "./pages/User";
 
 export default function App() {
   return (
@@ -27,8 +32,12 @@ export default function App() {
                 <Route path="/gathers/:id" element={<GatherDetails />} />
                 <Route element={<RequireAuth />}>
                   <Route path="/add/:subject" element={<Add />} />
-                  <Route path="/users/:id" element={<User />}>
-                    <Route path=":group" element={<GroupInUser />} />
+                  <Route path="/user/*" element={<User />}>
+                    <Route path="posts" element={<UserPosts />} />
+                    <Route path="gathers" element={<UserGatherPosts />} />
+                    <Route path="comments" element={<UserComments />} />
+                    <Route path="bookmarks" element={<UserBookmarks />} />
+                    <Route path="*" element={<UserInfo />} />
                   </Route>
                 </Route>
                 <Route path="/search/*" element={<Search />} />
