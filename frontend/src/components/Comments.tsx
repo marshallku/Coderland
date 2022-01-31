@@ -26,7 +26,6 @@ export default function Comments() {
       const newComment: IComment = {
         _id: String(Date.now()),
         contents: commentText,
-        postId: "",
         author: "익명의 도도새",
         postId: "",
         likes: 0,
@@ -76,7 +75,6 @@ export default function Comments() {
           <Comment
             key={_id}
             _id={_id}
-            postId={postId}
             contents={contents}
             author={author}
             postId={postId}

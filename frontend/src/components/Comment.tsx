@@ -6,7 +6,6 @@ import "./Comment.css";
 
 export default function Comment({
   contents,
-  postId,
   author,
   createdAt,
   likes,
