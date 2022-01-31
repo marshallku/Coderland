@@ -7,10 +7,18 @@
   height: 2rem;
 }
 
+.comment-wrap {
+  border-bottom: 1px solid var(--gray-5);
+}
+
 .comment {
   padding: 12px 20px;
-  border-bottom: 1px solid var(--gray-5);
   line-height: 1.5rem;
+}
+
+.comment--reply {
+  margin-left: 20px;
+  border-top: 1px solid var(--gray-5);
 }
 
 .comment__author-wrap,

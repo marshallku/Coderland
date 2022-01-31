@@ -1,5 +1,6 @@
 import { useState } from "react";
 import CommentLikeBtn from "./CommentLikeBtn";
+import Reply from "./CommentReply";
 import { formatToReadableTime } from "../utils/time";
 import "./Comment.css";
 
@@ -54,7 +55,7 @@ export default function Comment({
   };
 
   return (
-    <>
+    <div className="comment-wrap">
       <div className="comment">
         <div className="comment__author-wrap">
           <span className="comment__author">{author}</span>
@@ -156,13 +157,27 @@ export default function Comment({
       )}
 
       {replies.length > 0
-        ? replies.map((reply) => (
-            <>
-              <div>{reply.author}</div>
-              <div>{reply.contents}</div>
-            </>
-          ))
+        ? replies.map(
+            ({
+              _id: replyId,
+              contents: replyContents,
+              author: replyAuthor,
+              isPostAuthor,
+              createdAt: replyCreatedAt,
+              updatedAt: replyUpdatedAt,
+            }: ICommentReply) => (
+              <Reply
+                key={replyId}
+                _id={replyId}
+                contents={replyContents}
+                author={replyAuthor}
+                isPostAuthor={isPostAuthor}
+                createdAt={replyCreatedAt}
+                updatedAt={replyUpdatedAt}
+              />
+            )
+          )
         : ""}
-    </>
+    </div>
   );
 }
