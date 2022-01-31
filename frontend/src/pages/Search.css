@@ -5,6 +5,7 @@
   align-items: center;
   border: var(--border-thickness) solid var(--gray-5);
   border-radius: 4px;
+  transition: border-color 0.25s ease-in-out;
 }
 
 .search-box:focus-within {

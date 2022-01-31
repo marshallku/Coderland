@@ -1,6 +1,6 @@
 // Type
-declare type subject = "article" | "dev" | "recruit" | "chat" | "review";
-declare type gatherCategory = "study" | "code" | "team";
+declare type TSubject = "article" | "dev" | "recruit" | "chat" | "review";
+declare type TGatherCategory = "study" | "code" | "team";
 
 interface IUser {
   googleId: string;
@@ -16,7 +16,7 @@ interface IPost {
   _id: string;
   title: string;
   contents: string;
-  subject: subject;
+  subject: TSubject;
   view: number;
   likes: number;
   author: string;
@@ -36,9 +36,10 @@ interface IGatherPost {
   updatedAt: string;
   isCompleted: boolean;
   area: string;
+  category: TGatherCategory;
   tags: Array<string>;
   members: Array<IUser>;
-  memberCount: number;
+  icon: string;
 }
 
 interface IComment {
@@ -89,6 +90,10 @@ interface IGatherPostListResponse extends ISuccessResponse {
 
 interface IGatherPostResponse extends ISuccessResponse {
   gather: IGatherPost;
+}
+
+interface IGatherModifyResponse extends ISuccessResponse {
+  gatherId: string;
 }
 
 // Comment

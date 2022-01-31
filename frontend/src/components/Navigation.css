@@ -15,6 +15,10 @@
   padding: 0.5rem;
   line-height: 1.5;
   flex-shrink: 0;
+  /*
+    TODO: box-shadow에 transition 주는 것과 가상 선택자 만들어서 애니메이션 표시하는 것 중 어떤 게 성능 저하 큰지 찾아보기
+  */
+  transition: color 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
 }
 
 .navigation__item--highlight {

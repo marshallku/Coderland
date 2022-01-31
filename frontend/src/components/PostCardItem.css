@@ -17,6 +17,11 @@
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
 }
 
+.post-list__card.complete {
+  background-color: var(--multipurpose);
+  color: var(--gray-5);
+}
+
 .card-title {
   font-size: 1.125rem;
   font-weight: 600;
@@ -33,6 +38,30 @@
   justify-content: center;
   align-items: center;
   font-size: 4rem;
+}
+
+.card-area,
+.card-member {
+  color: var(--gray-1);
+  display: flex;
+  align-items: center;
+}
+
+.card-member {
+  justify-content: space-between;
+}
+
+.card-member__is-completed {
+  margin-right: 20px;
+  color: var(--forest-base);
+  background-color: var(--material-submit-second);
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
+}
+
+.card-member__is-completed.complete {
+  color: var(--warning);
+  background-color: var(--warning-second);
 }
 
 .card-member__icon,
