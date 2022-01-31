@@ -8,14 +8,14 @@ export default function PostCardItem({ postList }: IPostCardItemProps) {
       <Navigation
         list={[
           { title: "전체", to: "/gather" },
-          { title: "스터디", to: "/gather?category=study" },
-          { title: "모각코", to: "/gather?category=code" },
-          { title: "프로젝트", to: "/gather?category=team" },
+          { title: "스터디", to: "/gather/study" },
+          { title: "모각코", to: "/gather/code" },
+          { title: "프로젝트", to: "/gather/team" },
         ]}
         align="center"
       />
       <div className="post-list-card-wrapper">
-        {postList?.map(
+        {postList.map(
           ({
             _id,
             title,

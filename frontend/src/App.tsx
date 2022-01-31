@@ -21,6 +21,7 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/gather" element={<Gather />} />
+                <Route path="/gather/:category" element={<Gather />} />
                 <Route path="/posts/:id" element={<PostsDetail />} />
                 <Route path="/gathers/:id" element={<GathersDetail />} />
                 <Route element={<RequireAuth />}>
