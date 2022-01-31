@@ -6,6 +6,7 @@ import "./Comment.css";
 export default function Comment({
   _id,
   contents,
+  postId,
   author,
   createdAt,
   likes,
@@ -28,11 +29,6 @@ export default function Comment({
   const handleEditSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (editedText) {
-      // sample edit
-      const editedComment = {
-        contents: editedText,
-        updatedAt: new Date(Date.now()).toISOString(),
-      };
       // TODO: PATCH Comments
       toggleEditMode();
     }
@@ -41,15 +37,6 @@ export default function Comment({
   const handleReplySubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (replyText) {
-      // sample reply
-      const reply: IComment = {
-        _id: String(Date.now()),
-        contents: replyText,
-        author: "익명의 도도새",
-        createdAt: new Date(Date.now()).toISOString(),
-        updatedAt: new Date(Date.now()).toISOString(),
-        likes: 0,
-      };
       // TODO: POST Reply
       toggleReplyMode();
     }

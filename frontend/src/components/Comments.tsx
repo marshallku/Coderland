@@ -21,6 +21,7 @@ export default function Comments() {
       const newComment: IComment = {
         _id: String(Date.now()),
         contents: commentText,
+        postId: "",
         author: "익명의 도도새",
         createdAt: new Date(Date.now()).toISOString(),
         updatedAt: new Date(Date.now()).toISOString(),
@@ -53,10 +54,19 @@ export default function Comments() {
       </form>
 
       {commentList.map(
-        ({ _id, contents, author, createdAt, updatedAt, likes }: IComment) => (
+        ({
+          _id,
+          contents,
+          author,
+          postId,
+          createdAt,
+          updatedAt,
+          likes,
+        }: IComment) => (
           <Comment
             key={_id}
             _id={_id}
+            postId={postId}
             contents={contents}
             author={author}
             createdAt={createdAt}
