@@ -65,9 +65,11 @@ const tmpComments: Array<IComment> = [
       "엘리스 SW 엔지니어 트랙은 디지털 융합 신기술 훈련, 기업 맞춤형 국기훈련입니다.",
     author: "하트 여왕",
     postId: "",
+    isPostAuthor: false,
     likes: 1,
     createdAt: "2022-01-24T10:23:38.981Z",
     updatedAt: "2022-01-25T10:23:38.981Z",
+    replies: [],
   },
   {
     _id: "60f6af69124eef28ad1676e3",
@@ -75,9 +77,28 @@ const tmpComments: Array<IComment> = [
       "엘리스 AI 트랙은 디지털 융합 신기술 훈련, 기업 맞춤형 국기훈련입니다.",
     author: "3월의 토끼",
     postId: "",
+    isPostAuthor: false,
     likes: 3,
     createdAt: "2022-01-24T10:23:38.981Z",
     updatedAt: "2022-01-25T10:23:38.981Z",
+    replies: [
+      {
+        _id: "60f6af69124eef28ad1m57d2",
+        contents: "안녕하세요, SW 엔지니어 트랙에 오신 것을 환영합니다.",
+        author: "모자 장수",
+        isPostAuthor: false,
+        createdAt: "2022-01-30T09:23:38.981Z",
+        updatedAt: "2022-01-30T09:23:38.981Z",
+      },
+      {
+        _id: "60f6af69124eef28ad48ki59",
+        contents: "안녕하세요, AI 트랙에 오신 것을 환영합니다.",
+        author: "도도새",
+        isPostAuthor: false,
+        createdAt: "2022-01-30T09:23:38.981Z",
+        updatedAt: "2022-01-30T09:23:38.981Z",
+      },
+    ],
   },
   {
     _id: "80f6ac6812485f2ead1876e7",
@@ -85,9 +106,11 @@ const tmpComments: Array<IComment> = [
       "엘리스 트랙은 디지털 융합 신기술 훈련, 기업 맞춤형 국기훈련입니다.",
     author: "하트 여왕",
     postId: "",
+    isPostAuthor: false,
     likes: 10,
     createdAt: "2022-01-24T10:23:38.981Z",
     updatedAt: "2022-01-25T10:23:38.981Z",
+    replies: [],
   },
 ];
 

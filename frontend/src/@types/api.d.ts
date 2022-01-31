@@ -42,14 +42,25 @@ interface IGatherPost {
   icon: string;
 }
 
+interface ICommentReply {
+  _id: string;
+  contents: string;
+  author: string | "anonymity";
+  isPostAuthor: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface IComment {
   _id: string;
   contents: string;
-  author: string;
+  author: string | "anonymity";
   postId: string;
   likes: number;
+  isPostAuthor: boolean;
   createdAt: string;
   updatedAt: string;
+  replies: Array<ICommentReply>;
 }
 
 interface IPagination {
