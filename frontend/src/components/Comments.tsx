@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { dummyComments } from "../api/dummy";
+import { dummyCommentsResponse } from "../api/dummy";
 import useApi from "../api/useApi";
 import Comment from "./Comment";
 import "./Comments.css";
@@ -8,24 +8,31 @@ export default function Comments() {
   const [commentText, setCommentText] = useState("");
   const [commentList, setCommentList] = useState<IComment[]>([]);
 
-  // TODO: GET Comments
-  const comments = useApi(dummyComments);
+  // TODO: GET Comment
+  const response = useApi(dummyCommentsResponse);
+
+  const getComments = () => {
+    setCommentList(response?.comments || []);
+  };
+
   useEffect(() => {
-    setCommentList(comments || []);
-  }, [commentList]);
+    getComments();
+  }, []);
 
   const handleCommentSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (commentText) {
-      // sample comment
+      // TODO: POST Comment
       const newComment: IComment = {
         _id: String(Date.now()),
         contents: commentText,
         author: "익명의 도도새",
         postId: "",
+        likes: 0,
+        isPostAuthor: false,
         createdAt: new Date(Date.now()).toISOString(),
         updatedAt: new Date(Date.now()).toISOString(),
-        likes: 0,
+        replies: [],
       };
       setCommentList([...commentList, newComment]);
       setCommentText("");
@@ -59,9 +66,11 @@ export default function Comments() {
           contents,
           author,
           postId,
+          likes,
+          isPostAuthor,
           createdAt,
           updatedAt,
-          likes,
+          replies,
         }: IComment) => (
           <Comment
             key={_id}
@@ -69,9 +78,11 @@ export default function Comments() {
             contents={contents}
             author={author}
             postId={postId}
+            likes={likes}
+            isPostAuthor={isPostAuthor}
             createdAt={createdAt}
             updatedAt={updatedAt}
-            likes={likes}
+            replies={replies}
           />
         )
       )}

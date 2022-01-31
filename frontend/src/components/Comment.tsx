@@ -6,9 +6,9 @@ import "./Comment.css";
 export default function Comment({
   contents,
   author,
-  postId,
   createdAt,
   likes,
+  replies,
 }: IComment) {
   const [editMode, setEditMode] = useState(false);
   const [replyMode, setReplyMode] = useState(false);
@@ -28,12 +28,11 @@ export default function Comment({
   const handleEditSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (editedText) {
-      // sample edit
-      const editedComment = {
-        contents: editedText,
-        updatedAt: new Date(Date.now()).toISOString(),
-      };
-      // TODO: PATCH Comments
+      // TODO: PUT Comment
+      // const editedComment = {
+      //   contents: editedText,
+      //   updatedAt: new Date(Date.now()).toISOString(),
+      // };
       toggleEditMode();
     }
   };
@@ -41,23 +40,21 @@ export default function Comment({
   const handleReplySubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (replyText) {
-      // sample reply
-      const reply: IComment = {
-        _id: String(Date.now()),
-        contents: replyText,
-        author: "익명의 도도새",
-        postId,
-        createdAt: new Date(Date.now()).toISOString(),
-        updatedAt: new Date(Date.now()).toISOString(),
-        likes: 0,
-      };
       // TODO: POST Reply
+      // const reply: ICommentReply = {
+      //   _id: String(Date.now()),
+      //   contents: replyText,
+      //   author: "익명의 도도새",
+      //   isPostAuthor: false,
+      //   createdAt: new Date(Date.now()).toISOString(),
+      //   updatedAt: new Date(Date.now()).toISOString(),
+      // };
       toggleReplyMode();
     }
   };
 
   return (
-    <div className="comment-wrap">
+    <>
       <div className="comment">
         <div className="comment__author-wrap">
           <span className="comment__author">{author}</span>
@@ -154,7 +151,18 @@ export default function Comment({
             </button>
           </div>
         </form>
-      ) : null}
-    </div>
+      ) : (
+        ""
+      )}
+
+      {replies.length > 0
+        ? replies.map((reply) => (
+            <>
+              <div>{reply.author}</div>
+              <div>{reply.contents}</div>
+            </>
+          ))
+        : ""}
+    </>
   );
 }
