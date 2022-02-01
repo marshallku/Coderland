@@ -1,0 +1,30 @@
+.post-list--card {
+  display: flex;
+  margin-top: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+@media screen and (min-width: 680px) {
+  .post-list--card {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card-item {
+    height: 100%;
+  }
+}
+
+@media screen and (min-width: 860px) {
+  .post-list--card {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (min-width: 1160px) {
+  .post-list--card {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

@@ -1,5 +1,11 @@
 // Type
-declare type TSubject = "article" | "dev" | "recruit" | "chat" | "review";
+declare type TSubject =
+  | "article"
+  | "dev"
+  | "recruit"
+  | "chat"
+  | "review"
+  | "gather";
 declare type TGatherCategory = "study" | "code" | "team";
 
 interface IUser {
@@ -24,6 +30,8 @@ interface IPost {
   createdAt: string;
   updatedAt: string;
 }
+
+type IPostInList = Array<Omit<IPost, "contents" | "subject">>;
 
 interface IGatherPost {
   _id: string;

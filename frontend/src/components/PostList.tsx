@@ -1,16 +1,20 @@
 import { useState, useEffect, useCallback } from "react";
 import { dummyGathersResponse, dummyPostsResponse } from "../api/dummy";
-import Posts from "./Posts";
 import Pagination from "./Pagination";
 import Loader from "./Loader";
+import PostCardItem from "./PostCardItem";
+import PostListItem from "./PostListItem";
+import "./PostList.css";
 
-const USES_CARD_DESIGN = ["gathering"];
+const USES_CARD_DESIGN = ["gather"];
 
 export default function PostList({ subject }: IPostListProps) {
-  const [currentPosts, setCurrentPosts] = useState<
+  // TODO: 타입 세팅
+  const [response, setResponse] = useState<
     IPostListResponse | IGatherPostListResponse
   >();
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const usesCardDesign = USES_CARD_DESIGN.includes(subject);
 
   const paginate = useCallback((pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -18,22 +22,32 @@ export default function PostList({ subject }: IPostListProps) {
 
   useEffect(() => {
     async function getCardOrListPosts() {
-      const postsResponse = await (USES_CARD_DESIGN.includes(subject)
+      const postsResponse = await (usesCardDesign
         ? dummyGathersResponse
         : dummyPostsResponse);
 
-      setCurrentPosts(postsResponse);
+      setResponse(postsResponse);
     }
     getCardOrListPosts();
   }, [currentPage]);
 
-  if (!currentPosts) {
+  if (!response) {
     return <Loader />;
   }
   return (
     <>
-      <Posts subject={subject} postList={currentPosts.posts} />
-      <Pagination paginate={paginate} paginateInfo={currentPosts.pagination} />
+      <div
+        className={`post-list ${
+          usesCardDesign ? "post-list--card" : "post-list--list"
+        }`}
+      >
+        {usesCardDesign
+          ? (response.posts as Array<IGatherPost>).map(PostCardItem)
+          : (response.posts as Array<Omit<IPost, "contents" | "subject">>).map(
+              PostListItem
+            )}
+      </div>
+      <Pagination paginate={paginate} paginateInfo={response.pagination} />
     </>
   );
 }
