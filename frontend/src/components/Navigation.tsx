@@ -1,7 +1,7 @@
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import "./Navigation.css";
 
-function CustomLink({ title, to }: NavigationItems) {
+function CustomLink({ title, to }: INavigationItems) {
   const resolved = useResolvedPath(to);
   const match = useMatch({ path: resolved.pathname, end: true });
 
@@ -17,7 +17,7 @@ function CustomLink({ title, to }: NavigationItems) {
   );
 }
 
-export default function Navigation({ list, align = "left" }: NavigationProps) {
+export default function Navigation({ list, align = "left" }: INavigationProps) {
   return (
     <nav className={`navigation navigation--align-${align}`}>
       {list.map(({ title, to }) => (

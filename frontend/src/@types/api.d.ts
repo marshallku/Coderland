@@ -31,7 +31,7 @@ interface IPost {
   updatedAt: string;
 }
 
-type IPostInList = Array<Omit<IPost, "contents" | "subject">>;
+type TPostInList = Array<Omit<IPost, "contents" | "subject">>;
 
 interface IGatherPost {
   _id: string;

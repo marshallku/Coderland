@@ -1,9 +1,9 @@
 import { useState } from "react";
 import "./Select.css";
 
-export default function Select({ id, list }: SelectProps) {
+export default function Select({ id, list }: ISelectProps) {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<SelectItem>(
+  const [selected, setSelected] = useState<ISelectItem>(
     list.find((x) => x.selected) || list[0]
   );
 

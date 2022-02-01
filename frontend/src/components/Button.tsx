@@ -6,7 +6,7 @@ export default function Button({
   buttonStyle = "primary",
   disabled,
   size = "medium",
-}: ButtonProps) {
+}: IButtonProps) {
   return (
     <button
       // eslint-disable-next-line react/button-has-type
