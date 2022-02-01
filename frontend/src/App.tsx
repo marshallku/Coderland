@@ -15,6 +15,11 @@ import User, {
   UserComments,
   UserBookmarks,
 } from "./pages/User";
+import Review from "./pages/Review";
+import Article from "./pages/Article";
+import Dev from "./pages/Dev";
+import Recruit from "./pages/Recruit";
+import Chat from "./pages/Chat";
 
 export default function App() {
   return (
@@ -28,8 +33,11 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/gather" element={<Gather />} />
                 <Route path="/gather/:category" element={<Gather />} />
-                <Route path="/posts/:id" element={<PostDetails />} />
-                <Route path="/gathers/:id" element={<GatherDetails />} />
+                <Route path="/review" element={<Review />} />
+                <Route path="/article" element={<Article />} />
+                <Route path="/dev" element={<Dev />} />
+                <Route path="/recruit" element={<Recruit />} />
+                <Route path="/chat" element={<Chat />} />
                 <Route element={<RequireAuth />}>
                   <Route path="/add/:subject" element={<Add />} />
                   <Route path="/user/*" element={<User />}>
@@ -40,6 +48,8 @@ export default function App() {
                     <Route path="*" element={<UserInfo />} />
                   </Route>
                 </Route>
+                <Route path="/posts/:id" element={<PostDetails />} />
+                <Route path="/gathers/:id" element={<GatherDetails />} />
                 <Route path="/search/*" element={<Search />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
