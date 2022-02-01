@@ -1,11 +1,3 @@
-.post-list-card-wrapper {
-  display: flex;
-  margin-top: 16px;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
 .card-item {
   width: 100%;
   border-radius: var(--border-radius);
@@ -81,24 +73,7 @@
 }
 
 @media screen and (min-width: 680px) {
-  .post-list-card-wrapper {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .card-item {
     height: 100%;
-  }
-}
-
-@media screen and (min-width: 860px) {
-  .post-list-card-wrapper {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media screen and (min-width: 1160px) {
-  .post-list-card-wrapper {
-    grid-template-columns: repeat(4, 1fr);
   }
 }
