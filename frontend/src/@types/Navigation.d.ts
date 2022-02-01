@@ -1,9 +1,9 @@
-interface NavigationItems {
+interface INavigationItems {
   title: string;
   to: string;
 }
 
-interface NavigationProps {
-  list: Array<NavigationItems>;
+interface INavigationProps {
+  list: Array<INavigationItems>;
   align?: "center" | "left" | "right";
 }

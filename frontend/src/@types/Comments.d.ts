@@ -1,3 +1,3 @@
-interface LikeProps {
+interface ILikeProps {
   likes: number;
 }

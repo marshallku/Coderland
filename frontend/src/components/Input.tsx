@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "./Input.css";
 
-export function Input(props: InputProps) {
+export function Input(props: IInputProps) {
   const {
     id,
     label,
@@ -72,7 +72,7 @@ export function Input(props: InputProps) {
   );
 }
 
-export function Textarea(props: TextareaProps) {
+export function Textarea(props: ITextareaProps) {
   const {
     id,
     label,

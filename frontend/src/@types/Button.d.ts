@@ -1,4 +1,4 @@
-interface ButtonProps {
+interface IButtonProps {
   value: string;
   type?: React.ButtonHTMLAttributes<HTMLButtonElement>["type"];
   disabled?: boolean;

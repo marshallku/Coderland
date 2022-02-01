@@ -1,4 +1,4 @@
-interface DrawerItem {
+interface IDrawerItem {
   title: string;
   to: string;
   icon: string;

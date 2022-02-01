@@ -1,7 +1,7 @@
-interface MarkdownEditorProps {
+interface IMarkdownEditorProps {
   id?: string;
   name?: string;
   label?: string;
 }
 
-declare type EditorMode = "edit" | "view";
+declare type TEditorMode = "edit" | "view";

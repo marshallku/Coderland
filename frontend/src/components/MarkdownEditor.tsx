@@ -3,11 +3,11 @@ import MarkdownViewer from "./MarkdownViewer";
 import "./MarkdownEditor.css";
 import { Textarea } from "./Input";
 
-export default function MarkdownEditor(props: MarkdownEditorProps) {
+export default function MarkdownEditor(props: IMarkdownEditorProps) {
   const { id, label, name } = props;
-  const [mode, setMode] = useState<EditorMode>("edit");
+  const [mode, setMode] = useState<TEditorMode>("edit");
   const [value, setValue] = useState("");
-  const highlight = (target: EditorMode) =>
+  const highlight = (target: TEditorMode) =>
     target === mode ? "highlight" : "";
 
   return (

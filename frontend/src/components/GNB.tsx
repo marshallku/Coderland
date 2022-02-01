@@ -6,7 +6,7 @@ import "./GNB.css";
 export default function GlobalNavigationBar({
   drawerRevealed,
   setDrawerRevealed,
-}: DrawerStatusProps) {
+}: IDrawerStatusProps) {
   return (
     <nav className="gnb">
       <div className="gnb__grow">

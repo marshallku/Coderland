@@ -4,7 +4,7 @@ import "./Dropdown.css";
 export default function Dropdown({
   ButtonChildren,
   ContentChildren,
-}: DropdownProps) {
+}: IDropdownProps) {
   const [opened, setOpened] = useState(false);
   const buttonRef = useRef(null);
 

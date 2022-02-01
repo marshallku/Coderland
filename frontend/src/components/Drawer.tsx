@@ -9,7 +9,7 @@ function randomCssProperty(): React.CSSProperties {
   } as React.CSSProperties;
 }
 
-function DrawerLink({ title, to, icon, cb }: DrawerItem) {
+function DrawerLink({ title, to, icon, cb }: IDrawerItem) {
   const [cssProperty, setCssProperty] = useState<React.CSSProperties>(
     randomCssProperty()
   );
@@ -37,7 +37,7 @@ function DrawerLink({ title, to, icon, cb }: DrawerItem) {
 export default function Drawer({
   drawerRevealed,
   setDrawerRevealed,
-}: DrawerStatusProps) {
+}: IDrawerStatusProps) {
   const hideDrawer = () => {
     setDrawerRevealed(false);
   };

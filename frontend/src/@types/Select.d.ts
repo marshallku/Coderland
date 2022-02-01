@@ -1,10 +1,10 @@
-interface SelectItem {
+interface ISelectItem {
   key: string;
   name: string;
   selected?: boolean;
 }
 
-interface SelectProps {
+interface ISelectProps {
   id: string;
-  list: Array<SelectItem>;
+  list: Array<ISelectItem>;
 }
