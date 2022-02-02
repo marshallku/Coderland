@@ -47,7 +47,7 @@ export default function PostList({ subject }: IPostListProps) {
               PostListItem
             )}
       </div>
-      <Pagination paginate={paginate} paginateInfo={response.pagination} />
+      <Pagination paginate={paginate} data={response.pagination} />
     </>
   );
 }

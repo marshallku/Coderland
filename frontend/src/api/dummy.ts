@@ -116,7 +116,7 @@ const tmpComments: Array<IComment> = [
 
 const tmpPagination: IPagination = {
   currentPage: 1,
-  lastPage: 6,
+  lastPage: 9,
 };
 
 const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [

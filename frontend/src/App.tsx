@@ -31,8 +31,9 @@ export default function App() {
             <main className="container">
               <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/gather" element={<Gather />} />
-                <Route path="/gather/:category" element={<Gather />} />
+                <Route path="/gather" element={<Gather />}>
+                  <Route path=":category" element={<Gather />} />
+                </Route>
                 <Route path="/review" element={<Review />} />
                 <Route path="/article" element={<Article />} />
                 <Route path="/dev" element={<Dev />} />

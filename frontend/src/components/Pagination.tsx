@@ -1,127 +1,90 @@
-import "./Pagination.css";
 import { useLayoutEffect, useState } from "react";
+import "./Pagination.css";
 
-export default function Pagination({
-  paginate,
-  paginateInfo,
-}: IPaginationProps) {
-  if (!paginateInfo) {
-    return <div>게시글이 없습니다.</div>;
-  }
-  const [pageNumbers, setPageNumbers] = useState<number[]>([]);
-  const [currentPageNumber, setCurrentPageNumber] = useState(
-    paginateInfo?.currentPage
-  );
-  const totalPageNumber = paginateInfo?.lastPage;
+const PAGES_TO_DISPLAY = 5;
 
-  const getPage = (newPageNumber: number) => {
-    if (newPageNumber <= totalPageNumber && newPageNumber >= 1) {
-      setCurrentPageNumber(newPageNumber);
-    }
-  };
+export default function Pagination({ paginate, data }: IPaginationProps) {
+  const [currentIndex, setCurrentIndex] = useState(data.currentPage);
+  const max = data.lastPage;
+  const pageChecker = Math.max(2, PAGES_TO_DISPLAY - 1 - (max - currentIndex));
+  const firstPage = Math.max(1, currentIndex - pageChecker);
 
   useLayoutEffect(() => {
-    let newPageNumberLength = 5;
-    let newPageNumberStart = currentPageNumber - 2;
-    if (currentPageNumber < 3) {
-      newPageNumberStart = 0;
-      newPageNumberLength += 1;
-    }
-    const newPageNumbers: any = Array.from(
-      { length: newPageNumberLength },
-      (_, i) => {
-        const newPageNumber = newPageNumberStart + i;
-        if (newPageNumber > 0 && newPageNumber <= totalPageNumber) {
-          return newPageNumber;
-        }
-        return null;
-      }
-    );
-    setPageNumbers(newPageNumbers);
-    paginate(currentPageNumber);
-  }, [currentPageNumber]);
+    paginate(currentIndex);
+  }, [currentIndex]);
 
   return (
     <div className="pagination">
-      {currentPageNumber > 1 ? (
-        <>
-          <button
-            type="button"
-            className="pagination__arrow"
-            onClick={() => getPage(1)}
-          >
-            <i
-              className="icon-first_page"
-              role="img"
-              aria-label="첫번째 페이지로 이동하는 화살표 아이콘"
-            />
-          </button>
-          <button
-            type="button"
-            className="pagination__arrow"
-            onClick={() => getPage(currentPageNumber - 1)}
-          >
-            <i
-              className="icon-navigate_before"
-              role="img"
-              aria-label="이전 페이지로 이동하는 화살표 아이콘"
-            />
-          </button>
-        </>
-      ) : (
-        <>
-          <div className="pagination__arrow disabled" />
-          <div className="pagination__arrow disabled" />
-        </>
-      )}
+      <button
+        type="button"
+        disabled={currentIndex <= 3}
+        className="pagination__arrow"
+        onClick={() => setCurrentIndex(1)}
+      >
+        <i
+          className="icon-first_page"
+          role="img"
+          aria-label="첫번째 페이지로 이동하는 화살표 아이콘"
+        />
+      </button>
+      <button
+        type="button"
+        disabled={currentIndex <= 1}
+        className="pagination__arrow"
+        onClick={() => setCurrentIndex(currentIndex - 1)}
+      >
+        <i
+          className="icon-navigate_before"
+          role="img"
+          aria-label="이전 페이지로 이동하는 화살표 아이콘"
+        />
+      </button>
       <ul className="pagination__page-number-box">
-        {pageNumbers
-          .filter((pageNumber) => pageNumber)
-          .map((pageNumber) => (
+        {Array.from({ length: Math.min(PAGES_TO_DISPLAY, max) }, (_, i) => {
+          const page = firstPage + i;
+          if (i > max || i < 0) return 0;
+
+          return page;
+        })
+          .filter((page) => !!page)
+          .map((page) => (
             <button
               type="button"
               className={`page-number ${
-                currentPageNumber === pageNumber ? "selected" : ""
+                currentIndex === page ? "selected" : ""
               }`}
-              key={pageNumber}
-              onClick={() => getPage(pageNumber)}
-              aria-label={`${pageNumber}번 페이지로 이동하는 버튼`}
+              key={page}
+              onClick={() => setCurrentIndex(page)}
+              aria-label={`${page}페이지로 이동`}
             >
-              {pageNumber}
+              {page}
             </button>
           ))}
       </ul>
-      {currentPageNumber < totalPageNumber ? (
-        <>
-          <button
-            type="button"
-            className="pagination__arrow"
-            onClick={() => getPage(currentPageNumber + 1)}
-          >
-            <i
-              className="icon-navigate_next"
-              role="img"
-              aria-label="다음 페이지로 이동하는 화살표 아이콘"
-            />
-          </button>
-          <button
-            type="button"
-            className="pagination__arrow"
-            onClick={() => getPage(totalPageNumber)}
-          >
-            <i
-              className="icon-last_page"
-              role="img"
-              aria-label="마지막 페이지로 이동하는 화살표 아이콘"
-            />
-          </button>
-        </>
-      ) : (
-        <>
-          <div className="pagination__arrow disabled" />
-          <div className="pagination__arrow disabled" />
-        </>
-      )}
+      <button
+        type="button"
+        disabled={currentIndex >= max}
+        className="pagination__arrow"
+        onClick={() => setCurrentIndex(currentIndex + 1)}
+      >
+        <i
+          className="icon-navigate_next"
+          role="img"
+          aria-label="다음 페이지로 이동하는 화살표 아이콘"
+        />
+      </button>
+      <button
+        type="button"
+        disabled={currentIndex > max - 3}
+        className="pagination__arrow"
+        onClick={() => setCurrentIndex(max)}
+      >
+        <i
+          className="icon-last_page"
+          role="img"
+          aria-label="마지막 페이지로 이동하는 화살표 아이콘"
+        />
+      </button>
     </div>
   );
 }
