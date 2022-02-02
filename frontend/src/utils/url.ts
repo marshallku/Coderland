@@ -4,9 +4,9 @@ export default function parseQuery(query: string) {
   query
     .substring(1)
     .split("&")
-    .map((x) => decodeURIComponent(x).split("="))
+    .map((x) => x.split("="))
     .forEach(([key, value]) => {
-      obj[key] = value;
+      obj[decodeURIComponent(key)] = decodeURIComponent(value);
     });
 
   return obj;
