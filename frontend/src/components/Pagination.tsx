@@ -1,4 +1,5 @@
 import { useLayoutEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./Pagination.css";
 
 const PAGES_TO_DISPLAY = 5;
@@ -15,10 +16,11 @@ export default function Pagination({ paginate, data }: IPaginationProps) {
 
   return (
     <div className="pagination">
-      <button
-        type="button"
-        disabled={currentIndex <= 3}
-        className="pagination__arrow"
+      <Link
+        to="?page=1"
+        className={`pagination__arrow${
+          currentIndex <= 3 ? " pagination__arrow--disabled" : ""
+        }`}
         onClick={() => setCurrentIndex(1)}
       >
         <i
@@ -26,11 +28,12 @@ export default function Pagination({ paginate, data }: IPaginationProps) {
           role="img"
           aria-label="첫번째 페이지로 이동하는 화살표 아이콘"
         />
-      </button>
-      <button
-        type="button"
-        disabled={currentIndex <= 1}
-        className="pagination__arrow"
+      </Link>
+      <Link
+        to={`?page=${currentIndex - 1}`}
+        className={`pagination__arrow${
+          currentIndex <= 1 ? " pagination__arrow--disabled" : ""
+        }`}
         onClick={() => setCurrentIndex(currentIndex - 1)}
       >
         <i
@@ -38,27 +41,28 @@ export default function Pagination({ paginate, data }: IPaginationProps) {
           role="img"
           aria-label="이전 페이지로 이동하는 화살표 아이콘"
         />
-      </button>
+      </Link>
       <ul className="pagination__page-number-box">
         {Array.from(
           { length: Math.min(PAGES_TO_DISPLAY, max) },
           (_, i) => firstPage + i
         ).map((page) => (
-          <button
-            type="button"
-            className={`page-number ${currentIndex === page ? "selected" : ""}`}
+          <Link
             key={page}
+            to={`?page=${page}`}
+            className={`page-number ${currentIndex === page ? "selected" : ""}`}
             onClick={() => setCurrentIndex(page)}
             aria-label={`${page}페이지로 이동`}
           >
             {page}
-          </button>
+          </Link>
         ))}
       </ul>
-      <button
-        type="button"
-        disabled={currentIndex >= max}
-        className="pagination__arrow"
+      <Link
+        to={`?page=${currentIndex + 1}`}
+        className={`pagination__arrow${
+          currentIndex >= max ? " pagination__arrow--disabled" : ""
+        }`}
         onClick={() => setCurrentIndex(currentIndex + 1)}
       >
         <i
@@ -66,11 +70,12 @@ export default function Pagination({ paginate, data }: IPaginationProps) {
           role="img"
           aria-label="다음 페이지로 이동하는 화살표 아이콘"
         />
-      </button>
-      <button
-        type="button"
-        disabled={currentIndex > max - 3}
-        className="pagination__arrow"
+      </Link>
+      <Link
+        to={`?page=${max}`}
+        className={`pagination__arrow${
+          currentIndex > max - 3 ? " pagination__arrow--disabled" : ""
+        }`}
         onClick={() => setCurrentIndex(max)}
       >
         <i
@@ -78,7 +83,7 @@ export default function Pagination({ paginate, data }: IPaginationProps) {
           role="img"
           aria-label="마지막 페이지로 이동하는 화살표 아이콘"
         />
-      </button>
+      </Link>
     </div>
   );
 }
