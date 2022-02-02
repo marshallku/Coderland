@@ -4,6 +4,26 @@ import "./Pagination.css";
 
 const PAGES_TO_DISPLAY = 5;
 
+function PaginationButton({
+  to,
+  disableIf,
+  icon,
+  ariaLabel,
+  setCurrentIndex,
+}: IPaginationButtonProps) {
+  return (
+    <Link
+      to={`?page=${to}`}
+      className={`pagination__arrow${
+        disableIf ? " pagination__arrow--disabled" : ""
+      }`}
+      onClick={() => setCurrentIndex(to)}
+    >
+      <i className={`icon-${icon}`} role="img" aria-label={ariaLabel} />
+    </Link>
+  );
+}
+
 export default function Pagination({ paginate, data }: IPaginationProps) {
   const [currentIndex, setCurrentIndex] = useState(data.currentPage);
   const max = data.lastPage;
@@ -16,32 +36,20 @@ export default function Pagination({ paginate, data }: IPaginationProps) {
 
   return (
     <div className="pagination">
-      <Link
-        to="?page=1"
-        className={`pagination__arrow${
-          currentIndex <= 3 ? " pagination__arrow--disabled" : ""
-        }`}
-        onClick={() => setCurrentIndex(1)}
-      >
-        <i
-          className="icon-first_page"
-          role="img"
-          aria-label="첫번째 페이지로 이동하는 화살표 아이콘"
-        />
-      </Link>
-      <Link
-        to={`?page=${currentIndex - 1}`}
-        className={`pagination__arrow${
-          currentIndex <= 1 ? " pagination__arrow--disabled" : ""
-        }`}
-        onClick={() => setCurrentIndex(currentIndex - 1)}
-      >
-        <i
-          className="icon-navigate_before"
-          role="img"
-          aria-label="이전 페이지로 이동하는 화살표 아이콘"
-        />
-      </Link>
+      <PaginationButton
+        to={1}
+        disableIf={currentIndex <= 3}
+        icon="first_page"
+        ariaLabel="첫 페이지로"
+        setCurrentIndex={setCurrentIndex}
+      />
+      <PaginationButton
+        to={currentIndex - 1}
+        disableIf={currentIndex <= 1}
+        icon="navigate_before"
+        ariaLabel="이전 페이지로"
+        setCurrentIndex={setCurrentIndex}
+      />
       <ul className="pagination__page-number-box">
         {Array.from(
           { length: Math.min(PAGES_TO_DISPLAY, max) },
@@ -58,32 +66,20 @@ export default function Pagination({ paginate, data }: IPaginationProps) {
           </Link>
         ))}
       </ul>
-      <Link
-        to={`?page=${currentIndex + 1}`}
-        className={`pagination__arrow${
-          currentIndex >= max ? " pagination__arrow--disabled" : ""
-        }`}
-        onClick={() => setCurrentIndex(currentIndex + 1)}
-      >
-        <i
-          className="icon-navigate_next"
-          role="img"
-          aria-label="다음 페이지로 이동하는 화살표 아이콘"
-        />
-      </Link>
-      <Link
-        to={`?page=${max}`}
-        className={`pagination__arrow${
-          currentIndex > max - 3 ? " pagination__arrow--disabled" : ""
-        }`}
-        onClick={() => setCurrentIndex(max)}
-      >
-        <i
-          className="icon-last_page"
-          role="img"
-          aria-label="마지막 페이지로 이동하는 화살표 아이콘"
-        />
-      </Link>
+      <PaginationButton
+        to={currentIndex + 1}
+        disableIf={currentIndex >= max}
+        icon="navigate_next"
+        ariaLabel="다음 페이지로"
+        setCurrentIndex={setCurrentIndex}
+      />
+      <PaginationButton
+        to={max}
+        disableIf={currentIndex > max - 3}
+        icon="last_page"
+        ariaLabel="마지막 페이지로"
+        setCurrentIndex={setCurrentIndex}
+      />
     </div>
   );
 }
