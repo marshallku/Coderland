@@ -40,26 +40,20 @@ export default function Pagination({ paginate, data }: IPaginationProps) {
         />
       </button>
       <ul className="pagination__page-number-box">
-        {Array.from({ length: Math.min(PAGES_TO_DISPLAY, max) }, (_, i) => {
-          const page = firstPage + i;
-          if (i > max || i < 0) return 0;
-
-          return page;
-        })
-          .filter((page) => !!page)
-          .map((page) => (
-            <button
-              type="button"
-              className={`page-number ${
-                currentIndex === page ? "selected" : ""
-              }`}
-              key={page}
-              onClick={() => setCurrentIndex(page)}
-              aria-label={`${page}페이지로 이동`}
-            >
-              {page}
-            </button>
-          ))}
+        {Array.from(
+          { length: Math.min(PAGES_TO_DISPLAY, max) },
+          (_, i) => firstPage + i
+        ).map((page) => (
+          <button
+            type="button"
+            className={`page-number ${currentIndex === page ? "selected" : ""}`}
+            key={page}
+            onClick={() => setCurrentIndex(page)}
+            aria-label={`${page}페이지로 이동`}
+          >
+            {page}
+          </button>
+        ))}
       </ul>
       <button
         type="button"
