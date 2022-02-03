@@ -38,7 +38,7 @@ export default function Pagination({ paginate, data }: IPaginationProps) {
     <div className="pagination">
       <PaginationButton
         to={1}
-        disableIf={currentIndex <= 3}
+        disableIf={currentIndex <= Math.ceil(PAGES_TO_DISPLAY / 2)}
         icon="first_page"
         ariaLabel="첫 페이지로"
         setCurrentIndex={setCurrentIndex}
@@ -68,14 +68,14 @@ export default function Pagination({ paginate, data }: IPaginationProps) {
       </ul>
       <PaginationButton
         to={currentIndex + 1}
-        disableIf={currentIndex >= max}
+        disableIf={max <= currentIndex}
         icon="navigate_next"
         ariaLabel="다음 페이지로"
         setCurrentIndex={setCurrentIndex}
       />
       <PaginationButton
         to={max}
-        disableIf={currentIndex > max - 3}
+        disableIf={max - Math.ceil(PAGES_TO_DISPLAY / 2) <= currentIndex}
         icon="last_page"
         ariaLabel="마지막 페이지로"
         setCurrentIndex={setCurrentIndex}
