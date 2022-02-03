@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { useEffect, useState } from "react";
-import { Outlet, useParams } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { useApi } from "../api";
 import {
   dummyCommentsResponse,
@@ -16,29 +16,20 @@ import "./User.css";
 
 export function UserInfo() {
   const { group } = useParams();
+  const navigate = useNavigate();
   const auth = useAuth();
   const user = auth?.user;
 
-  console.log(group);
-
-  // TODO: 에러 컴포넌트 추가
-  if (!user) return <div>로그인 후 이용해주세요.</div>;
+  if (!user) return navigate("/login");
 
   const [editMode, setEditMode] = useState(false);
-  const [googleId, setGoogleId] = useState("");
-  const [nickname, setNickname] = useState("");
   const [name, setName] = useState("");
-  const [track, setTrack] = useState("");
-  const [gitlab, setGitlab] = useState("");
+  const { googleId, nickname, track, gitlab } = user;
 
   const selectedUser = useApi(dummyUser);
 
   useEffect(() => {
-    setGoogleId(user.googleId);
-    setNickname(user.nickname);
     setName(user.name);
-    setTrack(user.track);
-    setGitlab(user.gitlab);
   }, [editMode]);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -58,44 +49,18 @@ export function UserInfo() {
           alt={`${selectedUser?.profile}님의 이미지`}
         />
       </div>
-      <Input
-        id="googleId"
-        label="구글 ID"
-        name="googleId"
-        value={googleId}
-        setValue={setGoogleId}
-        readOnly={!editMode}
-      />
-      <Input
-        id="nickname"
-        label="닉네임"
-        name="nickname"
-        value={nickname}
-        setValue={setNickname}
-        readOnly={!editMode}
-      />
+      <Input id="googleId" label="구글 ID" name="googleId" value={googleId} />
+      <Input id="nickname" label="닉네임" name="nickname" value={nickname} />
+      {/* TODO: 수정 가능한 요소 하이라이팅 방법 생각 */}
       <Input
         id="name"
-        label="이름"
+        label={`이름${editMode ? " (수정 가능)" : ""}`}
         value={name}
         setValue={setName}
         readOnly={!editMode}
       />
-      <Input
-        id="track"
-        label="트랙"
-        value={track}
-        setValue={setTrack}
-        readOnly={!editMode}
-      />
-      <Input
-        id="gitlab"
-        label="GitLab 주소"
-        name="gitlab"
-        value={gitlab}
-        setValue={setGitlab}
-        readOnly={!editMode}
-      />
+      <Input id="track" label="트랙" value={track} />
+      <Input id="gitlab" label="GitLab 주소" name="gitlab" value={gitlab} />
       <div className="btns">
         <div
           role="button"
