@@ -21,6 +21,7 @@ export interface IUser {
   grade: number;
   track?: string;
   gitlab?: string;
+  refreshToken?: string;
 }
 
 export interface IUserDocument extends IUser, Document {}
@@ -30,4 +31,11 @@ export interface IUserModel extends Model<IUserDocument> {
     googleId: string | Jwt | JwtPayload,
     user?: IGoogleUser
   ) => Promise<IUserDocument>;
+
+  findOneByGoogleIdAndUpdateRefreshToken: (
+    googleId: string,
+    refreshToken: string
+  ) => Promise<void>;
+
+  findByGoogleId: ({ googleId: string }) => Promise<IUserDocument>;
 }

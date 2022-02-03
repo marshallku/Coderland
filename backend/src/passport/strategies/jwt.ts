@@ -1,17 +1,21 @@
-import jwt, { SignOptions, VerifyCallback } from "jsonwebtoken";
-import { IUserDocument } from "user";
-import configs from "../../config";
+import {
+  ExtractJwt,
+  Strategy,
+  StrategyOptions,
+  VerifyCallback,
+} from "passport-jwt";
+import config from "../../config";
 
-const { jwtSecret } = configs;
-
-export const createToken = (user: IUserDocument) => {
-  const payload = { googleId: user.googleId };
-  const signOpts: SignOptions = {
-    expiresIn: "7d",
-  };
-  const token = jwt.sign(payload, jwtSecret, signOpts);
-  return token;
+const jwtOpts: StrategyOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: config.jwtSecret,
 };
 
-export const verifyToken = (token: string, cb: VerifyCallback) =>
-  jwt.verify(token, jwtSecret, cb);
+const jwtVerify: VerifyCallback = (payload, done) => {
+  if (!payload) {
+    return done(null, payload, "로그인이 필요합니다.");
+  }
+  return done(null, payload);
+};
+
+export default new Strategy(jwtOpts, jwtVerify);

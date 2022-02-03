@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "../../passport/strategies/jwt";
+import { verifyToken } from "../../utils/jwt";
 import { User } from "../../models/User";
 
 function parseAuthorizationHeader(

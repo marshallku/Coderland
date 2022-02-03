@@ -3,7 +3,7 @@ import "regenerator-runtime";
 import db from "mongoose";
 import { IUserDocument } from "../src/types/user";
 import server from "../src/app";
-import { createToken } from "../src/passport/strategies/jwt";
+import { createToken } from "../src/utils/jwt";
 import configs from "../src/config";
 
 describe("모임 게시글 기능 테스트", () => {

@@ -29,6 +29,9 @@ export const UserSchema = new mongoose.Schema<IUserDocument>(
     gitlab: {
       type: String,
     },
+    refreshToken: {
+      type: String,
+    },
   },
   {
     versionKey: false,
@@ -51,6 +54,23 @@ UserSchema.statics.findOrCreate = async (
     profile: user.photos[0].value,
   });
   return newUser;
+};
+
+UserSchema.statics.findOneByGoogleIdAndUpdateRefreshToken = async (
+  googleId,
+  refreshToken
+) => {
+  await User.findOneAndUpdate(
+    { googleId },
+    {
+      refreshToken,
+    }
+  );
+};
+
+UserSchema.statics.findByGoogleId = async ({ googleId }) => {
+  const user = User.findOne({ googleId });
+  return user;
 };
 
 const User = mongoose.model<IUserDocument, IUserModel>("User", UserSchema);

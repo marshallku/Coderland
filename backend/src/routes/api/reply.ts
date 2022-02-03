@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { asyncHandler } from "../../utils";
-import { loginRequired } from "../middlewares";
 import { Comment } from "../../models";
 import ReplyService from "../../services/reply";
+
+import { asyncHandler } from "../../utils";
+import { loginRequired } from "../../passport/guards";
 import checkReplyPermission from "../middlewares/check-reply-permission";
 
 const replyRouter = Router({ mergeParams: true });

@@ -9,4 +9,5 @@ export default {
   clientSecret: process.env.GOOGLE_SECRET,
   jwtSecret: process.env.JWT_SECRET_KEY,
   perPage: 10,
+  COOKIE_MAX_AGE: 1000 * 60 * 60 * 24 * 7,
 };
