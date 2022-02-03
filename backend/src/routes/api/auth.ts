@@ -1,6 +1,9 @@
 import { Router } from "express";
 import passport from "passport";
-import { createToken } from "../../passport/strategies/jwt";
+import { asyncHandler } from "../../utils";
+import { User } from "../../models";
+import AuthService from "../../services/auth";
+import config from "../../config";
 
 export default (app: Router) => {
   const route = Router();
@@ -10,10 +13,21 @@ export default (app: Router) => {
   route.get(
     "/google/callback",
     passport.authenticate("google", { session: false }),
-    (req, res) => {
+    asyncHandler(async (req, res) => {
       const { user } = req;
-      res.status(200).cookie("token", createToken(user)).json({ isOk: true });
-    }
+
+      const authService = new AuthService(User);
+      const [accessToken, refreshToken] = await authService.login(user);
+      res.cookie("accesstoken", accessToken, {
+        httpOnly: true,
+        maxAge: config.COOKIE_MAX_AGE,
+      });
+      res.cookie("refreshtoken", refreshToken, {
+        httpOnly: true,
+        maxAge: config.COOKIE_MAX_AGE,
+      });
+      res.status(200).json({ isOk: true });
+    })
   );
 
   app.use("/auth", route);

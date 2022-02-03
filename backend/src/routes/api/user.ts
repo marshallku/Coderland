@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { asyncHandler } from "../../utils";
-import { loginRequired } from "../middlewares";
+import { loginRequired } from "../../passport/guards";
 
 export default (app: Router) => {
   const route = Router();

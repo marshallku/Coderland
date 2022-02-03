@@ -3,7 +3,8 @@ import PostService from "../../services/post";
 import { Post } from "../../models";
 
 import { asyncHandler } from "../../utils";
-import { checkPermission, loginRequired } from "../middlewares";
+import { loginRequired, loginCheck } from "../../passport/guards";
+import { checkPermission } from "../middlewares";
 
 import commentRouter from "./comment";
 import replyRouter from "./reply";
@@ -17,6 +18,7 @@ export default (app: Router) => {
   // 글 목록 조회
   route.get(
     "/",
+    loginCheck,
     asyncHandler(async (req, res) => {
       const subject = String(req.query.subject);
       const category = String(req.query.category);
@@ -38,6 +40,7 @@ export default (app: Router) => {
   // 글 상세 조회
   route.get(
     "/:postId",
+    loginCheck,
     asyncHandler(async (req, res) => {
       const { postId } = req.params;
       const postService = new PostService(Post);

@@ -4,7 +4,7 @@ import db from "mongoose";
 import { IUserDocument } from "../src/types/user";
 import server from "../src/app";
 import configs from "../src/config";
-import { createToken } from "../src/passport/strategies/jwt";
+import { createToken } from "../src/utils/jwt";
 
 describe("댓글 통합 테스트", () => {
   const connection = db.createConnection(`${configs.mongoUri}/coderland`);

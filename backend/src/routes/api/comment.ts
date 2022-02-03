@@ -2,7 +2,8 @@ import { Router } from "express";
 import { asyncHandler } from "../../utils";
 import CommentService from "../../services/comment";
 import { Post, Comment } from "../../models";
-import { checkCommentPermission, loginRequired } from "../middlewares";
+import { loginRequired, loginCheck } from "../../passport/guards";
+import { checkCommentPermission } from "../middlewares";
 
 const commentRouter = Router({ mergeParams: true });
 
@@ -23,6 +24,7 @@ commentRouter.post(
 // 댓글 목록
 commentRouter.get(
   "/",
+  loginCheck,
   asyncHandler(async (req, res) => {
     const { postId } = req.params;
     const currentPage = Number(req.query.currentPage) || 1;
