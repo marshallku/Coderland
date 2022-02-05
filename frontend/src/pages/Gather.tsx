@@ -1,5 +1,6 @@
 import { useApi } from "../api";
 import { dummyGathersResponse } from "../api/dummy";
+import AddPostButton from "../components/AddPostButton";
 import Loader from "../components/Loader";
 import Navigation from "../components/Navigation";
 import PostList from "../components/PostList";
@@ -21,6 +22,9 @@ export default function Gather() {
         align="center"
       />
       <PostList subject="gather" />
+      <div>
+        <AddPostButton to="gather" />
+      </div>
     </>
   );
 }

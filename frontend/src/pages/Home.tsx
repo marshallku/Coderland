@@ -1,5 +1,6 @@
 import { useApi } from "../api";
 import { dummyPostsResponse } from "../api/dummy";
+import AddPostButton from "../components/AddPostButton";
 import Loader from "../components/Loader";
 import PostListItem from "../components/PostListItem";
 
@@ -14,6 +15,7 @@ export default function Home() {
       <div className="post-list__wrapper">
         {response.posts.map(PostListItem)}
       </div>
+      <AddPostButton to="chat" />
     </div>
   );
 }
