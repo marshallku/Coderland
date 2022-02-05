@@ -2,9 +2,10 @@ import ReactMarkdown from "react-markdown";
 import RehypeRaw from "rehype-raw";
 import RehypeSanitize from "rehype-sanitize";
 
-export default function MarkdownViewer(props: IMarkdownViewerProps) {
-  const { className, value } = props;
-
+export default function MarkdownViewer({
+  className,
+  value,
+}: IMarkdownViewerProps) {
   return (
     <ReactMarkdown
       className={className || ""}
@@ -13,7 +14,7 @@ export default function MarkdownViewer(props: IMarkdownViewerProps) {
         h1: "h2",
       }}
     >
-      {value}
+      {value ?? ""}
     </ReactMarkdown>
   );
 }
