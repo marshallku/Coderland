@@ -20,7 +20,7 @@ export function UserInfo() {
   const auth = useAuth();
   const user = auth?.user;
 
-  if (!user) return navigate("/login");
+  if (!user) return <>{navigate("/login")}</>;
 
   const [editMode, setEditMode] = useState(false);
   const [name, setName] = useState("");
