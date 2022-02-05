@@ -7,4 +7,5 @@ interface ISelectItem {
 interface ISelectProps {
   id: string;
   list: Array<ISelectItem>;
+  cb?: (args: ISelectItem) => void;
 }

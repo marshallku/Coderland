@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./Select.css";
 
-export default function Select({ id, list }: ISelectProps) {
+export default function Select({ id, list, cb }: ISelectProps) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<ISelectItem>(
     list.find((x) => x.selected) || list[0]
@@ -9,7 +9,7 @@ export default function Select({ id, list }: ISelectProps) {
 
   return (
     <div className={`select${open ? " select--open" : ""}`}>
-      <input type="hidden" id={id} value={selected.key} />
+      <input type="hidden" id={id} name={id} value={selected.key} />
       <button
         type="button"
         className="select__title"
@@ -27,6 +27,7 @@ export default function Select({ id, list }: ISelectProps) {
               onClick={() => {
                 setOpen(false);
                 setSelected({ key, name });
+                cb?.({ key, name });
               }}
             >
               {name}

@@ -40,6 +40,7 @@ export function Input(props: IInputProps) {
     <div className="input">
       <input
         id={id}
+        name={name}
         className={`input__input ${className || ""}`}
         type={type || "text"}
         placeholder=" "
@@ -56,7 +57,6 @@ export function Input(props: IInputProps) {
         min={min}
         minLength={minLength}
         multiple={multiple}
-        name={name}
         pattern={pattern}
         readOnly={readOnly}
         required={required}
@@ -112,6 +112,7 @@ export function Textarea(props: ITextareaProps) {
     <div className="input">
       <textarea
         id={id}
+        name={id}
         className={`input__input ${className || ""}`}
         placeholder=" "
         cols={cols}
