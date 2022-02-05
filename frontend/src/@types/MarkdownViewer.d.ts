@@ -1,4 +1,4 @@
 interface IMarkdownViewerProps {
-  value: string;
+  value?: string;
   className?: string;
 }
