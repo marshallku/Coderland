@@ -1,9 +1,8 @@
 import to from "./awaitTo";
 
-export default function createInstance({
-  baseUrl,
-  timeOut,
-}: IInstanceProps): IInstance {
+export default function createInstance(
+  { baseUrl = "", timeOut } = <IInstanceProps>{}
+): IInstance {
   const dummyPromise: TDummyPromise = () =>
     new Promise((resolve) => {
       setTimeout(() => {
