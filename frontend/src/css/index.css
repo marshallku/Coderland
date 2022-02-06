@@ -29,9 +29,10 @@
   --gray-5: #d0d0d0;
   --gray-6: #ffffff;
   --gray-7: #ffffff;
+  --drawer: #e2e2e2;
   --title: #121314;
   --text: #222222;
-  --body: #888889;
+  --body: #080808;
   --caption: #b8b8b9;
   --background-base: #ffffff;
   --background-elevated: #f3f3f3;
@@ -69,9 +70,10 @@ html.dark {
   --gray-5: #59595b;
   --gray-6: #ffffff;
   --gray-7: #121314;
+  --drawer: #1d1d1d;
   --title: #ffffff;
   --text: #cccccc;
-  --body: #888889;
+  --body: #bbb;
   --caption: #717172;
   --background-base: #121314;
   --background-elevated: #2a2a2c;
@@ -86,6 +88,7 @@ html {
 
 body {
   background-color: var(--background-elevated);
+  color: var(--body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

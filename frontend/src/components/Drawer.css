@@ -6,7 +6,7 @@
   width: 300px;
   height: 100%;
   padding: 10px 0;
-  background-color: var(--gray-5);
+  background-color: var(--drawer);
   transform: translate3d(300px, 0, 0);
   overflow-y: auto;
   overscroll-behavior: none;
