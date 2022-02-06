@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import favicon from "../../static/image/favicon.svg";
+import ThemeSwitch from "./ThemeSwitch";
 import Dropdown from "./Dropdown";
 import "./GNB.css";
 
@@ -24,6 +25,7 @@ export default function GlobalNavigationBar({
         <Link to="/search" className="gnb__button">
           <i role="img" aria-label="검색" className="icon-search" />
         </Link>
+        <ThemeSwitch />
         <Dropdown
           ButtonChildren={
             <i role="img" aria-label="알림" className="icon-notifications" />
