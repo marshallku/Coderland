@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import suffleNickname from "./suffle-array";
+import shuffleArray from "./array";
 
 const anonymousNicknameList = [
   "도도새",
@@ -29,7 +29,7 @@ export default function createAuthorName(
   anonymous: boolean,
   author: { _id: mongoose.Types.ObjectId; nickname: string }
 ) {
-  const nicknameList = suffleNickname(anonymousNicknameList);
+  const nicknameList = shuffleArray(anonymousNicknameList);
   return anonymous
     ? selectAuthorName(author._id.toString(), nicknameList)
     : author.nickname;
