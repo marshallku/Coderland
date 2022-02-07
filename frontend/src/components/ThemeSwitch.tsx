@@ -1,28 +1,11 @@
+import { useTheme } from "../data/Theme";
 import "./ThemeSwitch.css";
 
-const THEME = "theme";
-
-function getCurrentTheme() {
-  return document.documentElement.classList.contains("dark") ? "dark" : "light";
-}
-
-function saveTheme() {
-  localStorage.setItem(THEME, getCurrentTheme());
-}
-
-function switchTheme() {
-  const currentTheme = getCurrentTheme();
-
-  document.documentElement.className = `${
-    currentTheme === "dark" ? "light" : "dark"
-  }`;
-
-  saveTheme();
-}
-
 export default function ThemeSwitch() {
+  const theme = useTheme();
+
   return (
-    <button type="button" onClick={switchTheme} className="theme-switch">
+    <button type="button" onClick={theme?.updateTheme} className="theme-switch">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24px"
