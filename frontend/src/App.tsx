@@ -7,6 +7,7 @@ import Add from "./pages/Add";
 import Search from "./pages/Search";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./data/Auth";
+import { ThemeProvider } from "./data/Theme";
 import RequireAuth from "./routes/RequireAuth";
 import User, {
   UserInfo,
@@ -23,41 +24,43 @@ import Chat from "./pages/Chat";
 
 export default function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <GlobalNavigation />
-        <div className="main-container">
-          <div className="container-wrap">
-            <main className="container">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/gather" element={<Gather />}>
-                  <Route path=":category" element={<Gather />} />
-                </Route>
-                <Route path="/review" element={<Review />} />
-                <Route path="/article" element={<Article />} />
-                <Route path="/dev" element={<Dev />} />
-                <Route path="/recruit" element={<Recruit />} />
-                <Route path="/chat" element={<Chat />} />
-                <Route element={<RequireAuth />}>
-                  <Route path="/add/:subject" element={<Add />} />
-                  <Route path="/user/*" element={<User />}>
-                    <Route path="posts" element={<UserPosts />} />
-                    <Route path="gathers" element={<UserGatherPosts />} />
-                    <Route path="comments" element={<UserComments />} />
-                    <Route path="bookmarks" element={<UserBookmarks />} />
-                    <Route path="*" element={<UserInfo />} />
+    <ThemeProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <GlobalNavigation />
+          <div className="main-container">
+            <div className="container-wrap">
+              <main className="container">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/gather" element={<Gather />}>
+                    <Route path=":category" element={<Gather />} />
                   </Route>
-                </Route>
-                <Route path="/posts/:id" element={<PostDetails />} />
-                <Route path="/gathers/:id" element={<GatherDetails />} />
-                <Route path="/search/*" element={<Search />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
+                  <Route path="/review" element={<Review />} />
+                  <Route path="/article" element={<Article />} />
+                  <Route path="/dev" element={<Dev />} />
+                  <Route path="/recruit" element={<Recruit />} />
+                  <Route path="/chat" element={<Chat />} />
+                  <Route element={<RequireAuth />}>
+                    <Route path="/add/:subject" element={<Add />} />
+                    <Route path="/user/*" element={<User />}>
+                      <Route path="posts" element={<UserPosts />} />
+                      <Route path="gathers" element={<UserGatherPosts />} />
+                      <Route path="comments" element={<UserComments />} />
+                      <Route path="bookmarks" element={<UserBookmarks />} />
+                      <Route path="*" element={<UserInfo />} />
+                    </Route>
+                  </Route>
+                  <Route path="/posts/:id" element={<PostDetails />} />
+                  <Route path="/gathers/:id" element={<GatherDetails />} />
+                  <Route path="/search/*" element={<Search />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </main>
+            </div>
           </div>
-        </div>
-      </BrowserRouter>
-    </AuthProvider>
+        </BrowserRouter>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

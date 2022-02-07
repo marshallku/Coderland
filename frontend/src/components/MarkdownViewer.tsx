@@ -7,11 +7,13 @@ import {
   vscDarkPlus,
   solarizedlight,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { useTheme } from "../data/Theme";
 
 export default function MarkdownViewer({
   className,
   value,
 }: IMarkdownViewerProps) {
+  const theme = useTheme();
   const sanitize = () =>
     rehypeSanitize({
       ...defaultSchema,
@@ -20,6 +22,7 @@ export default function MarkdownViewer({
         code: [...(defaultSchema?.attributes?.code || []), ["className"]],
       },
     });
+
   return (
     <ReactMarkdown
       className={className || ""}
@@ -35,9 +38,7 @@ export default function MarkdownViewer({
             <Prism
               style={
                 // TODO: theme 상태관리 추가해 리렌더링
-                document.documentElement.classList.contains("dark")
-                  ? vscDarkPlus
-                  : solarizedlight
+                theme?.theme === "dark" ? vscDarkPlus : solarizedlight
               }
               language={match[1]}
               PreTag="div"
