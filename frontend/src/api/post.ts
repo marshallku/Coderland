@@ -1,10 +1,14 @@
 import instance from "./instance";
 
-export function getPostList(
-  subject: string,
-  perPage?: number,
-  page = 1
-): Promise<IPostListResponse | IFailResponse> {
+export function getPostList({
+  subject,
+  page = 1,
+  perPage,
+}: {
+  subject: string;
+  perPage?: number;
+  page?: number;
+}): Promise<IPostListResponse | IFailResponse> {
   return instance.get(
     `/posts?subject=${subject}&page=${page}${
       perPage ? `&perPage=${perPage}` : ""
@@ -12,11 +16,15 @@ export function getPostList(
   );
 }
 
-export function getGatherPostList(
-  category?: "study" | "code" | "team",
-  perPage?: number,
-  page = 1
-): Promise<IGatherPostListResponse | IFailResponse> {
+export function getGatherPostList({
+  category,
+  page = 1,
+  perPage,
+}: {
+  category?: "study" | "code" | "team";
+  perPage?: number;
+  page?: number;
+} = {}): Promise<IGatherPostListResponse | IFailResponse> {
   return instance.get(
     `/posts?subject=gathering${
       category ? `&category=${category}` : ""
@@ -66,11 +74,15 @@ export function createGatherPost(
   });
 }
 
-export function updatePost(
-  post: IPost | IGatherPost,
-  id: string,
-  token: string
-): Promise<ISuccessResponse | IFailResponse> {
+export function updatePost({
+  post,
+  id,
+  token,
+}: {
+  post: IPost | IGatherPost;
+  id: string;
+  token: string;
+}): Promise<ISuccessResponse | IFailResponse> {
   return instance.post(`/posts/${id}`, {
     headers: {
       "Content-Type": "application/json",
@@ -80,10 +92,13 @@ export function updatePost(
   });
 }
 
-export function deletePost(
-  id: string,
-  token: string
-): Promise<ISuccessResponse | IFailResponse> {
+export function deletePost({
+  id,
+  token,
+}: {
+  id: string;
+  token: string;
+}): Promise<ISuccessResponse | IFailResponse> {
   return instance.delete(`/posts/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -91,10 +106,13 @@ export function deletePost(
   });
 }
 
-export function addLike(
-  id: string,
-  token: string
-): Promise<ISuccessResponse | IFailResponse> {
+export function addLike({
+  id,
+  token,
+}: {
+  id: string;
+  token: string;
+}): Promise<ISuccessResponse | IFailResponse> {
   return instance.post(`/posts/${id}/like`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -102,10 +120,13 @@ export function addLike(
   });
 }
 
-export function removeLike(
-  id: string,
-  token: string
-): Promise<ISuccessResponse | IFailResponse> {
+export function removeLike({
+  id,
+  token,
+}: {
+  id: string;
+  token: string;
+}): Promise<ISuccessResponse | IFailResponse> {
   return instance.delete(`/posts/${id}/like`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -113,10 +134,13 @@ export function removeLike(
   });
 }
 
-export function addBookmark(
-  id: string,
-  token: string
-): Promise<ISuccessResponse | IFailResponse> {
+export function addBookmark({
+  id,
+  token,
+}: {
+  id: string;
+  token: string;
+}): Promise<ISuccessResponse | IFailResponse> {
   return instance.post(`/posts/${id}/bookmark`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -124,10 +148,13 @@ export function addBookmark(
   });
 }
 
-export function removeBookmark(
-  id: string,
-  token: string
-): Promise<ISuccessResponse | IFailResponse> {
+export function removeBookmark({
+  id,
+  token,
+}: {
+  id: string;
+  token: string;
+}): Promise<ISuccessResponse | IFailResponse> {
   return instance.delete(`/posts/${id}/bookmark`, {
     headers: {
       Authorization: `Bearer ${token}`,
