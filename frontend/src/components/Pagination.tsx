@@ -75,7 +75,7 @@ export default function Pagination({ paginate, data }: IPaginationProps) {
       />
       <PaginationButton
         to={max}
-        disableIf={max - Math.ceil(PAGES_TO_DISPLAY / 2) <= currentIndex}
+        disableIf={max - Math.ceil(PAGES_TO_DISPLAY / 2) < currentIndex}
         icon="last_page"
         ariaLabel="마지막 페이지로"
         setCurrentIndex={setCurrentIndex}
