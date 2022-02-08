@@ -147,7 +147,6 @@ PostSchema.statics.updatePost = async (
   const dto = createDto(subject, { title, contents }, gatherDto);
   await Post.findByIdAndUpdate(postId, {
     ...dto,
-    anonymous: isAnonymous(subject),
   });
 };
 

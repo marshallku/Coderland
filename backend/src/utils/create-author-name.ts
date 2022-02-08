@@ -32,5 +32,5 @@ export default function createAuthorName(
   const nicknameList = shuffleArray(anonymousNicknameList);
   return anonymous
     ? selectAuthorName(author._id.toString(), nicknameList)
-    : author.nickname;
+    : author;
 }
