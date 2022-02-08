@@ -170,7 +170,19 @@ function TechStacksInput({
     setFilteredStacks([]);
   };
   const addTag = (tagToAdd: string) => {
+    if (tags.length >= MAX_TAGS_LENGTH) {
+      toast(`${MAX_TAGS_LENGTH}개 이상은 입력하실 수 없습니다!`);
+      return;
+    }
+
+    if (tags.includes(tagToAdd)) {
+      toast("이미 추가한 태그입니다!");
+      return;
+    }
+
     setTags([...tags, tagToAdd]);
+    resetTag();
+    resetFilteredTags();
   };
 
   return (
@@ -199,20 +211,8 @@ function TechStacksInput({
             return;
           }
 
-          if (tags.length >= MAX_TAGS_LENGTH) {
-            toast("5개 이상은 입력하실 수 없습니다!");
-            return;
-          }
-
           if (filteredStacks.length === 1) {
             const [submittedTag] = filteredStacks;
-
-            resetTag();
-            resetFilteredTags();
-
-            if (tags.includes(submittedTag)) {
-              return;
-            }
 
             addTag(submittedTag);
           }
@@ -244,8 +244,6 @@ function TechStacksInput({
               type="button"
               onClick={() => {
                 addTag(x);
-                resetTag();
-                resetFilteredTags();
               }}
             >
               <i className={`icon-${x}`} />
