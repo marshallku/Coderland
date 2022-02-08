@@ -4,7 +4,6 @@ import Home from "./pages/Home";
 import Gather from "./pages/Gather";
 import { PostDetails, GatherDetails } from "./pages/Details";
 import Add from "./pages/Add";
-import Search from "./pages/Search";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./data/Auth";
 import { ThemeProvider } from "./data/Theme";
@@ -53,7 +52,6 @@ export default function App() {
                   </Route>
                   <Route path="/posts/:id" element={<PostDetails />} />
                   <Route path="/gathers/:id" element={<GatherDetails />} />
-                  <Route path="/search/*" element={<Search />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>

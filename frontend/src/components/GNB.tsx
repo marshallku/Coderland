@@ -22,9 +22,6 @@ export default function GlobalNavigationBar({
         </Link>
       </div>
       <div className="gnb__grow gnb__grow--right">
-        <Link to="/search" className="gnb__button">
-          <i role="img" aria-label="검색" className="icon-search" />
-        </Link>
         <ThemeSwitch />
         <Dropdown
           ButtonChildren={
