@@ -34,7 +34,7 @@
 
 .suggested-tags:not(:empty) {
   position: absolute;
-  top: calc(100% + 20px);
+  top: calc(100% + 10px);
   left: 0;
   width: clamp(0px, 100%, 300px);
   padding: 10px;
