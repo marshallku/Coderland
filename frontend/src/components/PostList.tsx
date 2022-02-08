@@ -28,6 +28,7 @@ export default function PostList({ subject, preventPaginate }: IPostListProps) {
       const postsResponse = await (usesCardDesign
         ? dummyGathersResponse
         : dummyPostsResponse);
+
       setResponse(postsResponse);
     }
     getCardOrListPosts();
