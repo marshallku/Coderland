@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import { IPostDocument, IPostModel, subjects } from "post";
 import { IUserDocument } from "user";
 import { UserSchema } from "./User";
-import configs from "../config";
 
 function conditionBySubject(subject: string, category: string) {
   if (["study", "code", "team"].includes(category)) {
@@ -97,9 +96,9 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
 PostSchema.statics.findAllPosts = async (
   subject: string,
   category: string,
-  currentPage: number
+  currentPage: number,
+  perPage: number
 ) => {
-  const { perPage } = configs;
   const condition = conditionBySubject(subject, category);
   const total = await Post.countDocuments(condition);
   const lastPage = Math.ceil(total / perPage);

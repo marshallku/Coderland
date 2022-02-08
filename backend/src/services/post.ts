@@ -9,11 +9,17 @@ export default class PostService {
     this.PostModel = PostModel;
   }
 
-  async findAllPosts(subject: string, category: string, currentPage: number) {
+  async findAllPosts(
+    subject: string,
+    category: string,
+    currentPage: number,
+    perPage: number
+  ) {
     const [posts, pagination] = await this.PostModel.findAllPosts(
       subject,
       category,
-      currentPage
+      currentPage,
+      perPage
     );
     const parsedPosts = posts.map((post) =>
       parsePostBySubject(post.subject, post.toObject())

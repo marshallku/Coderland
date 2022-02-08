@@ -41,7 +41,8 @@ export interface IPostModel extends Model<IPostDocument> {
   findAllPosts: (
     subject: string,
     category: string,
-    currentPage: number
+    currentPage: number,
+    perPage: number
   ) => Promise<[IPostDocument[], IPagination]>;
 
   findPostById: (postId: string) => Promise<IPostDocument>;
