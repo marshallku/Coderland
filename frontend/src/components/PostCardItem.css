@@ -17,6 +17,7 @@
 }
 
 .card-item__status {
+  display: inline-block;
   padding: 0.25rem 0.5rem;
   background-color: var(--material-submit-second);
   color: var(--forest-base);
@@ -29,12 +30,12 @@
   background-color: var(--warning-second);
 }
 
-.card-item-title {
+.card-item__title {
   font-size: 1.2rem;
   margin: 1rem 0;
 }
 
-.card-item-contents {
+.card-item__contents {
   font-size: 0.875rem;
   color: var(--gray-2);
 }
@@ -70,6 +71,60 @@
   padding: 0.2rem 0.6rem;
   border-radius: 8px;
   font-size: 0.8rem;
+}
+
+/* Skeleton */
+@keyframes loading-card-item {
+  from {
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    transform: translate3d(2000%, 0, 0);
+  }
+}
+
+.card-skeleton,
+.card-item__tags > .card-skeleton {
+  position: relative;
+  color: transparent;
+  background-color: var(--gray-5);
+  overflow: hidden;
+}
+
+.card-item__tags > .card-skeleton {
+  height: calc(1rem);
+}
+
+.card-skeleton:empty:not(.card-skeleton--icon) {
+  min-width: 20%;
+  height: 1rem;
+}
+
+.card-skelton--margin {
+  margin: 0.35rem 0;
+}
+
+.card-skeleton--icon {
+  width: clamp(0px, 100%, 4rem);
+  height: 4rem;
+  margin: 3rem auto;
+  border-radius: 50%;
+}
+
+.card-skeleton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20%;
+  height: 100%;
+  background-image: linear-gradient(
+    90deg,
+    var(--gray-5),
+    var(--gray-2),
+    var(--gray-5)
+  );
+  animation: loading-card-item 1.5s ease-in-out infinite;
 }
 
 @media screen and (min-width: 680px) {

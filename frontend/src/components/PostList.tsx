@@ -2,18 +2,17 @@ import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { dummyGathersResponse, dummyPostsResponse } from "../api/dummy";
 import Pagination from "./Pagination";
-import Loader from "./Loader";
-import PostCardItem from "./PostCardItem";
-import PostListItem from "./PostListItem";
+import PostCardItem, { PostCardItemSkeleton } from "./PostCardItem";
+import PostListItem, { PostListItemSkeleton } from "./PostListItem";
 import parseQuery from "../utils/url";
 import "./PostList.css";
 
-const USES_CARD_DESIGN = ["gather"];
+const USES_CARD_DESIGN = ["gather", "study", "code", "team"];
+const SKELETONS_LENGTH = 8;
 
 export default function PostList({ subject }: IPostListProps) {
   const { search } = useLocation();
   const { page } = parseQuery(search);
-  // TODO: 타입 세팅
   const [response, setResponse] = useState<
     IPostListResponse | IGatherPostListResponse
   >();
@@ -35,9 +34,28 @@ export default function PostList({ subject }: IPostListProps) {
     getCardOrListPosts();
   }, [currentPage]);
 
-  if (!response) {
-    return <Loader />;
-  }
+  const ListOfElements = () => {
+    if (response) {
+      if (usesCardDesign) {
+        return (response.posts as Array<IGatherPost>).map(PostCardItem);
+      }
+
+      return (response.posts as Array<Omit<IPost, "contents" | "subject">>).map(
+        PostListItem
+      );
+    }
+
+    const tmpArray = Array.from({ length: SKELETONS_LENGTH });
+
+    if (usesCardDesign) {
+      // eslint-disable-next-line react/no-array-index-key
+      return tmpArray.map((_, i) => <PostCardItemSkeleton key={i} />);
+    }
+
+    // eslint-disable-next-line react/no-array-index-key
+    return tmpArray.map((_, i) => <PostListItemSkeleton key={i} />);
+  };
+
   return (
     <>
       <div
@@ -45,13 +63,11 @@ export default function PostList({ subject }: IPostListProps) {
           usesCardDesign ? "post-list--card" : "post-list--list"
         }`}
       >
-        {usesCardDesign
-          ? (response.posts as Array<IGatherPost>).map(PostCardItem)
-          : (response.posts as Array<Omit<IPost, "contents" | "subject">>).map(
-              PostListItem
-            )}
+        {ListOfElements()}
       </div>
-      <Pagination paginate={paginate} data={response.pagination} />
+      {response && (
+        <Pagination paginate={paginate} data={response.pagination} />
+      )}
     </>
   );
 }

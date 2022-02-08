@@ -5,7 +5,10 @@ declare type TSubject =
   | "recruit"
   | "chat"
   | "review"
-  | "gather";
+  | "gather"
+  | "study"
+  | "code"
+  | "team";
 declare type TGatherCategory = "study" | "code" | "team";
 
 interface IUser {

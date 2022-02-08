@@ -44,3 +44,11 @@ export default function PostListItem({
     </article>
   );
 }
+
+export function PostListItemSkeleton({ key }: { key: number }) {
+  return (
+    <article key={key} className="list-item list-item--skeleton">
+      <div className="list-item__link" />
+    </article>
+  );
+}
