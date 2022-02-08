@@ -93,6 +93,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+a[href],
+button {
+  cursor: pointer;
+}
+
 .main-container {
   min-height: calc(100vh - 60px);
   padding-top: 60px;
