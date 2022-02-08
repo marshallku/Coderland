@@ -1,0 +1,17 @@
+.home__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.home__banner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  background-color: var(--body);
+  border-radius: var(--border-radius);
+  color: var(--gray-6);
+  margin: 0px 10px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}

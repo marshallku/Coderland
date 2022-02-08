@@ -1,21 +1,25 @@
 import useApi from "../hooks/api";
 import { dummyPostsResponse } from "../api/dummy";
-import AddPostButton from "../components/AddPostButton";
 import Loader from "../components/Loader";
-import PostListItem from "../components/PostListItem";
+import PostList from "../components/PostList";
+import "./Home.css";
 
 export default function Home() {
   const response = useApi(dummyPostsResponse);
-
   if (!response) return <Loader />;
-
   return (
-    <div>
-      <h1>홈!</h1>
-      <div className="post-list__wrapper">
-        {response.posts.map(PostListItem)}
+    <>
+      <div className="home__banner">배너 들어갈 공간</div>
+      <div className="home__grid">
+        <PostList subject="topView" />
+        <PostList subject="latest" />
+        <PostList subject="article" />
+        <PostList subject="dev" />
+        <PostList subject="recruit" />
+        <PostList subject="chat" />
+        <PostList subject="review" />
+        <PostList subject="gather" />
       </div>
-      <AddPostButton to="chat" />
-    </div>
+    </>
   );
 }

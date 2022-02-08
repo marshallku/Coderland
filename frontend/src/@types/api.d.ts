@@ -26,7 +26,7 @@ interface IPost {
   title: string;
   contents: string;
   subject: TSubject;
-  view: number;
+  views: number;
   likes: number;
   author: string;
   commentCount: number;
@@ -43,6 +43,7 @@ interface IGatherPost {
   author: string;
   likes: number;
   views: number;
+  commentCount: number;
   createdAt: string;
   updatedAt: string;
   isCompleted: boolean;
