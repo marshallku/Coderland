@@ -26,11 +26,14 @@ commentRouter.get(
   "/",
   loginCheck,
   asyncHandler(async (req, res) => {
+    const { user } = req;
     const { postId } = req.params;
+    const userId = user ? user.id : undefined;
     const currentPage = Number(req.query.currentPage) || 1;
     const commentService = new CommentService(Post, Comment, postId);
     const [comments, pagination] = await commentService.findAllComments(
-      currentPage
+      currentPage,
+      userId
     );
     res.status(200).json({ isOk: true, comments, pagination });
   })
@@ -60,6 +63,18 @@ commentRouter.delete(
     const commentService = new CommentService(Post, Comment, postId);
     await commentService.deleteComment(commentId);
     res.status(200).json({ isOk: true, commentId });
+  })
+);
+
+commentRouter.post(
+  "/like",
+  loginRequired,
+  asyncHandler(async (req, res) => {
+    const { commentId } = req.body;
+    const { user } = req;
+    const commentService = new CommentService(Post, Comment);
+    await commentService.updateLike(commentId, user.id);
+    res.status(200).json({ isOk: true });
   })
 );
 

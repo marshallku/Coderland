@@ -25,6 +25,7 @@ export interface IComment {
   author: PopulatedDoc<IUserDocument>;
   parentId: mongoose.Types.ObjectId;
   likes: number;
+  likeUsers: string[];
   anonymous: boolean;
   isPostAuthor: boolean;
   replies: IReplyDocument[];
@@ -63,4 +64,6 @@ export interface ICommentModel extends Model<ICommentDocument> {
     user: IUserDocument,
     replyDto: Pick<IReplyDto, "commentId" | "replyId">
   ) => Promise<void>;
+
+  updateLike: (commentId: string, userId: string) => Promise<void>;
 }

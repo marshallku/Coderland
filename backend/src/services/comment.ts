@@ -34,17 +34,18 @@ export default class CommentService {
     }
   }
 
-  async findAllComments(currentPage: number) {
+  async findAllComments(currentPage: number, userId: string) {
     const [comments, pagination] = await this.CommentModel.findAllComments(
       this.parentId,
       currentPage
     );
     const parsedComments = comments.map((comment) => {
-      const { author, anonymous, replies, isPostAuthor, ...rest } =
+      const { author, anonymous, replies, isPostAuthor, likeUsers, ...rest } =
         comment.toObject();
       return {
         ...rest,
         isPostAuthor,
+        isLiked: likeUsers.includes(userId),
         replies: parseReply(replies, anonymous, author, isPostAuthor),
         author: createAuthorName(anonymous, author),
       };
@@ -68,5 +69,9 @@ export default class CommentService {
     } catch (error) {
       throw new Error("존재하지 않는 글입니다.");
     }
+  }
+
+  async updateLike(commentId: string, userId: string) {
+    await this.CommentModel.updateLike(commentId, userId);
   }
 }

@@ -43,6 +43,10 @@ export const CommentSchema = new mongoose.Schema<ICommentDocument>(
       default: 0,
       min: 0,
     },
+    likeUsers: {
+      type: [String],
+      default: [],
+    },
     anonymous: {
       type: Boolean,
       default: false,
@@ -146,6 +150,24 @@ CommentSchema.statics.deleteReply = async (user, replyDto) => {
   const { commentId, replyId } = replyDto;
   await Comment.findByIdAndUpdate(commentId, {
     $pull: { replies: { _id: replyId } },
+  });
+};
+
+CommentSchema.statics.updateLike = async (
+  commentId: string,
+  userId: string
+) => {
+  const comment = await Comment.findById(commentId);
+  if (comment.likeUsers.length > 0 && comment.likeUsers.includes(userId)) {
+    await Comment.findByIdAndUpdate(commentId, {
+      $pull: { likeUsers: userId },
+      $inc: { likes: -1 },
+    });
+    return;
+  }
+  await Comment.findByIdAndUpdate(commentId, {
+    $push: { likeUsers: userId },
+    $inc: { likes: 1 },
   });
 };
 

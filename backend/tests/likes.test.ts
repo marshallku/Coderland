@@ -10,6 +10,7 @@ describe("좋아요 테스트", () => {
   const connection = db.createConnection(`${configs.mongoUri}/coderland`);
   let token = "Bearer ";
   let postId: string;
+  let commentId: string;
 
   beforeAll(async () => {
     await connection.collection("users").insertOne({
@@ -88,8 +89,72 @@ describe("좋아요 테스트", () => {
     expect(res1.body.post.isLiked).toEqual(false);
   });
 
+  it("댓글 생성", async () => {
+    const res = await request(server)
+      .post(`/api/posts/${postId}/comments`)
+      .set("authorization", token)
+      .send({ contents: "contents" });
+
+    expect(res.statusCode).toEqual(201);
+
+    commentId = res.body.commentId;
+  });
+
+  it("댓글 좋아요", async () => {
+    const res = await request(server)
+      .post(`/api/posts/${postId}/comments/like`)
+      .set("authorization", token)
+      .send({ commentId });
+
+    expect(res.statusCode).toEqual(200);
+
+    const res1 = await request(server)
+      .get(`/api/posts/${postId}/comments`)
+      .send();
+
+    expect(res1.statusCode).toEqual(200);
+    expect(res1.body.comments[0].likes).toEqual(1);
+    expect(res1.body.comments[0].isLiked).toEqual(false);
+
+    const res2 = await request(server)
+      .get(`/api/posts/${postId}/comments`)
+      .set("authorization", token)
+      .send();
+
+    expect(res2.statusCode).toEqual(200);
+    expect(res2.body.comments[0].likes).toEqual(1);
+    expect(res2.body.comments[0].isLiked).toEqual(true);
+  });
+
+  it("댓글 좋아요 취소", async () => {
+    const res = await request(server)
+      .post(`/api/posts/${postId}/comments/like`)
+      .set("authorization", token)
+      .send({ commentId });
+
+    expect(res.statusCode).toEqual(200);
+
+    const res1 = await request(server)
+      .get(`/api/posts/${postId}/comments`)
+      .send();
+
+    expect(res1.statusCode).toEqual(200);
+    expect(res1.body.comments[0].likes).toEqual(0);
+    expect(res1.body.comments[0].isLiked).toEqual(false);
+
+    const res2 = await request(server)
+      .get(`/api/posts/${postId}/comments`)
+      .set("authorization", token)
+      .send();
+
+    expect(res2.statusCode).toEqual(200);
+    expect(res2.body.comments[0].likes).toEqual(0);
+    expect(res2.body.comments[0].isLiked).toEqual(false);
+  });
+
   afterAll(async () => {
     connection.collection("users").deleteMany({});
     connection.collection("posts").deleteMany({});
+    connection.collection("comments").deleteMany({});
   });
 });
