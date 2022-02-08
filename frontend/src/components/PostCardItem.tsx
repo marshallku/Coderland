@@ -24,8 +24,8 @@ export default function PostCardItem({
             }`}
           >{`모집${isCompleted ? "완료" : "중"}`}</span>
         </div>
-        <h2 className="card-item-title">{title}</h2>
-        <p className="card-item-contents">{contents}</p>
+        <h2 className="card-item__title">{title}</h2>
+        <p className="card-item__contents">{contents}</p>
         <i
           className={`card-item__icon icon-${icon}`}
           role="img"
@@ -49,6 +49,40 @@ export default function PostCardItem({
           </ul>
         </header>
       </Link>
+    </article>
+  );
+}
+
+export function PostCardItemSkeleton({ key }: { key: number }) {
+  return (
+    <article key={key} className="card-item card-item--skeleton">
+      <div className="card-item__link">
+        <div>
+          <span className="card-item__status card-skeleton">로딩중</span>
+        </div>
+        <div className="card-item__title card-skeleton">Loading</div>
+        <p className="card-item__contents">
+          <div className="card-skeleton card-skelton--margin" />
+          <div className="card-skeleton" />
+        </p>
+        <div className="card-item__icon card-skeleton card-skeleton--icon" />
+        <header className="card-item__header">
+          <div className="card-item__info">
+            <i className="card-item__info-icon icon-person" />
+            <span className="card-item__info-text card-skeleton" />
+          </div>
+          <div className="card-item__info">
+            <i className="card-item__info-icon icon-desktop_windows" />
+            <span className="card-item__info-text card-skeleton" />
+          </div>
+          <ul className="card-item__tags">
+            {Array.from({ length: 3 }).map((_, i) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <li key={i} className="card-skeleton" />
+            ))}
+          </ul>
+        </header>
+      </div>
     </article>
   );
 }

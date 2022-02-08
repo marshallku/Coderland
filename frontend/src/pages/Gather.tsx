@@ -1,14 +1,25 @@
-import useApi from "../hooks/api";
-import { dummyGathersResponse } from "../api/dummy";
+import { useLocation } from "react-router-dom";
 import AddPostButton from "../components/AddPostButton";
-import Loader from "../components/Loader";
 import Navigation from "../components/Navigation";
 import PostList from "../components/PostList";
 
 export default function Gather() {
-  const response = useApi(dummyGathersResponse);
+  const location = useLocation();
 
-  if (!response) return <Loader />;
+  const getLocation = () => {
+    const lastPath = location.pathname.split("/").pop();
+    const allowedPath = ["gather", "study", "code", "team"];
+
+    if (!lastPath) {
+      return "gather";
+    }
+
+    if (allowedPath.includes(lastPath)) {
+      return lastPath as TSubject;
+    }
+
+    return "gather";
+  };
 
   return (
     <>
@@ -21,7 +32,7 @@ export default function Gather() {
         ]}
         align="center"
       />
-      <PostList subject="gather" />
+      <PostList subject={getLocation()} />
       <div>
         <AddPostButton to="gather" />
       </div>
