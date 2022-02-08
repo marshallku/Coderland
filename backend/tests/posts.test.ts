@@ -77,7 +77,7 @@ describe("일반 포스트 기능 테스트", () => {
     expect(res.statusCode).toEqual(200);
     expect(res.body.isOk).toEqual(true);
     expect(res.body.post.title).toEqual("new title");
-    expect(res.body.post.author).toEqual("testuser2");
+    expect(res.body.post.author.nickname).toEqual("testuser2");
     expect.arrayContaining([
       "_id",
       "title",
@@ -110,7 +110,7 @@ describe("일반 포스트 기능 테스트", () => {
     // then
     expect(res.statusCode).toEqual(200);
     expect(res.body.isOk).toEqual(true);
-    expect(res.body.posts[0].author).toEqual("testuser2");
+    expect(res.body.posts[0].author.nickname).toEqual("testuser2");
     expect(Object.keys(res.body)).toEqual(
       expect.arrayContaining(["isOk", "posts", "pagination"])
     );
@@ -286,7 +286,7 @@ describe("일반 포스트 기능 테스트", () => {
       .send();
 
     expect(res2.body.post.title).toEqual("update anony");
-    expect(res2.body.post.author).toEqual("testuser2");
+    expect(res2.body.post.author.nickname).not.toEqual("testuser2");
   });
 
   afterAll(async () => {

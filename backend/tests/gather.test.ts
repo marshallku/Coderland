@@ -84,7 +84,7 @@ describe("모임 게시글 기능 테스트", () => {
       expect.arrayContaining(["isOk", "posts", "pagination"])
     );
     expect(res.body.posts.length).toEqual(1);
-    expect(res.body.posts[0].author).toEqual("testuuu");
+    expect(res.body.posts[0].author.nickname).toEqual("testuuu");
   });
 
   it("비어있는 리스트 모임 게시글 리스트 조회 테스트", async () => {
@@ -110,7 +110,7 @@ describe("모임 게시글 기능 테스트", () => {
       expect.arrayContaining(["isOk", "post"])
     );
     expect(res.body.post.title).toEqual("모집 게시글 타이틀");
-    expect(res.body.post.author).toEqual("testuuu");
+    expect(res.body.post.author.nickname).toEqual("testuuu");
     expect(Object.keys(res.body.post)).toEqual(
       expect.arrayContaining([
         "_id",
