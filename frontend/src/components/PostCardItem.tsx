@@ -53,18 +53,18 @@ export default function PostCardItem({
   );
 }
 
-export function PostCardItemSkeleton({ key }: { key: number }) {
+export function PostCardItemSkeleton() {
   return (
-    <article key={key} className="card-item card-item--skeleton">
+    <article className="card-item card-item--skeleton">
       <div className="card-item__link">
         <div>
           <span className="card-item__status card-skeleton">로딩중</span>
         </div>
         <div className="card-item__title card-skeleton">Loading</div>
-        <p className="card-item__contents">
+        <div className="card-item__contents">
           <div className="card-skeleton card-skelton--margin" />
           <div className="card-skeleton" />
-        </p>
+        </div>
         <div className="card-item__icon card-skeleton card-skeleton--icon" />
         <header className="card-item__header">
           <div className="card-item__info">

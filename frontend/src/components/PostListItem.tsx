@@ -45,9 +45,9 @@ export default function PostListItem({
   );
 }
 
-export function PostListItemSkeleton({ key }: { key: number }) {
+export function PostListItemSkeleton() {
   return (
-    <article key={key} className="list-item list-item--skeleton">
+    <article className="list-item list-item--skeleton">
       <div className="list-item__link" />
     </article>
   );
