@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { dummyGathersResponse, dummyPostsResponse } from "../api/dummy";
 import Pagination from "./Pagination";
 import PostCardItem, { PostCardItemSkeleton } from "./PostCardItem";
@@ -10,8 +10,7 @@ import "./PostList.css";
 const USES_CARD_DESIGN = ["gather", "study", "code", "team"];
 const SKELETONS_LENGTH = 8;
 
-export default function PostList({ subject }: IPostListProps) {
-  const [title, setTitle] = useState("");
+export default function PostList({ subject, preventPaginate }: IPostListProps) {
   const { search } = useLocation();
   const { page } = parseQuery(search);
   const [response, setResponse] = useState<
@@ -33,17 +32,6 @@ export default function PostList({ subject }: IPostListProps) {
     }
     getCardOrListPosts();
   }, [currentPage]);
-
-  useEffect(() => {
-    if (subject === "article") setTitle("댓글 남겨줘");
-    else if (subject === "dev") setTitle("개발 정보");
-    else if (subject === "recruit") setTitle("채용 정보");
-    else if (subject === "chat") setTitle("잡담");
-    else if (subject === "review") setTitle("후기 / 회고");
-    else if (subject === "gather") setTitle("팀원 모집");
-    else if (subject === "topView") setTitle("조회수 BEST");
-    else if (subject === "latest") setTitle("최신순");
-  }, []);
 
   const ListOfElements = () => {
     if (response) {
@@ -68,36 +56,17 @@ export default function PostList({ subject }: IPostListProps) {
   };
 
   return (
-    <div
-      className={`post-list ${
-        subject === "latest" || subject === "topView"
-          ? "post-list--highlight"
-          : ""
-      }`}
-    >
-      <div className="post-list__header">
-        <h2 className="post-list__title">{title}</h2>
-        {subject !== "topView" && subject !== "latest" ? (
-          <Link to={`/${subject}`}>
-            <i
-              aria-label={`${title} 더보기`}
-              className="icon-keyboard_control"
-            />
-          </Link>
-        ) : (
-          ""
-        )}
-      </div>
+    <>
       <div
-        className={`posts-wrapper ${
-          usesCardDesign ? "posts-wrapper--card" : "posts-wrapper--list"
+        className={`post-list ${
+          usesCardDesign ? "post-list--card" : "post-list--list"
         }`}
       >
         {ListOfElements()}
       </div>
-      {response && (
+      {!preventPaginate && response && (
         <Pagination paginate={paginate} data={response.pagination} />
       )}
-    </div>
+    </>
   );
 }

@@ -1,9 +1,5 @@
 interface IPostListProps {
-  subject: TSubject | "topView" | "latest";
-}
-
-interface IHomePostListProps {
-  to?: string;
-  title: string;
-  response: IPostListResponse;
+  subject: TSubject;
+  limit?: number;
+  preventPaginate?: boolean;
 }
