@@ -1,10 +1,7 @@
 .comment-form__button-wrap {
+  display: flex;
+  justify-content: flex-start;
   margin-top: 8px;
-}
-
-.comment-form__button-wrap button {
-  width: 3rem;
-  height: 2rem;
 }
 
 .comment-wrap {
@@ -56,4 +53,8 @@
 .comment__edit--on,
 .comment__reply--on {
   color: var(--primary);
+}
+
+.comment-form--reply {
+  padding: 12px 20px;
 }

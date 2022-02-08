@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { dummyCommentsResponse } from "../api/dummy";
-import useApi from "../api/useApi";
 import Comment from "./Comment";
 import "./Comments.css";
 
@@ -9,13 +8,11 @@ export default function Comments() {
   const [commentList, setCommentList] = useState<IComment[]>([]);
 
   // TODO: GET Comment
-  const response = useApi(dummyCommentsResponse);
-
-  const getComments = () => {
-    setCommentList(response?.comments || []);
-  };
-
   useEffect(() => {
+    const getComments = async () => {
+      const response = await dummyCommentsResponse;
+      setCommentList(response?.comments || []);
+    };
     getComments();
   }, []);
 
