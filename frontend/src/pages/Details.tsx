@@ -1,7 +1,7 @@
 import { useState } from "react";
+import useApi from "../hooks/api";
 import { dummyGatherResponse, dummyPostResponse } from "../api/dummy";
 import { formatToReadableTime } from "../utils/time";
-import useApi from "../api/useApi";
 import MarkdownViewer from "../components/MarkdownViewer";
 import Comments from "../components/Comments";
 import "./Details.css";

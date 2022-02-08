@@ -5,8 +5,8 @@ import Gather from "./pages/Gather";
 import { PostDetails, GatherDetails } from "./pages/Details";
 import Add from "./pages/Add";
 import NotFound from "./pages/NotFound";
-import { AuthProvider } from "./data/Auth";
-import { ThemeProvider } from "./data/Theme";
+import { AuthProvider } from "./hooks/auth";
+import { ThemeProvider } from "./hooks/theme";
 import RequireAuth from "./routes/RequireAuth";
 import User, {
   UserInfo,

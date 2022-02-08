@@ -1,4 +1,4 @@
-import { useApi } from "../api";
+import useApi from "../hooks/api";
 import { dummyGathersResponse } from "../api/dummy";
 import AddPostButton from "../components/AddPostButton";
 import Loader from "../components/Loader";

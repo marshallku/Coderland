@@ -1,4 +1,4 @@
-import { useTheme } from "../data/Theme";
+import { useTheme } from "../hooks/theme";
 import "./ThemeSwitch.css";
 
 export default function ThemeSwitch() {

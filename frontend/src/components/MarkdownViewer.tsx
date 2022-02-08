@@ -7,7 +7,7 @@ import {
   vscDarkPlus,
   solarizedlight,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { useTheme } from "../data/Theme";
+import { useTheme } from "../hooks/theme";
 
 export default function MarkdownViewer({
   className,

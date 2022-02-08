@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
-import { useApi } from "../api";
+import useApi from "../hooks/api";
 import {
   dummyCommentsResponse,
   dummyGathersResponse,
@@ -11,7 +11,7 @@ import {
 import Button from "../components/Button";
 import { Input } from "../components/Input";
 import Navigation from "../components/Navigation";
-import { useAuth } from "../data/Auth";
+import { useAuth } from "../hooks/auth";
 import "./User.css";
 
 export function UserInfo() {
