@@ -49,7 +49,9 @@ describe("일반 포스트 기능 테스트", () => {
   it("일반 포스트 생성 테스트", async () => {
     // given
     const title = "new title";
-    const contents = "new contents";
+    const contents = `<iframe src="https://www.youtube.com/embed/UAQT5Hgrm1Q"></iframe>
+<iframe src="https://example.com"></iframe>
+<img src=x onerror="alert('hi')" />`;
     const subject = "article";
     const category = "none";
 
@@ -77,6 +79,11 @@ describe("일반 포스트 기능 테스트", () => {
     expect(res.statusCode).toEqual(200);
     expect(res.body.isOk).toEqual(true);
     expect(res.body.post.title).toEqual("new title");
+    expect(res.body.post.contents).toEqual(
+      `<iframe src="https://www.youtube.com/embed/UAQT5Hgrm1Q"></iframe>
+<iframe></iframe>
+<img src="x" />`
+    );
     expect(res.body.post.author.nickname).toEqual("testuser2");
     expect.arrayContaining([
       "_id",

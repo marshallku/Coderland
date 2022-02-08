@@ -2,7 +2,7 @@ import { Router } from "express";
 import PostService from "../../services/post";
 import { Post } from "../../models";
 
-import { asyncHandler } from "../../utils";
+import { asyncHandler, purifyHtml } from "../../utils";
 import { loginRequired, loginCheck } from "../../passport/guards";
 import { checkPermission } from "../middlewares";
 
@@ -70,7 +70,7 @@ export default (app: Router) => {
       const postService = new PostService(Post);
       const postId = await postService.createPost(
         user,
-        { title, contents, subject },
+        { title, contents: purifyHtml(contents), subject },
         { category, area, tags, icon }
       );
       res.status(201).json({ isOk: true, postId });
@@ -88,7 +88,7 @@ export default (app: Router) => {
       const postService = new PostService(Post);
       await postService.updatePost(
         postId,
-        { title, contents, subject },
+        { title, contents: purifyHtml(contents), subject },
         { category, area, tags, icon }
       );
       res.status(200).json({ isOk: true, postId });
