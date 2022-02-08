@@ -19,6 +19,7 @@ export interface IPost {
   commentCount: number;
   views: number;
   likes: number;
+  likeUsers: string[];
   subject: subjects;
   anonymous: boolean;
   createdAt: Date;
@@ -62,4 +63,6 @@ export interface IPostModel extends Model<IPostDocument> {
   deletePost: (postId: string) => Promise<void>;
 
   completePost: (postId: string) => Promise<void>;
+
+  updateLike: (postId: string, user: string) => Promise<void>;
 }
