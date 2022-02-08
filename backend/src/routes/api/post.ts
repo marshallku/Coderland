@@ -8,6 +8,7 @@ import { checkPermission } from "../middlewares";
 
 import commentRouter from "./comment";
 import replyRouter from "./reply";
+import config from "../../config";
 
 export default (app: Router) => {
   const route = Router();
@@ -23,11 +24,13 @@ export default (app: Router) => {
       const subject = String(req.query.subject);
       const category = String(req.query.category);
       const currentPage = Number(req.query.currentPage) || 1;
+      const perPage = Number(req.query.perPage) || config.perPage;
       const postService = new PostService(Post);
       const [posts, pagination] = await postService.findAllPosts(
         subject,
         category,
-        currentPage
+        currentPage,
+        perPage
       );
       res.status(200).json({
         isOk: true,
