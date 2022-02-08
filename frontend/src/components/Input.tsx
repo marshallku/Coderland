@@ -1,33 +1,33 @@
 import React, { useEffect, useRef } from "react";
 import "./Input.css";
 
-export function Input(props: IInputProps) {
-  const {
-    id,
-    label,
-    className,
-    type,
-    required,
-    accept,
-    alt,
-    autoComplete,
-    capture,
-    checked,
-    disabled,
-    form,
-    list,
-    max,
-    maxLength,
-    min,
-    minLength,
-    multiple,
-    name,
-    pattern,
-    readOnly,
-    value,
-    setValue,
-  } = props;
-
+export function Input({
+  id,
+  label,
+  className,
+  type,
+  required,
+  accept,
+  alt,
+  autoComplete,
+  capture,
+  checked,
+  disabled,
+  form,
+  list,
+  max,
+  maxLength,
+  min,
+  minLength,
+  multiple,
+  name,
+  pattern,
+  readOnly,
+  value,
+  setValue,
+  onKeyDown,
+  onChange,
+}: IInputProps) {
   const handleChange = (event: React.FormEvent) => {
     const { target } = event;
 
@@ -62,7 +62,11 @@ export function Input(props: IInputProps) {
         required={required}
         aria-label={label}
         value={value}
-        onChange={handleChange}
+        onChange={(event) => {
+          onChange?.(event);
+          handleChange(event);
+        }}
+        onKeyDown={onKeyDown}
       />
       <label htmlFor={id} className="input__label">
         {label}
@@ -72,19 +76,18 @@ export function Input(props: IInputProps) {
   );
 }
 
-export function Textarea(props: ITextareaProps) {
-  const {
-    id,
-    label,
-    required,
-    className,
-    cols,
-    maxLength,
-    minLength,
-    wrap,
-    value,
-    setValue,
-  } = props;
+export function Textarea({
+  id,
+  label,
+  required,
+  className,
+  cols,
+  maxLength,
+  minLength,
+  wrap,
+  value,
+  setValue,
+}: ITextareaProps) {
   const textarea = useRef<HTMLTextAreaElement>(null);
 
   const resize = () => {

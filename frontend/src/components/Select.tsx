@@ -19,10 +19,9 @@ export default function Select({ id, list, cb }: ISelectProps) {
       </button>
       <ul className="select__list">
         {list.map(({ key, name }) => (
-          <li>
+          <li key={key}>
             <button
               type="button"
-              key={key}
               value={key}
               onClick={() => {
                 setOpen(false);
