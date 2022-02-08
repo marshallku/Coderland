@@ -8,6 +8,8 @@ import { checkPermission } from "../middlewares";
 
 import commentRouter from "./comment";
 import replyRouter from "./reply";
+import likeRouter from "./like";
+
 import config from "../../config";
 
 export default (app: Router) => {
@@ -15,6 +17,7 @@ export default (app: Router) => {
 
   route.use("/:postId/comments", commentRouter);
   route.use("/:postId/replies", replyRouter);
+  route.use("/:postId/like", likeRouter);
 
   // 글 목록 조회
   route.get(
@@ -45,9 +48,11 @@ export default (app: Router) => {
     "/:postId",
     loginCheck,
     asyncHandler(async (req, res) => {
+      const { user } = req;
+      const userId = user ? user.id : undefined;
       const { postId } = req.params;
       const postService = new PostService(Post);
-      const post = await postService.findPostById(postId);
+      const post = await postService.findPostById(postId, userId);
       res.status(200).json({
         isOk: true,
         post,
@@ -103,6 +108,7 @@ export default (app: Router) => {
     })
   );
 
+  // 모집 글 완료처리
   route.patch(
     "/:postId",
     loginRequired,

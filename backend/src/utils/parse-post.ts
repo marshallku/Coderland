@@ -4,7 +4,8 @@ import { createAuthorName } from "./index";
 
 export default function parsePostBySubject(
   subject: string,
-  post: LeanDocument<IPostDocument>
+  post: LeanDocument<IPostDocument>,
+  userId?: string
 ) {
   const {
     author,
@@ -14,6 +15,7 @@ export default function parsePostBySubject(
     isCompleted,
     area,
     category,
+    likeUsers,
     ...rest
   } = post;
   if (subject === "gathering") {
@@ -32,6 +34,7 @@ export default function parsePostBySubject(
   return {
     ...rest,
     anonymous,
+    isLiked: likeUsers.includes(userId),
     author: createAuthorName(anonymous, author),
   };
 }

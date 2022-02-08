@@ -10,7 +10,6 @@ export default class AuthService {
   }
 
   async login(user: IUserDocument) {
-    // TODO: 토큰 만료 시간 1주
     const accessToken = sign({ googleId: user.googleId }, config.jwtSecret, {
       expiresIn: "7d",
     });

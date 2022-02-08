@@ -58,6 +58,10 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
       default: 0,
       min: 0,
     },
+    likeUsers: {
+      type: [String],
+      default: [],
+    },
     subject: {
       type: String,
       required: true,
@@ -156,6 +160,23 @@ PostSchema.statics.deletePost = async (postId: string) => {
 PostSchema.statics.completePost = async (postId: string) => {
   await Post.findByIdAndUpdate(postId, {
     isCompleted: true,
+  });
+};
+
+PostSchema.statics.updateLike = async (postId: string, userId: string) => {
+  // 먼저 찾아서, 유저가 좋아요 눌렀는지 확인하고,
+  // 눌렀으면 취소, 안눌렀으면 좋아요
+  const post = await Post.findById(postId);
+  if (post.likeUsers.length > 0 && post.likeUsers.includes(userId)) {
+    await Post.findByIdAndUpdate(postId, {
+      $pull: { likeUsers: userId },
+      $inc: { likes: -1 },
+    });
+    return;
+  }
+  await Post.findByIdAndUpdate(postId, {
+    $push: { likeUsers: userId },
+    $inc: { likes: 1 },
   });
 };
 

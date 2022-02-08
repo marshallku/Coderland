@@ -27,10 +27,10 @@ export default class PostService {
     return [parsedPosts, pagination];
   }
 
-  async findPostById(postId: string) {
+  async findPostById(postId: string, userId: string) {
     try {
       const post = await this.PostModel.findPostById(postId);
-      return parsePostBySubject(post.subject, post.toObject());
+      return parsePostBySubject(post.subject, post.toObject(), userId);
     } catch (error) {
       throw new Error("존재하지 않는 글입니다.");
     }
@@ -59,5 +59,9 @@ export default class PostService {
 
   async completePost(postId: string) {
     await this.PostModel.completePost(postId);
+  }
+
+  async updateLike(postId: string, userId: string) {
+    await this.PostModel.updateLike(postId, userId);
   }
 }

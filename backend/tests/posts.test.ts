@@ -90,6 +90,31 @@ describe("일반 포스트 기능 테스트", () => {
     ]);
   });
 
+  it("로그인한 유저 일반 포스트 조회 테스트", async () => {
+    // when
+    const res = await request(server)
+      .get(`/api/posts/${postId}`)
+      .set("authorization", token)
+      .send();
+
+    // then
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.isOk).toEqual(true);
+    expect(res.body.post.title).toEqual("new title");
+    expect(res.body.post.author.nickname).toEqual("testuser2");
+    expect.arrayContaining([
+      "_id",
+      "title",
+      "contents",
+      "author",
+      "likes",
+      "views",
+      "createdAt",
+      "updatedAt",
+      "isLiked",
+    ]);
+  });
+
   it("Fail 일반 포스트 조회 존재하지 않는 글", async () => {
     // when
     const res = await request(server).get("/api/posts/nonlskdjfqjeofi").send();
