@@ -123,7 +123,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f6af6812485f28ad1876e7",
     title: "First Post",
-    view: 30,
+    views: 30,
     likes: 20,
     commentCount: 5,
     author: "도도새",
@@ -133,7 +133,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f9475b934f247bad759a2d",
     title: "Second Post",
-    view: 40,
+    views: 40,
     likes: 30,
     commentCount: 5,
     author: "도도새",
@@ -143,7 +143,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f6af6812132485f28ad1876e7",
     title: "First Post",
-    view: 30,
+    views: 30,
     likes: 20,
     commentCount: 5,
     author: "도도새",
@@ -153,7 +153,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f9475b934f123247bad759a2d",
     title: "Second Post",
-    view: 40,
+    views: 40,
     likes: 30,
     commentCount: 5,
     author: "도도새",
@@ -163,7 +163,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f6af6812412385f28ad1876e7",
     title: "First Post",
-    view: 30,
+    views: 30,
     likes: 20,
     commentCount: 5,
     author: "도도새",
@@ -173,7 +173,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f9475b934f21312247bad759a2d",
     title: "Second Post",
-    view: 40,
+    views: 40,
     likes: 30,
     commentCount: 5,
     author: "도도새",
@@ -183,7 +183,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f6af681241232185f28ad1876e7",
     title: "First Post",
-    view: 30,
+    views: 30,
     likes: 20,
     commentCount: 5,
     author: "도도새",
@@ -193,7 +193,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f9475122133b934f247bad759a2d",
     title: "Second Post",
-    view: 40,
+    views: 40,
     likes: 30,
     commentCount: 5,
     author: "도도새",
@@ -203,7 +203,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f6af6812132233485f28ad1876e7",
     title: "First Post",
-    view: 30,
+    views: 30,
     likes: 20,
     commentCount: 5,
     author: "도도새",
@@ -213,7 +213,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f9475b934f247b32ad759a2d",
     title: "Second Post",
-    view: 40,
+    views: 40,
     likes: 30,
     commentCount: 5,
     author: "도도새",
@@ -230,6 +230,7 @@ const tmpGatherList: Array<IGatherPost> = [
     author: "도도새",
     likes: 30,
     views: 40,
+    commentCount: 5,
     createdAt: "2022-01-24T10:23:38.981Z",
     updatedAt: "2022-01-25T10:23:38.981Z",
     icon: "typescript",
@@ -246,6 +247,7 @@ const tmpGatherList: Array<IGatherPost> = [
     author: "체셔 고양이",
     likes: 30,
     views: 40,
+    commentCount: 5,
     createdAt: "2022-01-24T10:23:38.981Z",
     updatedAt: "2022-01-25T10:23:38.981Z",
     icon: "javascript",
@@ -272,7 +274,7 @@ export const dummyPostResponse: Promise<IPostResponse> = dummyAsync({
     title: "First Post",
     contents: dummyMarkDown,
     subject: "chat",
-    view: 30,
+    views: 30,
     likes: 20,
     commentCount: 5,
     author: "도도새",
@@ -299,6 +301,7 @@ export const dummyGatherResponse: Promise<IGatherPostResponse> = dummyAsync({
     author: "도도새",
     views: 30,
     likes: 40,
+    commentCount: 5,
     createdAt: "2022-01-24T10:23:38.981Z",
     updatedAt: "2022-01-25T10:23:38.981Z",
     isCompleted: false,

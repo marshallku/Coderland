@@ -2,19 +2,25 @@ import instance from "./instance";
 
 export function getPostList(
   subject: string,
+  perPage?: number,
   page = 1
 ): Promise<IPostListResponse | IFailResponse> {
-  return instance.get(`/posts?subject=${subject}&page=${page}`);
+  return instance.get(
+    `/posts?subject=${subject}&page=${page}${
+      perPage ? `&perPage=${perPage}` : ""
+    }`
+  );
 }
 
 export function getGatherPostList(
   category?: "study" | "code" | "team",
+  perPage?: number,
   page = 1
 ): Promise<IGatherPostListResponse | IFailResponse> {
   return instance.get(
     `/posts?subject=gathering${
       category ? `&category=${category}` : ""
-    }&page=${page}`
+    }&page=${page}${perPage ? `&perPage=${perPage}` : ""}`
   );
 }
 

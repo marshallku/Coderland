@@ -7,7 +7,7 @@ export default function PostListItem({
   author,
   commentCount,
   likes,
-  view,
+  views,
 }: Omit<IPost, "contents" | "subject">) {
   return (
     <article key={_id} className="list-item">
@@ -37,7 +37,7 @@ export default function PostListItem({
               role="img"
               aria-label="조회 수"
             />
-            <span className="list-item__info-text">{view}</span>
+            <span className="list-item__info-text">{views}</span>
           </div>
         </header>
       </Link>
