@@ -180,7 +180,7 @@ export function PostDetails() {
           </div>
           <div className="details-header__views">
             <i className="icon-visibility" role="img" aria-label="조회 수" />
-            {selected?.post.view}
+            {selected?.post.views}
           </div>
         </div>
       </div>
