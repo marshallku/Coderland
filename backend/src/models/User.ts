@@ -103,6 +103,12 @@ UserSchema.statics.findAllBookmarks = async (userId: string) => {
   return bookmarks;
 };
 
+UserSchema.statics.updateUser = async (userId: string, nickname: string) => {
+  await User.findByIdAndUpdate(userId, {
+    nickname,
+  });
+};
+
 const User = mongoose.model<IUserDocument, IUserModel>("User", UserSchema);
 
 export { User };

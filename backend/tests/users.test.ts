@@ -104,6 +104,35 @@ describe("유저 기능 테스트", () => {
     expect(res.body.msg).toEqual("로그인이 필요합니다!");
   });
 
+  it("유저 정보 수정하기", async () => {
+    const res = await request(server)
+      .patch("/api/users")
+      .set("authorization", token)
+      .send({ nickname: "update nickname" });
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.isOk).toEqual(true);
+
+    const res1 = await request(server)
+      .get("/api/users")
+      .set("authorization", token)
+      .send();
+
+    expect(res1.statusCode).toEqual(200);
+    expect(res1.body.user.nickname).toEqual("update nickname");
+  });
+
+  it("Fail 없는 유저 정보 수정하기", async () => {
+    const res = await request(server)
+      .patch("/api/users")
+      .set("authorization", "lksjdfkljsdlfksldkfj")
+      .send({ nickname: "update nickname" });
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.isOk).toEqual(false);
+    expect(res.body.msg).toEqual("로그인이 필요합니다!");
+  });
+
   afterAll(async () => {
     await connection
       .collection("users")

@@ -46,6 +46,8 @@ export interface IUserModel extends Model<IUserDocument> {
     googleId: string,
   }) => Promise<Partial<IUserDocument>>;
 
+  updateUser: (userId: string, nickname: string) => Promise<void>;
+
   updateBookmark: (postId: string, userId: string) => Promise<void>;
 
   findAllBookmarks: (userId: string) => Promise<IUserDocument>;
