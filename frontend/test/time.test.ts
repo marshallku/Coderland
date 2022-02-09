@@ -11,7 +11,7 @@ describe("시간 관련 유틸 작동 검사", () => {
 
     expect(formatter.format("엘리스")).toBe("어떤 오후");
     expect(formatter.format("2022-01-27T11:23:11.472Z")).toBe(
-      "2022년 1월 27일 오후 8시 23분"
+      "2022년 1월 27일 오전 11시 23분"
     );
   });
 });

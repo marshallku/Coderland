@@ -1,4 +1,4 @@
-import React, { useState, FocusEvent } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import { Input } from "../components/Input";
