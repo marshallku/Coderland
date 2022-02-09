@@ -1,4 +1,5 @@
 import { useState } from "react";
+import formatClassName from "../utils/formatClassName";
 import { formatToReadableTime } from "../utils/time";
 
 export default function Reply({ contents, author, createdAt }: ICommentReply) {
@@ -27,10 +28,11 @@ export default function Reply({ contents, author, createdAt }: ICommentReply) {
       <div className="comment__author-wrap">
         <span className="comment__author">{author}</span>
         <button
-          className={`comment__edit-button ${
-            editMode ? "comment__edit--on" : ""
-          }`}
           type="button"
+          className={formatClassName(
+            "comment__edit-button",
+            editMode && "comment__edit--on"
+          )}
           aria-label="답글 수정 버튼"
           onClick={toggleEditMode}
         >

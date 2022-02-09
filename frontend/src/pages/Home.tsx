@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import PostList from "../components/PostList";
+import formatClassName from "../utils/formatClassName";
 import "./Home.css";
 
 function HomePostList({ subject, isLarge }: IHomePostListProps) {
@@ -19,7 +20,9 @@ function HomePostList({ subject, isLarge }: IHomePostListProps) {
   };
 
   return (
-    <section className={`home-posts${isLarge ? " home-posts--large" : ""}`}>
+    <section
+      className={formatClassName("home-posts", isLarge && "home-posts--large")}
+    >
       <header className="home-posts__header">
         <h2 className="home-posts__title">{subjectsInKr[subject]}</h2>
       </header>

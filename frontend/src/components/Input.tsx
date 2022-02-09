@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import formatClassName from "../utils/formatClassName";
 import "./Input.css";
 
 export function Input({
@@ -41,7 +42,7 @@ export function Input({
       <input
         id={id}
         name={name}
-        className={`input__input ${className || ""}`}
+        className={formatClassName("input__input", className)}
         type={type || "text"}
         placeholder=" "
         accept={accept}
@@ -116,7 +117,7 @@ export function Textarea({
       <textarea
         id={id}
         name={id}
-        className={`input__input ${className || ""}`}
+        className={formatClassName("input__input", className)}
         placeholder=" "
         cols={cols}
         maxLength={maxLength}

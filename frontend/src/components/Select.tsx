@@ -1,4 +1,5 @@
 import { useState } from "react";
+import formatClassName from "../utils/formatClassName";
 import "./Select.css";
 
 export default function Select({ id, list, cb }: ISelectProps) {
@@ -8,7 +9,7 @@ export default function Select({ id, list, cb }: ISelectProps) {
   );
 
   return (
-    <div className={`select${open ? " select--open" : ""}`}>
+    <div className={formatClassName("select", open && "select--open")}>
       <input type="hidden" id={id} name={id} value={selected.key} />
       <button
         type="button"

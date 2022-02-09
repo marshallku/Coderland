@@ -1,4 +1,5 @@
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
+import formatClassName from "../utils/formatClassName";
 import "./Navigation.css";
 
 function CustomLink({ title, to }: INavigationItems) {
@@ -8,9 +9,10 @@ function CustomLink({ title, to }: INavigationItems) {
   return (
     <Link
       to={to}
-      className={`navigation__item${
-        match ? " navigation__item--highlight" : ""
-      }`}
+      className={formatClassName(
+        "navigation__item",
+        match && "navigation__item--highlight"
+      )}
     >
       {title}
     </Link>

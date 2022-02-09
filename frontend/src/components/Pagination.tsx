@@ -1,5 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import formatClassName from "../utils/formatClassName";
 import "./Pagination.css";
 
 const PAGES_TO_DISPLAY = 5;
@@ -14,9 +15,10 @@ function PaginationButton({
   return (
     <Link
       to={`?page=${to}`}
-      className={`pagination__arrow${
-        disableIf ? " pagination__arrow--disabled" : ""
-      }`}
+      className={formatClassName(
+        "pagination__arrow",
+        disableIf && "pagination__arrow--disabled"
+      )}
       onClick={() => setCurrentIndex(to)}
     >
       <i className={`icon-${icon}`} role="img" aria-label={ariaLabel} />
@@ -58,7 +60,10 @@ export default function Pagination({ paginate, data }: IPaginationProps) {
           <Link
             key={page}
             to={`?page=${page}`}
-            className={`page-number ${currentIndex === page ? "selected" : ""}`}
+            className={formatClassName(
+              "page-number",
+              currentIndex === page && "selected"
+            )}
             onClick={() => setCurrentIndex(page)}
             aria-label={`${page}페이지로 이동`}
           >

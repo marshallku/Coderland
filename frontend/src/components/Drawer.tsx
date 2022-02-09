@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
+import formatClassName from "../utils/formatClassName";
 import { getRandomInt } from "../utils/random";
 import "./Drawer.css";
 
@@ -19,7 +20,10 @@ function DrawerLink({ title, to, icon, cb }: IDrawerItem) {
   return (
     <Link
       to={to}
-      className={`drawer__link${match ? " drawer__link--highlight" : ""}`}
+      className={formatClassName(
+        "drawer__link",
+        match && "drawer__link--highlight"
+      )}
       style={cssProperty}
       onClick={() => {
         if (!match) {
@@ -44,7 +48,12 @@ export default function Drawer({
 
   return (
     <>
-      <section className={`drawer${drawerRevealed ? " drawer--revealed" : ""}`}>
+      <section
+        className={formatClassName(
+          "drawer",
+          drawerRevealed && "drawer-revealed"
+        )}
+      >
         <h2 className="drawer__title">코더랜드</h2>
         <nav className="drawer__navigation">
           <DrawerLink cb={hideDrawer} icon="home" title="홈" to="/" />

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import formatClassName from "../utils/formatClassName";
 import "./CommentLikeBtn.css";
 
 export default function CommentLikeBtn({ likes }: ILikeProps) {
@@ -16,8 +17,11 @@ export default function CommentLikeBtn({ likes }: ILikeProps) {
 
   return (
     <button
-      className={`comment__likes ${isLiked ? "comment__likes--liked" : ""}`}
       type="button"
+      className={formatClassName(
+        "comment__likes",
+        isLiked && "comment__likes--liked"
+      )}
       onClick={handleLikeClick}
     >
       <i className="icon-thumb_up" />
