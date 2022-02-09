@@ -5,10 +5,9 @@ stages:
 
 staging-frontend:
   stage: staging-frontend
-  only:
-    - master
-    - Frontend-Sprint
-    - Backend-Sprint
+  deploy:
+    only:
+      - Frontend-Sprint
   before_script:
     # Setup ssh
     - eval $(ssh-agent -s)
