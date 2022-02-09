@@ -98,6 +98,7 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
     },
     members: {
       type: [UserSchema],
+      default: [],
     },
   },
   {
@@ -202,6 +203,15 @@ PostSchema.statics.updateBookmark = async (postId: string, userId: string) => {
   await Post.findByIdAndUpdate(postId, {
     $push: { bookmarkUsers: userId },
     $inc: { bookmarks: 1 },
+  });
+};
+
+PostSchema.statics.allowAppliedUser = async (
+  postId: string,
+  user: IUserDocument
+) => {
+  await Post.findByIdAndUpdate(postId, {
+    $push: { members: user },
   });
 };
 

@@ -19,6 +19,7 @@ export default function parsePostBySubject(
     bookmarkUsers,
     ...rest
   } = post;
+
   if (subject === "gathering") {
     return {
       ...rest,

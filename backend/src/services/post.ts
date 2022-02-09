@@ -91,4 +91,14 @@ export default class PostService {
     }
     await this.UserModel.updateBookmark(postId, userId);
   }
+
+  async allowAppliedUser(postId: string, userId: string) {
+    let user: IUserDocument;
+    try {
+      user = await User.findById(userId);
+    } catch (error) {
+      throw new Error("존재하지 않는 유저입니다.");
+    }
+    await this.PostModel.allowAppliedUser(postId, user);
+  }
 }

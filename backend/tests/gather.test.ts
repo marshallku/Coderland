@@ -11,6 +11,7 @@ describe("모임 게시글 기능 테스트", () => {
   let token = "Bearer ";
   let postId: string;
   let notAccessToken = "Bearer ";
+  let applyUserId: string;
 
   beforeAll(async () => {
     await connection.collection("users").insertOne({
@@ -39,6 +40,7 @@ describe("모임 게시글 기능 테스트", () => {
       })
     );
     notAccessToken += createToken(notAccessUser);
+    applyUserId = notAccessUser._id;
   });
 
   it("모임 게시글 생성 테스트", async () => {
@@ -175,6 +177,49 @@ describe("모임 게시글 기능 테스트", () => {
     );
   });
 
+  // 모집 글 신청 수락
+  // 1. 작성자만 수락할 수 있다.
+  // 2. 이미 수락된 유저는 수락할 수 없다.
+  // 3. 모집 완료된 글은 더 수락할 수 없다.
+  it("Fail 권한 없이 모집 글 신청 수락", async () => {
+    const res = await request(server)
+      .post(`/api/posts/${postId}/cast`)
+      .set("authorization", notAccessToken)
+      .send({
+        userId: applyUserId,
+      });
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.msg).toEqual("권한이 없어요...");
+  });
+
+  it("모집 글 신청 수락", async () => {
+    const res = await request(server)
+      .post(`/api/posts/${postId}/cast`)
+      .set("authorization", token)
+      .send({
+        userId: applyUserId,
+      });
+
+    expect(res.statusCode).toEqual(200);
+
+    const res1 = await request(server).get(`/api/posts/${postId}`).send();
+    expect(res1.statusCode).toEqual(200);
+    expect(res1.body.post.memberCount).toEqual(1);
+  });
+
+  it("Fail 이미 수락한 유저 모집 글 신청 수락", async () => {
+    const res = await request(server)
+      .post(`/api/posts/${postId}/cast`)
+      .set("authorization", token)
+      .send({
+        userId: applyUserId,
+      });
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.msg).toEqual("이미 등록된 인원입니다.");
+  });
+
   it("모집 글 모집 완료", async () => {
     const res = await request(server)
       .patch(`/api/posts/${postId}`)
@@ -185,6 +230,18 @@ describe("모임 게시글 기능 테스트", () => {
 
     const res1 = await request(server).get(`/api/posts/${postId}`).send();
     expect(res1.body.post.isCompleted).toEqual(true);
+  });
+
+  it("Fail 완료된 모집 글 신청 수락", async () => {
+    const res = await request(server)
+      .post(`/api/posts/${postId}/cast`)
+      .set("authorization", token)
+      .send({
+        userId: applyUserId,
+      });
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.msg).toEqual("이미 마감된 모임입니다.");
   });
 
   it("Fail 권한 없이 모집 글 모집 완료", async () => {
