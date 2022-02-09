@@ -19,6 +19,7 @@ interface IUser {
   grade: 0;
   track: string;
   gitlab: string;
+  authKey?: string;
 }
 
 interface IPost {

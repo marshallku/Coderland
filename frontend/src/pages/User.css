@@ -4,29 +4,37 @@
   align-items: center;
 }
 
-.user-info > div:first-child {
+.user-info__image {
+  position: relative;
+  width: 150px;
   margin-top: 1rem;
-  width: 10rem;
-  height: 10rem;
   border-radius: 50%;
   overflow: hidden;
 }
 
-.user-info > div:not(:first-child) {
-  width: 50vw;
+.user-info__image > img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.user-info__content {
+  width: clamp(0px, 100%, 680px);
   margin-top: 1rem;
   padding: 0.5rem;
 }
 
-.user-info > button {
-  margin-top: 1rem;
+.user-info__blockquote {
+  line-height: 2;
 }
 
-.user-write > ul > li {
-  border-bottom: 1px solid var(--gray-5);
-  padding: 1rem 0 1rem 1rem;
+.user-info__blockquote > a {
+  color: var(--primary);
 }
-.btns {
+
+.user-info__buttons {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
+  gap: 10px;
 }

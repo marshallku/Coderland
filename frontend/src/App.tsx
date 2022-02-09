@@ -8,18 +8,13 @@ import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./hooks/auth";
 import { ThemeProvider } from "./hooks/theme";
 import RequireAuth from "./routes/RequireAuth";
-import User, {
-  UserInfo,
-  UserPosts,
-  UserGatherPosts,
-  UserComments,
-  UserBookmarks,
-} from "./pages/User";
+import User, { UserInfo, UserBookmarks } from "./pages/User";
 import Review from "./pages/Review";
 import Article from "./pages/Article";
 import Dev from "./pages/Dev";
 import Recruit from "./pages/Recruit";
 import Chat from "./pages/Chat";
+import Authorize from "./pages/Authorize";
 
 export default function App() {
   return (
@@ -43,12 +38,10 @@ export default function App() {
                   <Route element={<RequireAuth />}>
                     <Route path="/add/:subject" element={<Add />} />
                     <Route path="/user/*" element={<User />}>
-                      <Route path="posts" element={<UserPosts />} />
-                      <Route path="gathers" element={<UserGatherPosts />} />
-                      <Route path="comments" element={<UserComments />} />
                       <Route path="bookmarks" element={<UserBookmarks />} />
                       <Route path="*" element={<UserInfo />} />
                     </Route>
+                    <Route path="/authorize" element={<Authorize />} />
                   </Route>
                   <Route path="/posts/:id" element={<PostDetails />} />
                   <Route path="/gathers/:id" element={<GatherDetails />} />

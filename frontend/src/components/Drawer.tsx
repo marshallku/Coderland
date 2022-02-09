@@ -51,7 +51,7 @@ export default function Drawer({
       <section
         className={formatClassName(
           "drawer",
-          drawerRevealed && "drawer-revealed"
+          drawerRevealed && "drawer--revealed"
         )}
       >
         <h2 className="drawer__title">코더랜드</h2>

@@ -98,6 +98,12 @@ button {
   cursor: pointer;
 }
 
+h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  line-height: 2;
+}
+
 .main-container {
   min-height: calc(100vh - 60px);
   padding-top: 60px;
