@@ -1,3 +1,3 @@
 export default async () => {
-  process.env.TZ = "Asia/Seoul";
+  process.env.TZ = "UTC";
 };
