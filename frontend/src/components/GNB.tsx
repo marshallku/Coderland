@@ -3,6 +3,7 @@ import favicon from "../../static/image/favicon.svg";
 import ThemeSwitch from "./ThemeSwitch";
 import Dropdown from "./Dropdown";
 import "./GNB.css";
+import formatClassName from "../utils/formatClassName";
 
 export default function GlobalNavigationBar({
   drawerRevealed,
@@ -54,9 +55,11 @@ export default function GlobalNavigationBar({
         />
         <button
           type="button"
-          className={`hbg gnb__button${
-            drawerRevealed ? " hbg--activated" : ""
-          }`}
+          className={formatClassName(
+            "hbg",
+            "gnb__button",
+            drawerRevealed && "hbg--activated"
+          )}
           aria-label="드로어 열기"
           onClick={() => setDrawerRevealed(!drawerRevealed)}
         >

@@ -3,6 +3,7 @@ import CommentLikeBtn from "./CommentLikeBtn";
 import Reply from "./CommentReply";
 import { formatToReadableTime } from "../utils/time";
 import "./Comment.css";
+import formatClassName from "../utils/formatClassName";
 
 export default function Comment({
   contents,
@@ -60,9 +61,10 @@ export default function Comment({
         <div className="comment__author-wrap">
           <span className="comment__author">{author}</span>
           <button
-            className={`comment__edit-button ${
-              editMode ? "comment__edit--on" : ""
-            }`}
+            className={formatClassName(
+              "comment__edit-button",
+              editMode && "comment__edit--on"
+            )}
             type="button"
             aria-label="댓글 수정 버튼"
             onClick={toggleEditMode}
@@ -113,9 +115,10 @@ export default function Comment({
               </span>
               <CommentLikeBtn likes={likes} />
               <button
-                className={`comment__reply ${
-                  replyMode ? "comment__reply--on" : ""
-                }`}
+                className={formatClassName(
+                  "comment__edit",
+                  replyMode && "comment__reply--on"
+                )}
                 type="button"
                 onClick={toggleReplyMode}
               >

@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import formatClassName from "../utils/formatClassName";
 import "./Dropdown.css";
 
 export default function Dropdown({
@@ -50,9 +51,10 @@ export default function Dropdown({
         {ButtonChildren}
       </button>
       <div
-        className={`dropdown-content${
-          opened ? " dropdown-content--revealed" : ""
-        }`}
+        className={formatClassName(
+          "dropdown-content",
+          opened && "dropdown-content--revealed"
+        )}
       >
         {ContentChildren}
       </div>

@@ -5,6 +5,7 @@ import { formatToReadableTime } from "../utils/time";
 import MarkdownViewer from "../components/MarkdownViewer";
 import Comments from "../components/Comments";
 import "./Details.css";
+import formatClassName from "../utils/formatClassName";
 
 export function GatherDetails() {
   const [likesStatus, setLikesStatus] = useState(false);
@@ -102,32 +103,30 @@ export function GatherDetails() {
         <div className="details-body__buttons">
           <button
             type="button"
-            className={`details-body__button ${
-              bookmarkStatus ? "details-body__button--activated" : ""
-            }`}
+            className={formatClassName(
+              "details-body__button",
+              bookmarkStatus && "details-body__button--activated"
+            )}
             onClick={handleBookmarkClick}
           >
             <i
               role="img"
               aria-label="북마크"
-              className={`icon-bookmark${bookmarkStatus ? "" : "_outline"}`}
+              className={`${
+                bookmarkStatus ? "icon-bookmark" : "icon-bookmark_outline"
+              }`}
             />
           </button>
           <button
             type="button"
-            className={`details-body__button ${
-              likesStatus ? "details-body__button--activated" : ""
-            }`}
+            className={formatClassName(
+              "details-body__button",
+              likesStatus && "details-body__button--activated"
+            )}
             onClick={handleLikesClick}
           >
             <span>{selected?.gather.likes}</span>
-            <i
-              role="img"
-              aria-label="좋아요"
-              className={`icon-thumb_up${
-                likesStatus ? " details-header__likes--true" : ""
-              }`}
-            />
+            <i role="img" aria-label="좋아요" className="icon-thumb_up" />
           </button>
         </div>
       </div>
@@ -194,32 +193,30 @@ export function PostDetails() {
         <div className="details-body__buttons">
           <button
             type="button"
-            className={`details-body__button ${
-              bookmarkStatus ? "details-body__button--activated" : ""
-            }`}
+            className={formatClassName(
+              "details-body__button",
+              bookmarkStatus && "details-body__button--activated"
+            )}
             onClick={handleBookmarkClick}
           >
             <i
               role="img"
               aria-label="북마크"
-              className={`icon-bookmark${bookmarkStatus ? "" : "_outline"}`}
+              className={`${
+                bookmarkStatus ? "icon-bookmark" : "icon-bookmark_outline"
+              }`}
             />
           </button>
           <button
             type="button"
-            className={`details-body__button ${
-              likesStatus ? "details-body__button--activated" : ""
-            }`}
+            className={formatClassName(
+              "details-body__button",
+              likesStatus && "details-body__button--activated"
+            )}
             onClick={handleLikesClick}
           >
             <span>{selected?.post.likes}</span>
-            <i
-              role="img"
-              aria-label="좋아요"
-              className={`icon-thumb_up${
-                likesStatus ? " details-header__likes--true" : ""
-              }`}
-            />
+            <i role="img" aria-label="좋아요" className="icon-thumb_up" />
           </button>
         </div>
       </div>

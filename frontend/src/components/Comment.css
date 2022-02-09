@@ -50,7 +50,7 @@
   margin-right: 4px;
 }
 
-.comment__edit--on,
+.comment__edit-button--on,
 .comment__reply--on {
   color: var(--primary);
 }

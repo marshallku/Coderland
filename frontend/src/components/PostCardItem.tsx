@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import formatClassName from "../utils/formatClassName";
 import "./PostCardItem.css";
 
 export default function PostCardItem({
@@ -14,14 +15,18 @@ export default function PostCardItem({
   return (
     <article
       key={_id}
-      className={`card-item ${isCompleted ? "card-item--completed" : ""}`}
+      className={formatClassName(
+        "card-item",
+        isCompleted && "card-item--completed"
+      )}
     >
       <Link className="card-item__link" to={`/gathers/${_id}`}>
         <div>
           <span
-            className={`card-item__status ${
-              isCompleted ? "card-item__status--completed" : ""
-            }`}
+            className={formatClassName(
+              "card-item__status",
+              isCompleted && "card-item__status--completed"
+            )}
           >{`모집${isCompleted ? "완료" : "중"}`}</span>
         </div>
         <h2 className="card-item__title">{title}</h2>
