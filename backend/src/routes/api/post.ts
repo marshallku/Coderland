@@ -1,6 +1,5 @@
 import { Router } from "express";
 import PostService from "../../services/post";
-import { Post } from "../../models";
 
 import { asyncHandler, purifyHtml } from "../../utils";
 import { loginRequired, loginCheck } from "../../passport/guards";
@@ -8,7 +7,6 @@ import { checkPermission } from "../middlewares";
 
 import commentRouter from "./comment";
 import replyRouter from "./reply";
-import likeRouter from "./like";
 
 import config from "../../config";
 
@@ -17,7 +15,6 @@ export default (app: Router) => {
 
   route.use("/:postId/comments", commentRouter);
   route.use("/:postId/replies", replyRouter);
-  route.use("/:postId/like", likeRouter);
 
   // 글 목록 조회
   route.get(
@@ -28,7 +25,7 @@ export default (app: Router) => {
       const category = String(req.query.category);
       const currentPage = Number(req.query.currentPage) || 1;
       const perPage = Number(req.query.perPage) || config.perPage;
-      const postService = new PostService(Post);
+      const postService = new PostService();
       const [posts, pagination] = await postService.findAllPosts(
         subject,
         category,
@@ -51,7 +48,7 @@ export default (app: Router) => {
       const { user } = req;
       const userId = user ? user.id : undefined;
       const { postId } = req.params;
-      const postService = new PostService(Post);
+      const postService = new PostService();
       const post = await postService.findPostById(postId, userId);
       res.status(200).json({
         isOk: true,
@@ -67,7 +64,7 @@ export default (app: Router) => {
     asyncHandler(async (req, res) => {
       const { user } = req;
       const { title, contents, subject, category, area, tags, icon } = req.body;
-      const postService = new PostService(Post);
+      const postService = new PostService();
       const postId = await postService.createPost(
         user,
         { title, contents: purifyHtml(contents), subject },
@@ -85,7 +82,7 @@ export default (app: Router) => {
     asyncHandler(async (req, res) => {
       const { postId } = req.params;
       const { title, contents, subject, category, area, tags, icon } = req.body;
-      const postService = new PostService(Post);
+      const postService = new PostService();
       await postService.updatePost(
         postId,
         { title, contents: purifyHtml(contents), subject },
@@ -102,7 +99,7 @@ export default (app: Router) => {
     checkPermission,
     asyncHandler(async (req, res) => {
       const { postId } = req.params;
-      const postService = new PostService(Post);
+      const postService = new PostService();
       await postService.deletePost(postId);
       res.status(200).json({ isOk: true, postId });
     })
@@ -115,8 +112,34 @@ export default (app: Router) => {
     checkPermission,
     asyncHandler(async (req, res) => {
       const { postId } = req.params;
-      const postService = new PostService(Post);
+      const postService = new PostService();
       await postService.completePost(postId);
+      res.status(200).json({ isOk: true });
+    })
+  );
+
+  // 좋아요
+  route.post(
+    "/:postId/like",
+    loginRequired,
+    asyncHandler(async (req, res) => {
+      const { user } = req;
+      const { postId } = req.params;
+      const postService = new PostService();
+      await postService.updateLike(postId, user.id);
+      res.status(200).json({ isOk: true });
+    })
+  );
+
+  // 북마크
+  route.post(
+    "/:postId/bookmark",
+    loginRequired,
+    asyncHandler(async (req, res) => {
+      const { postId } = req.params;
+      const { user } = req;
+      const postService = new PostService();
+      await postService.updateBookmark(postId, user.id);
       res.status(200).json({ isOk: true });
     })
   );

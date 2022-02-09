@@ -62,6 +62,15 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
       type: [String],
       default: [],
     },
+    bookmarks: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    bookmarkUsers: {
+      type: [String],
+      default: [],
+    },
     subject: {
       type: String,
       required: true,
@@ -154,7 +163,8 @@ PostSchema.statics.updatePost = async (
 };
 
 PostSchema.statics.deletePost = async (postId: string) => {
-  await Post.findByIdAndDelete(postId);
+  const post = await Post.findByIdAndDelete(postId);
+  return post.toObject();
 };
 
 PostSchema.statics.completePost = async (postId: string) => {
@@ -177,6 +187,21 @@ PostSchema.statics.updateLike = async (postId: string, userId: string) => {
   await Post.findByIdAndUpdate(postId, {
     $push: { likeUsers: userId },
     $inc: { likes: 1 },
+  });
+};
+
+PostSchema.statics.updateBookmark = async (postId: string, userId: string) => {
+  const post = await Post.findById(postId);
+  if (post.bookmarkUsers.length > 0 && post.bookmarkUsers.includes(userId)) {
+    await Post.findByIdAndUpdate(postId, {
+      $pull: { bookmarkUsers: userId },
+      $inc: { bookmarks: -1 },
+    });
+    return;
+  }
+  await Post.findByIdAndUpdate(postId, {
+    $push: { bookmarkUsers: userId },
+    $inc: { bookmarks: 1 },
   });
 };
 

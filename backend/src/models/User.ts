@@ -19,6 +19,11 @@ export const UserSchema = new mongoose.Schema<IUserDocument>(
       type: String,
       required: true,
     },
+    bookmarks: {
+      type: [mongoose.Types.ObjectId],
+      ref: "Post",
+      default: [],
+    },
     grade: {
       type: Number,
       default: 0,
@@ -70,7 +75,32 @@ UserSchema.statics.findOneByGoogleIdAndUpdateRefreshToken = async (
 
 UserSchema.statics.findByGoogleId = async ({ googleId }) => {
   const user = User.findOne({ googleId });
-  return user;
+  return user.select("-bookmarks -refreshToken");
+};
+
+UserSchema.statics.getRefreshTokenByGoogleId = async ({ googleId }) => {
+  const user = User.findOne({ googleId });
+  return user.select("refreshToken");
+};
+
+UserSchema.statics.updateBookmark = async (postId: string, userId: string) => {
+  const user = await User.findById(userId);
+  if (user.bookmarks.length > 0 && user.bookmarks.includes(postId)) {
+    await User.findByIdAndUpdate(userId, {
+      $pull: { bookmarks: postId },
+    });
+    return;
+  }
+  await User.findByIdAndUpdate(userId, {
+    $push: { bookmarks: postId },
+  });
+};
+
+UserSchema.statics.findAllBookmarks = async (userId: string) => {
+  const bookmarks = await User.findById(userId)
+    .select("bookmarks")
+    .populate("bookmarks");
+  return bookmarks;
 };
 
 const User = mongoose.model<IUserDocument, IUserModel>("User", UserSchema);

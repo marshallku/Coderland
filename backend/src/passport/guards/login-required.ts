@@ -27,7 +27,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
             return next(new Error("로그인이 필요합니다!"));
           }
 
-          const { refreshToken } = await User.findByGoogleId({ googleId });
+          const { refreshToken } = await User.getRefreshTokenByGoogleId({
+            googleId,
+          });
 
           if (refreshToken === refreshTokenInRequest) {
             const newToken = sign({ googleId }, config.jwtSecret, {
