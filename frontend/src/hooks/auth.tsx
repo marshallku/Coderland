@@ -11,7 +11,8 @@ function useAuthProvider() {
     profile: "https://i.imgur.com/xCvzudW.png",
     grade: 0,
     track: "SW 엔지니어 트랙 1기",
-    gitlab: "https://kdt-gitlab.elice.io/marshallku",
+    gitlab: "",
+    authKey: "TEMPORARY_KEY",
   });
 
   return {

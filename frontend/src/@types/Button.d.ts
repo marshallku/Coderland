@@ -1,4 +1,4 @@
-interface IButtonProps {
+interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   value: string;
   type?: React.ButtonHTMLAttributes<HTMLButtonElement>["type"];
   disabled?: boolean;

@@ -6,6 +6,7 @@ export default function Button({
   buttonStyle = "primary",
   disabled,
   size = "medium",
+  onClick,
 }: IButtonProps) {
   return (
     <button
@@ -13,6 +14,7 @@ export default function Button({
       type={type}
       className={`button button--${buttonStyle} button--${size}`}
       disabled={disabled}
+      onClick={onClick}
     >
       {value}
     </button>

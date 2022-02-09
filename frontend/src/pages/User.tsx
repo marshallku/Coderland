@@ -1,13 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import { useEffect, useState } from "react";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, Outlet, useParams } from "react-router-dom";
 import useApi from "../hooks/api";
-import {
-  dummyCommentsResponse,
-  dummyGathersResponse,
-  dummyPostsResponse,
-  dummyUser,
-} from "../api/dummy";
+import { dummyUser } from "../api/dummy";
 import Button from "../components/Button";
 import { Input } from "../components/Input";
 import Navigation from "../components/Navigation";
@@ -16,15 +11,15 @@ import "./User.css";
 
 export function UserInfo() {
   const { group } = useParams();
-  const navigate = useNavigate();
   const auth = useAuth();
   const user = auth?.user;
 
-  if (!user) return <>{navigate("/login")}</>;
+  if (!user) return <Navigate to="/login" />;
 
   const [editMode, setEditMode] = useState(false);
   const [name, setName] = useState("");
-  const { googleId, nickname, track, gitlab } = user;
+  const { nickname, track, gitlab } = user;
+  const isAuthorized = !user.authKey && !!user.gitlab;
 
   const selectedUser = useApi(dummyUser);
 
@@ -35,10 +30,7 @@ export function UserInfo() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     // TODO: 데이터 수정(event.target..value)
-    setEditMode(!editMode);
-  }
-  function handleToggleClick() {
-    setEditMode(!editMode);
+    setEditMode(false);
   }
 
   return (
@@ -49,49 +41,67 @@ export function UserInfo() {
           alt={`${selectedUser?.profile}님의 이미지`}
         />
       </div>
-      <Input id="googleId" label="구글 ID" name="googleId" value={googleId} />
-      <Input id="nickname" label="닉네임" name="nickname" value={nickname} />
-      {/* TODO: 수정 가능한 요소 하이라이팅 방법 생각 */}
-      <Input
-        id="name"
-        label={`이름${editMode ? " (수정 가능)" : ""}`}
-        value={name}
-        setValue={setName}
-        readOnly={!editMode}
-      />
-      <Input id="track" label="트랙" value={track} />
-      <Input id="gitlab" label="GitLab 주소" name="gitlab" value={gitlab} />
-      <div className="btns">
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={handleToggleClick}
-          onKeyPress={handleToggleClick}
-        >
-          <Button type="button" value={`${editMode ? "취소" : "수정"}하기`} />
+      {!isAuthorized && (
+        <div className="user-info__content">
+          <blockquote className="user-info__blockquote">
+            아직 레이서 인증이 완료되지 않았습니다.{" "}
+            <Link to="/authorize">인증 페이지</Link>에서 인증을 완료해주세요!
+          </blockquote>
         </div>
-        {editMode && <Button type="submit" value="수정완료" />}
+      )}
+      <div className="user-info__content">
+        <Input id="nickname" label="닉네임" name="nickname" value={nickname} />
+      </div>
+      {/* TODO: 수정 가능한 요소 하이라이팅 방법 생각 */}
+      <div className="user-info__content">
+        <Input
+          id="name"
+          label={`이름${editMode ? " (수정 가능)" : ""}`}
+          value={name}
+          setValue={setName}
+          readOnly={!editMode}
+        />
+      </div>
+      {isAuthorized && (
+        <>
+          <div className="user-info__content">
+            <Input id="track" label="트랙" value={track} />
+          </div>
+          <div className="user-info__content">
+            <Input
+              id="gitlab"
+              label="GitLab 주소"
+              name="gitlab"
+              value={gitlab}
+            />
+          </div>
+        </>
+      )}
+      <div className="user-info__content user-info__buttons">
+        {editMode ? (
+          <>
+            <Button
+              type="button"
+              buttonStyle="warning"
+              onClick={() => {
+                setEditMode(false);
+              }}
+              value="취소하기"
+            />
+            <Button type="submit" value="수정완료" />
+          </>
+        ) : (
+          <Button
+            type="button"
+            onClick={() => {
+              setEditMode(true);
+            }}
+            value="수정하기"
+          />
+        )}
       </div>
     </form>
   );
-}
-
-export function UserPosts() {
-  const posts = useApi(dummyPostsResponse);
-  // TODO: 작업한 컴포넌트 활용해 렌더링
-  return <div>작성한 글</div>;
-}
-
-export function UserGatherPosts() {
-  const gathers = useApi(dummyGathersResponse);
-  // TODO: 작업한 컴포넌트 활용해 렌더링
-  return <div>작성한 모집글</div>;
-}
-
-export function UserComments() {
-  const comments = useApi(dummyCommentsResponse);
-  // TODO: 작업한 컴포넌트 활용해 렌더링
-  return <div>작성한 댓글</div>;
 }
 
 export function UserBookmarks() {
@@ -106,11 +116,7 @@ export default function User() {
       <Navigation
         list={[
           { title: "기본정보", to: "" },
-          { title: "포스트", to: "posts" },
-          { title: "모집글", to: "gathers" },
-          { title: "댓글", to: "comments" },
           { title: "북마크", to: "bookmarks" },
-          // TODO: 모집 글 추가 여부 고민
         ]}
         align="center"
       />
