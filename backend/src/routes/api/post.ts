@@ -3,7 +3,7 @@ import PostService from "../../services/post";
 
 import { asyncHandler, purifyHtml } from "../../utils";
 import { loginRequired, loginCheck } from "../../passport/guards";
-import { checkPermission } from "../middlewares";
+import { checkPermission, checkGatherPost } from "../middlewares";
 
 import commentRouter from "./comment";
 import replyRouter from "./reply";
@@ -114,6 +114,20 @@ export default (app: Router) => {
       const { postId } = req.params;
       const postService = new PostService();
       await postService.completePost(postId);
+      res.status(200).json({ isOk: true });
+    })
+  );
+
+  // 모집 글 신청자 수락
+  route.post(
+    "/:postId/cast",
+    loginRequired,
+    checkGatherPost,
+    asyncHandler(async (req, res) => {
+      const { postId } = req.params;
+      const { userId } = req.body;
+      const postServcie = new PostService();
+      await postServcie.allowAppliedUser(postId, userId);
       res.status(200).json({ isOk: true });
     })
   );

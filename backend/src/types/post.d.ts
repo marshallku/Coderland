@@ -69,4 +69,6 @@ export interface IPostModel extends Model<IPostDocument> {
   updateLike: (postId: string, userId: string) => Promise<void>;
 
   updateBookmark: (postId: string, userId: string) => Promise<void>;
+
+  allowAppliedUser: (postId: string, user: IUserDocument) => Promise<void>;
 }
