@@ -18,6 +18,7 @@ staging-frontend:
     # Checkout to Frontend-Sprint
     - git fetch origin
     - git checkout Frontend-Sprint
+    - git pull origin Frontend-Sprint
     # Install npm dependencies
     - cd frontend
     - npm ci
