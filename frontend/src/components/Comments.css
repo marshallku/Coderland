@@ -25,9 +25,9 @@
 }
 
 .comment-form__button {
-  background-color: var(--primary-pressed);
+  background-color: var(--primary);
   color: var(--gray-6);
-  border: 1px solid var(--primary-pressed);
+  border: 1px solid var(--primary);
   border-radius: 4px;
   cursor: pointer;
   margin-left: 4px;
@@ -42,6 +42,6 @@
 .comment-form__button--cancel {
   margin-left: 6px;
   background-color: var(--gray-6);
-  color: var(--primary-pressed);
-  border: 1px solid var(--primary-pressed);
+  color: var(--primary);
+  border: 1px solid var(--primary);
 }

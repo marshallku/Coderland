@@ -19,15 +19,15 @@
 .card-item__status {
   display: inline-block;
   padding: 0.25rem 0.5rem;
-  background-color: var(--material-submit-second);
+  background-color: var(--forest-second);
   color: var(--forest-base);
   border-radius: 8px;
   font-size: 0.8rem;
 }
 
 .card-item__status--completed {
-  color: var(--warning);
-  background-color: var(--warning-second);
+  color: var(--red-base);
+  background-color: var(--red-second);
 }
 
 .card-item__title {
@@ -66,8 +66,8 @@
 }
 
 .card-item__tags > li {
-  color: var(--primary);
-  background-color: var(--primary-second-pressed);
+  color: var(--purple-base);
+  background-color: var(--purple-second);
   padding: 0.2rem 0.6rem;
   border-radius: 8px;
   font-size: 0.8rem;
