@@ -20,6 +20,8 @@ export interface IPost {
   views: number;
   likes: number;
   likeUsers: string[];
+  bookmarks: number;
+  bookmarkUsers: string[];
   subject: subjects;
   anonymous: boolean;
   createdAt: Date;
@@ -60,9 +62,11 @@ export interface IPostModel extends Model<IPostDocument> {
     gatherDto: Partial<IPostDocument>
   ) => Promise<void>;
 
-  deletePost: (postId: string) => Promise<void>;
+  deletePost: (postId: string) => Promise<IPostDocument>;
 
   completePost: (postId: string) => Promise<void>;
 
-  updateLike: (postId: string, user: string) => Promise<void>;
+  updateLike: (postId: string, userId: string) => Promise<void>;
+
+  updateBookmark: (postId: string, userId: string) => Promise<void>;
 }

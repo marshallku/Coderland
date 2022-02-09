@@ -1,12 +1,16 @@
-import { IUserDocument } from "user";
+import { IUserDocument, IUserModel } from "user";
 import { IPostDocument, IPostModel } from "post";
 import { parsePostBySubject } from "../utils";
+import { User, Post } from "../models";
 
 export default class PostService {
-  PostModel: IPostModel;
+  private PostModel: IPostModel;
 
-  constructor(PostModel: IPostModel) {
-    this.PostModel = PostModel;
+  private UserModel: IUserModel;
+
+  constructor() {
+    this.PostModel = Post;
+    this.UserModel = User;
   }
 
   async findAllPosts(
@@ -54,7 +58,17 @@ export default class PostService {
   }
 
   async deletePost(postId: string) {
-    await this.PostModel.deletePost(postId);
+    const post = await this.PostModel.deletePost(postId);
+
+    // 포스트 삭제 시 유저 정보에 등록된 포스트 삭제
+    const lengthBookmarkUsers = post.bookmarkUsers.length;
+    if (lengthBookmarkUsers > 0) {
+      post.bookmarkUsers.forEach(async (userId) => {
+        await User.findByIdAndUpdate(userId, {
+          $pull: { bookmarks: post.id },
+        });
+      });
+    }
   }
 
   async completePost(postId: string) {
@@ -62,6 +76,19 @@ export default class PostService {
   }
 
   async updateLike(postId: string, userId: string) {
-    await this.PostModel.updateLike(postId, userId);
+    try {
+      await this.PostModel.updateLike(postId, userId);
+    } catch (error) {
+      throw new Error("존재하지 않는 글입니다.");
+    }
+  }
+
+  async updateBookmark(postId: string, userId: string) {
+    try {
+      await this.PostModel.updateBookmark(postId, userId);
+    } catch (error) {
+      throw new Error("존재하지 않는 글입니다.");
+    }
+    await this.UserModel.updateBookmark(postId, userId);
   }
 }

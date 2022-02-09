@@ -16,6 +16,7 @@ export default function parsePostBySubject(
     area,
     category,
     likeUsers,
+    bookmarkUsers,
     ...rest
   } = post;
   if (subject === "gathering") {
@@ -28,12 +29,15 @@ export default function parsePostBySubject(
       area,
       category,
       anonymous,
+      isBookmarked: bookmarkUsers.includes(userId),
+      isLiked: likeUsers.includes(userId),
       author: createAuthorName(anonymous, author),
     };
   }
   return {
     ...rest,
     anonymous,
+    isBookmarked: bookmarkUsers.includes(userId),
     isLiked: likeUsers.includes(userId),
     author: createAuthorName(anonymous, author),
   };

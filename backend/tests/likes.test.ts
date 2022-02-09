@@ -66,6 +66,16 @@ describe("좋아요 테스트", () => {
     expect(res1.body.post.isLiked).toEqual(true);
   });
 
+  it("Fail 없는 글 좋아요 클릭", async () => {
+    const res = await request(server)
+      .post("/api/posts/notexistslksdjflk/like")
+      .set("authorization", token)
+      .send();
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.msg).toEqual("존재하지 않는 글입니다.");
+  });
+
   it("Fail 로그인 없이 좋아요 클릭", async () => {
     const res = await request(server).post(`/api/posts/${postId}/like`).send();
 
