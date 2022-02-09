@@ -1,0 +1,29 @@
+image: node:latest
+
+stages:
+  - staging-frontend
+
+staging-frontend:
+  stage: staging-frontend
+  only:
+    - master
+    - Frontend-Sprint
+    - Backend-Sprint
+  before_script:
+    # Setup ssh
+    - eval $(ssh-agent -s)
+    - echo "$SSH_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -p "$STAGING_SERVER_PORT" $STAGING_SERVER_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    # Install npm dependencies
+    - cd frontend
+    - npm ci
+  script:
+    # Build
+    - npm run build
+    # Send dist folder via scp
+    - scp -P "$STAGING_SERVER_PORT" -r dist "$STAGING_SERVER_USER"@"$STAGING_SERVER_IP":/var/www
+    # Run bash script
+    - ssh -p "$STAGING_SERVER_PORT" "$STAGING_SERVER_USER"@"$STAGING_SERVER_IP" "cd /var/www; bash start.sh"
