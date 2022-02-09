@@ -26,5 +26,17 @@ export default (app: Router) => {
     })
   );
 
+  route.patch(
+    "/",
+    loginRequired,
+    asyncHandler(async (req, res) => {
+      const { user } = req;
+      const { nickname } = req.body;
+      const userService = new UserService();
+      await userService.updateUser(user.id, nickname);
+      res.status(200).json({ isOk: true });
+    })
+  );
+
   app.use("/users", route);
 };

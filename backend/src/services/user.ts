@@ -17,4 +17,8 @@ export default class UserService {
     );
     return parsedBookmarks;
   }
+
+  async updateUser(userId: string, nickname: string) {
+    await this.UserModel.updateUser(userId, nickname);
+  }
 }
