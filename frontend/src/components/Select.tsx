@@ -9,7 +9,10 @@ export default function Select({ id, list, cb }: ISelectProps) {
   );
 
   return (
-    <div className={formatClassName("select", open && "select--open")}>
+    <div
+      onBlur={() => setOpen(false)}
+      className={formatClassName("select", open && "select--open")}
+    >
       <input type="hidden" id={id} name={id} value={selected.key} />
       <button
         type="button"
@@ -24,6 +27,7 @@ export default function Select({ id, list, cb }: ISelectProps) {
             <button
               type="button"
               value={key}
+              onMouseDown={(event) => event.preventDefault()}
               onClick={() => {
                 setOpen(false);
                 setSelected({ key, name });

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, FocusEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import { Input } from "../components/Input";
@@ -169,6 +169,7 @@ function TechStacksInput({
   const resetFilteredTags = () => {
     setFilteredStacks([]);
   };
+
   const addTag = (tagToAdd: string) => {
     if (tags.length >= MAX_TAGS_LENGTH) {
       toast(`${MAX_TAGS_LENGTH}개 이상은 입력하실 수 없습니다!`);
@@ -236,22 +237,22 @@ function TechStacksInput({
             }
           }}
         />
+        <ul className="suggested-tags">
+          {filteredStacks?.map((x) => (
+            <li key={x} className="suggested-tags__tag">
+              <button
+                type="button"
+                onClick={() => {
+                  addTag(x);
+                }}
+              >
+                <i className={`icon-${x}`} />
+                {x}
+              </button>
+            </li>
+          ))}
+        </ul>
       </form>
-      <ul className="suggested-tags">
-        {filteredStacks?.map((x) => (
-          <li key={x} className="suggested-tags__tag">
-            <button
-              type="button"
-              onClick={() => {
-                addTag(x);
-              }}
-            >
-              <i className={`icon-${x}`} />
-              {x}
-            </button>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
