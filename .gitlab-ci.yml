@@ -17,6 +17,8 @@ staging-frontend:
     - chmod 700 ~/.ssh
     - ssh-keyscan -p "$STAGING_SERVER_PORT" $STAGING_SERVER_IP >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
+    # Checkout to Frontend-Sprint
+    - git checkout Frontend-Sprint
     # Install npm dependencies
     - cd frontend
     - npm ci
