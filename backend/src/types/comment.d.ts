@@ -1,7 +1,6 @@
 import mongoose, { Document, Model, PopulatedDoc } from "mongoose";
 import { IUserDocument } from "user";
 import { IPostDocument } from "post";
-import { IPagination } from "pagination";
 
 export interface IReply {
   contents: string;
@@ -28,6 +27,7 @@ export interface IComment {
   likeUsers: string[];
   anonymous: boolean;
   isPostAuthor: boolean;
+  isDeleted: boolean;
   replies: IReplyDocument[];
   createdAt: Date;
   updatedAt: Date;
@@ -43,14 +43,11 @@ export interface ICommentModel extends Model<ICommentDocument> {
     commentDto: { parent: ParentDocument; contents: string }
   ) => Promise<ICommentDocument>;
 
-  findAllComments: (
-    parentId: string,
-    currentPage: number
-  ) => Promise<[ICommentDocument[], IPagination]>;
+  findAllComments: (parentId: string) => Promise<ICommentDocument[]>;
 
   updateComment: (commentId: string, contents: string) => Promise<void>;
 
-  deleteComment: (commentId: string) => Promise<void>;
+  deleteComment: (commentId: string) => Promise<boolean>;
 
   createReply: (
     commentId: string,

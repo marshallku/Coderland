@@ -30,13 +30,9 @@ commentRouter.get(
     const { user } = req;
     const { postId } = req.params;
     const userId = user ? user.id : undefined;
-    const currentPage = Number(req.query.currentPage) || 1;
     const commentService = new CommentService(Post, Comment, postId);
-    const [comments, pagination] = await commentService.findAllComments(
-      currentPage,
-      userId
-    );
-    res.status(200).json({ isOk: true, comments, pagination });
+    const comments = await commentService.findAllComments(userId);
+    res.status(200).json({ isOk: true, comments });
   })
 );
 

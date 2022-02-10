@@ -34,11 +34,8 @@ export default class CommentService {
     }
   }
 
-  async findAllComments(currentPage: number, userId: string) {
-    const [comments, pagination] = await this.CommentModel.findAllComments(
-      this.parentId,
-      currentPage
-    );
+  async findAllComments(userId: string) {
+    const comments = await this.CommentModel.findAllComments(this.parentId);
     const parsedComments = comments.map((comment) => {
       const { author, anonymous, replies, isPostAuthor, likeUsers, ...rest } =
         comment.toObject();
@@ -50,7 +47,7 @@ export default class CommentService {
         author: createAuthorName(anonymous, author),
       };
     });
-    return [parsedComments, pagination];
+    return parsedComments;
   }
 
   async updateComment(commentId: string, contents: string) {
@@ -64,8 +61,10 @@ export default class CommentService {
   async deleteComment(commentId: string) {
     try {
       const parent = this.ParentModel.findById(this.parentId);
-      await this.CommentModel.deleteComment(commentId);
-      await parent.updateOne({ $inc: { commentCount: -1 } });
+      const isDeleted = await this.CommentModel.deleteComment(commentId);
+      if (isDeleted) {
+        await parent.updateOne({ $inc: { commentCount: -1 } });
+      }
     } catch (error) {
       throw new Error("존재하지 않는 글입니다.");
     }

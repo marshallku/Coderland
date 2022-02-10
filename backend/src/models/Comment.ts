@@ -6,7 +6,6 @@ import {
   ParentDocument,
   IReplyDocument,
 } from "comment";
-import configs from "../config/index";
 import { UserSchema } from "./User";
 
 const ReplySchema = new mongoose.Schema<IReplyDocument>(
@@ -55,6 +54,10 @@ export const CommentSchema = new mongoose.Schema<ICommentDocument>(
       type: Boolean,
       default: false,
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
     replies: [ReplySchema],
   },
   {
@@ -88,25 +91,12 @@ CommentSchema.statics.createComment = async (
   return comment;
 };
 
-CommentSchema.statics.findAllComments = async (
-  parentId: string,
-  currentPage: number
-) => {
-  const { perPage } = configs;
-  const total = await Comment.countDocuments({
-    parentId,
-  });
-  const lastPage = Math.ceil(total / perPage);
-
+CommentSchema.statics.findAllComments = async (parentId: string) => {
   const comments = await Comment.find({
     parentId,
-  })
-    .populate("author", "nickname")
-    .sort("created")
-    .skip((currentPage - 1) * perPage)
-    .limit(perPage);
+  }).populate("author", "nickname");
 
-  return [comments, { currentPage, lastPage }];
+  return comments;
 };
 
 CommentSchema.statics.updateComment = async (
@@ -117,7 +107,22 @@ CommentSchema.statics.updateComment = async (
 };
 
 CommentSchema.statics.deleteComment = async (commentId) => {
-  await Comment.findByIdAndDelete(commentId);
+  // 삭제가 아니라 삭제된 댓글로 표현
+  const comment = await Comment.findById(commentId);
+  if (comment.replies.length > 0) {
+    // 답글이 있으면 삭제하지 않고 변경
+    await comment.updateOne({
+      contents: "작성자에 의해 삭제된 댓글입니다.",
+      isDeleted: true,
+      author: new mongoose.Types.ObjectId(undefined),
+      likes: 0,
+      likeUsers: [],
+      isPostAuthor: false,
+    });
+    return false;
+  }
+  await comment.deleteOne();
+  return true;
 };
 
 CommentSchema.statics.createReply = async (commentId, user, contents) => {
@@ -147,6 +152,7 @@ CommentSchema.statics.updateReply = async (user, replyDto) => {
 };
 
 CommentSchema.statics.deleteReply = async (user, replyDto) => {
+  // 삭제가 아니라 삭제된 답글로 표현
   const { commentId, replyId } = replyDto;
   await Comment.findByIdAndUpdate(commentId, {
     $pull: { replies: { _id: replyId } },
