@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Clap from "./Clap";
 import "./PostListItem.css";
 
 export default function PostListItem({
@@ -24,11 +25,7 @@ export default function PostListItem({
             <span className="list-item__info-text">{commentCount}</span>
           </div>
           <div className="list-item__info">
-            <i
-              className="list-item__info-icon icon-thumb_up"
-              role="img"
-              aria-label="좋아요 수"
-            />
+            <Clap className="list-item__info-icon" />
             <span className="list-item__info-text">{likes}</span>
           </div>
           <div className="list-item__info">

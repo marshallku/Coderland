@@ -27,6 +27,11 @@
   margin-right: 5px;
 }
 
+svg.list-item__info-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
 .list-item__author {
   font-size: 0.75rem;
   color: var(--primary);

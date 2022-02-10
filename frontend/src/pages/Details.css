@@ -203,11 +203,16 @@
   font-size: 1.4rem;
 }
 
-.details-body__button > span + i {
+.details-body__button > svg {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.details-body__button > span + :is(i, svg) {
   transform: translate3d(0, -0.4rem, 0);
 }
 
-.details-body__button--activated > i {
+.details-body__button--activated > :is(i, svg) {
   color: var(--primary);
 }
 
