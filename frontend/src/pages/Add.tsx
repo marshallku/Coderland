@@ -34,7 +34,6 @@ function TechStacksInput({
     "c",
     "cassandra",
     "cloudflare",
-    "codeignighter",
     "coffeescript",
     "composer",
     "cpp",
@@ -231,8 +230,12 @@ function TechStacksInput({
 
             setTag(value);
 
-            if (value.length > 1) {
-              setFilteredStacks(stacks.filter((x) => x.includes(value)));
+            if (value.length > 0) {
+              setFilteredStacks(
+                stacks
+                  .filter((x) => !tags.includes(x))
+                  .filter((x) => x.includes(value))
+              );
             } else {
               resetFilteredTags();
             }
