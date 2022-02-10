@@ -1,10 +1,10 @@
 :root {
-  --red-base: #c92a2a;
-  --red-second: #fdeded;
+  --red-base: #a00000;
+  --red-second: #ffe6e6;
   --skyblue-base: #364fc7;
   --skyblue-second: #e7f5ff;
-  --forest-base: #1e7e31;
-  --forest-second: #ebfbee;
+  --forest-base: #106420;
+  --forest-second: #f0fff2;
   --purple-base: #6741d9;
   --purple-second: #f3f0ff;
   --material-submit-second: #e4f9ed;
@@ -34,9 +34,11 @@
   --text: #222222;
   --body: #080808;
   --caption: #b8b8b9;
+  --highlighted: #fafafa;
   --background-base: #ffffff;
   --background-elevated: #f3f3f3;
   --background-contents: #ffffff;
+  --background-transparency: rgba(255, 255, 255, 0.8);
   --border-radius: 6px;
   --border-thickness: 0.7px;
   --box-shadow-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -51,12 +53,12 @@
 }
 
 html.dark {
-  --red-base: #fdeded;
-  --red-second: #c92a2a;
+  --red-base: #fffafa;
+  --red-second: #b00020;
   --skyblue-base: #e7f5ff;
   --skyblue-second: #364fc7;
-  --forest-base: #ebfbee;
-  --forest-second: #1e7e31;
+  --forest-base: #fefffe;
+  --forest-second: #07670a;
   --purple-base: #f3f0ff;
   --purple-second: #6741d9;
   --primary: #9986fe;
@@ -75,9 +77,22 @@ html.dark {
   --text: #cccccc;
   --body: #bbb;
   --caption: #717172;
+  --highlighted: #2f2f2f;
   --background-base: #121314;
   --background-elevated: #2a2a2c;
   --background-contents: #414143;
+  --background-transparency: rgba(18, 19, 20, 0.8);
+  --box-shadow-1: 0 0px 2px rgba(255, 255, 255, 0.78);
+  --box-shadow-1-hover: 0 14px 28px rgba(255, 255, 255, 0.25),
+    0 10px 10px rgba(255, 255, 255, 0.22);
+  --box-shadow-2: 0px 2px 2px 0px rgb(0 0 0 / 14%),
+    0px 3px 1px -2px rgb(0 0 0 / 12%), 0px 1px 5px 0px rgb(0 0 0 / 20%);
+  --box-shadow-3: 0px 3px 4px 0px rgb(0 0 0 / 14%),
+    0px 3px 3px -2px rgb(0 0 0 / 12%), 0px 1px 8px 0px rgb(0 0 0 / 20%);
+  --box-shadow-4: 0px 4px 5px 0px rgb(0 0 0 / 14%),
+    0px 1px 10px 0px rgb(0 0 0 / 12%), 0px 2px 4px -1px rgb(0 0 0 / 20%);
+  --box-shadow-5: 0px 6px 10px 0px rgb(0 0 0 / 14%),
+    0px 1px 18px 0px rgb(0 0 0 / 12%), 0px 3px 5px -1px rgb(0 0 0 / 20%);
 }
 
 html {
@@ -87,7 +102,7 @@ html {
 }
 
 body {
-  background-color: var(--background-elevated);
+  background-color: var(--background-base);
   color: var(--body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -108,11 +123,11 @@ h1 {
   min-height: calc(100vh - 60px);
   max-width: 1400px;
   margin: 30px auto;
-  padding-top: 60px;
+  padding: 60px 20px 0;
 }
 
 @media screen and (min-width: 1180px) {
-  .main-container {
-    padding-left: 310px;
+  .container {
+    margin-left: 300px;
   }
 }

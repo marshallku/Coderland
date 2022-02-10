@@ -1,7 +1,6 @@
 .list-item__link {
   display: flex;
   padding: 30px;
-  margin: 10px;
   flex-direction: column;
   line-height: 1.7rem;
   background-color: var(--background-base);

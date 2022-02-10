@@ -6,6 +6,12 @@
   gap: 20px;
 }
 
+.post-list--list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 @media screen and (min-width: 680px) {
   .post-list--card {
     display: grid;

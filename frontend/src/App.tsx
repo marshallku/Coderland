@@ -26,32 +26,34 @@ export default function App() {
         <BrowserRouter>
           <ScrollController />
           <GlobalNavigation />
-          <main className="main-container">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/gather" element={<Gather />}>
-                <Route path=":category" element={<Gather />} />
-              </Route>
-              <Route path="/review" element={<Review />} />
-              <Route path="/article" element={<Article />} />
-              <Route path="/dev" element={<Dev />} />
-              <Route path="/recruit" element={<Recruit />} />
-              <Route path="/chat" element={<Chat />} />
-              <Route element={<RequireAuth />}>
-                <Route path="/add/:subject" element={<Add />}>
-                  <Route path=":category" element={<Add />} />
+          <div className="container">
+            <main className="main-container">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/gather" element={<Gather />}>
+                  <Route path=":category" element={<Gather />} />
                 </Route>
-                <Route path="/user/*" element={<User />}>
-                  <Route path="bookmarks" element={<UserBookmarks />} />
-                  <Route path="*" element={<UserInfo />} />
+                <Route path="/review" element={<Review />} />
+                <Route path="/article" element={<Article />} />
+                <Route path="/dev" element={<Dev />} />
+                <Route path="/recruit" element={<Recruit />} />
+                <Route path="/chat" element={<Chat />} />
+                <Route element={<RequireAuth />}>
+                  <Route path="/add/:subject" element={<Add />}>
+                    <Route path=":category" element={<Add />} />
+                  </Route>
+                  <Route path="/user/*" element={<User />}>
+                    <Route path="bookmarks" element={<UserBookmarks />} />
+                    <Route path="*" element={<UserInfo />} />
+                  </Route>
+                  <Route path="/authorize" element={<Authorize />} />
                 </Route>
-                <Route path="/authorize" element={<Authorize />} />
-              </Route>
-              <Route path="/posts/:id" element={<PostDetails />} />
-              <Route path="/gathers/:id" element={<GatherDetails />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </main>
+                <Route path="/posts/:id" element={<PostDetails />} />
+                <Route path="/gathers/:id" element={<GatherDetails />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+          </div>
         </BrowserRouter>
       </AuthProvider>
     </ThemeProvider>

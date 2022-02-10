@@ -65,8 +65,9 @@
   transition: color 0.25s ease-in-out;
 }
 
+.drawer__link--highlight,
 .drawer__link--highlight > i {
-  color: var(--gray-6);
+  color: var(--highlighted);
 }
 
 .drawer-closer {

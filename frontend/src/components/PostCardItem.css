@@ -13,7 +13,7 @@
 }
 
 .card-item--completed {
-  background-color: var(--purple-second);
+  background-color: var(--background-elevated);
   color: var(--gray-5);
 }
 

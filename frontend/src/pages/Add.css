@@ -1,10 +1,10 @@
-.editor__item.editor__item--gather {
+.editor__item--gather {
   display: flex;
-  gap: 10px;
+  gap: 20px;
 }
 
 .editor__item:not(:last-child) {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .editor__item:last-child {
