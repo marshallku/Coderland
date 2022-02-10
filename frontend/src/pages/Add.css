@@ -42,11 +42,19 @@
   top: calc(100% + 10px);
   left: 0;
   width: clamp(0px, 100%, 300px);
+  max-height: 30vh;
   padding: 10px;
   background-color: var(--multipurpose);
   border: var(--border-thickness) solid var(--gray-5);
   border-radius: var(--border-radius);
+  overflow-y: auto;
   z-index: 10;
+}
+
+@media (any-pointer: fine) {
+  .suggested-tags:not(:empty)::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .suggested-tags__tag {
