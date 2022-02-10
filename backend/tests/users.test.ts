@@ -236,3 +236,84 @@ describe("유저 레이서 인증 서비스", () => {
       .deleteOne({ googleId: "1230419308012123" });
   });
 });
+
+describe("회원 탈퇴 기능", () => {
+  let token = "Bearer ";
+  const connection = db.createConnection(`${configs.mongoUri}/coderland`);
+  let refreshToken = "";
+  let postId: string;
+
+  beforeAll(async () => {
+    const payload = { googleId: "1230419308012123" };
+    refreshToken += jwt.sign({}, configs.jwtSecret, { expiresIn: "14d" });
+    const authKey = "uniquekeyisgeneratedbyuuid";
+    await connection.collection("users").insertOne({
+      googleId: "1230419308012123",
+      nickname: "testuser",
+      name: "family given",
+      profile: "profile photo url",
+      grade: 1,
+      authKey,
+      refreshToken,
+    });
+
+    const signOpts: SignOptions = {
+      expiresIn: "1h",
+    };
+    token += jwt.sign(payload, configs.jwtSecret, signOpts);
+  });
+
+  it("포스트 생성", async () => {
+    // given
+    const title = "new title";
+    const contents = "contents";
+    const subject = "article";
+    const category = "none";
+
+    // when
+    const res = await request(server)
+      .post("/api/posts")
+      .set("authorization", token)
+      .send({ title, contents, subject, category });
+
+    // then
+    expect(res.statusCode).toEqual(201);
+    expect(res.body.isOk).toEqual(true);
+    expect(Object.keys(res.body)).toEqual(
+      expect.arrayContaining(["isOk", "postId"])
+    );
+
+    postId = res.body.postId;
+  });
+
+  it("회원 탈퇴", async () => {
+    const res = await request(server)
+      .delete("/api/users")
+      .set("authorization", token)
+      .send();
+
+    expect(res.statusCode).toEqual(200);
+
+    const user = await connection
+      .collection("users")
+      .findOne({ googleId: "withdrawal" });
+
+    expect(user.nickname).toEqual("사라진 체셔 고양이");
+    expect(user.name).toEqual("사라진 체셔 고양이");
+    expect(user.grade).toEqual(-1);
+    expect(user.profile).toEqual("Not access");
+    expect(user.track).toEqual("Not access");
+    expect(user.gitlab).toEqual("Not access");
+    expect(user.refreshToken).toEqual("Not access");
+  });
+
+  it("탈퇴한 회원이 생성한 포스트 저자 확인", async () => {
+    const res = await request(server).get(`/api/posts/${postId}`).send();
+
+    expect(res.body.post.author.nickname).toEqual("사라진 체셔 고양이");
+  });
+
+  afterAll(async () => {
+    await connection.collection("users").deleteMany({});
+  });
+});

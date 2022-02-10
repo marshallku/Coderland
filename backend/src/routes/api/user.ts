@@ -38,6 +38,18 @@ export default (app: Router) => {
     })
   );
 
+  // 회원 탈퇴
+  route.delete(
+    "/",
+    loginRequired,
+    asyncHandler(async (req, res) => {
+      const { user } = req;
+      const userService = new UserService();
+      await userService.withdrawUser(user.id);
+      res.status(200).json({ isOk: true });
+    })
+  );
+
   // 유저 인증키 가져오기
   route.get(
     "/auth",
