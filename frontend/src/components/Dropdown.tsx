@@ -16,7 +16,7 @@ export default function Dropdown({
       if (
         buttonRef.current === target ||
         (target instanceof Element &&
-          target.matches(".dropdown-content, .dropdown-content *"))
+          target.matches(".dropdown-content, .dropdown-content *:not(a)"))
       )
         return;
     }
