@@ -1,23 +1,46 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import formatClassName from "../utils/formatClassName";
 import "./Select.css";
 
 export default function Select({ id, list, cb }: ISelectProps) {
-  const [open, setOpen] = useState(false);
+  const [opened, setOpened] = useState(false);
   const [selected, setSelected] = useState<ISelectItem>(
     list.find((x) => x.selected) || list[0]
   );
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleClick = (event: MouseEvent) => {
+    const { current } = containerRef;
+    const { target } = event;
+
+    if (!current || !(target instanceof Node)) {
+      return;
+    }
+
+    if (!current.contains(target)) {
+      setOpened(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("click", handleClick);
+
+    return () => {
+      window.removeEventListener("click", handleClick);
+    };
+  }, []);
 
   return (
     <div
-      onBlur={() => setOpen(false)}
-      className={formatClassName("select", open && "select--open")}
+      onBlur={() => setOpened(false)}
+      className={formatClassName("select", opened && "select--open")}
+      ref={containerRef}
     >
       <input type="hidden" id={id} name={id} value={selected.key} />
       <button
         type="button"
         className="select__title"
-        onClick={() => setOpen(!open)}
+        onClick={() => setOpened(!opened)}
       >
         {selected.name}
       </button>
@@ -29,7 +52,7 @@ export default function Select({ id, list, cb }: ISelectProps) {
               value={key}
               onMouseDown={(event) => event.preventDefault()}
               onClick={() => {
-                setOpen(false);
+                setOpened(false);
                 setSelected({ key, name });
                 cb?.({ key, name });
               }}
