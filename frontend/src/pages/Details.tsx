@@ -6,6 +6,7 @@ import MarkdownViewer from "../components/MarkdownViewer";
 import Comments from "../components/Comments";
 import "./Details.css";
 import formatClassName from "../utils/formatClassName";
+import Clap from "../components/Clap";
 
 export function GatherDetails() {
   const [likesStatus, setLikesStatus] = useState(false);
@@ -126,7 +127,7 @@ export function GatherDetails() {
             onClick={handleLikesClick}
           >
             <span>{selected?.gather.likes}</span>
-            <i role="img" aria-label="좋아요" className="icon-thumb_up" />
+            <Clap activated={likesStatus} />
           </button>
         </div>
       </div>
@@ -216,7 +217,7 @@ export function PostDetails() {
             onClick={handleLikesClick}
           >
             <span>{selected?.post.likes}</span>
-            <i role="img" aria-label="좋아요" className="icon-thumb_up" />
+            <Clap activated={likesStatus} />
           </button>
         </div>
       </div>
