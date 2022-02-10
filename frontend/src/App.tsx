@@ -1,13 +1,16 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
 import GlobalNavigation from "./components/GlobalNavigation";
+import { AuthProvider } from "./hooks/auth";
+import { ThemeProvider } from "./hooks/theme";
+import RequireAuth from "./routes/RequireAuth";
+import ScrollController from "./components/ScrollController";
+
 import Home from "./pages/Home";
 import Gather from "./pages/Gather";
 import { PostDetails, GatherDetails } from "./pages/Details";
 import Add from "./pages/Add";
 import NotFound from "./pages/NotFound";
-import { AuthProvider } from "./hooks/auth";
-import { ThemeProvider } from "./hooks/theme";
-import RequireAuth from "./routes/RequireAuth";
 import User, { UserInfo, UserBookmarks } from "./pages/User";
 import Review from "./pages/Review";
 import Article from "./pages/Article";
@@ -21,6 +24,7 @@ export default function App() {
     <ThemeProvider>
       <AuthProvider>
         <BrowserRouter>
+          <ScrollController />
           <GlobalNavigation />
           <main className="main-container">
             <Routes>
