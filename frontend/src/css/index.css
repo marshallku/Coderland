@@ -106,24 +106,13 @@ h1 {
 
 .main-container {
   min-height: calc(100vh - 60px);
+  max-width: 1400px;
+  margin: 30px auto;
   padding-top: 60px;
 }
 
-.container-wrap {
-  padding: 10px;
-}
-
-.container {
-  max-width: 1400px;
-  margin: 30px auto;
-  padding: 1rem;
-  background-color: var(--background-base);
-  box-shadow: var(--box-shadow-2);
-  border-radius: var(--border-radius);
-}
-
 @media screen and (min-width: 1180px) {
-  .container-wrap {
+  .main-container {
     padding-left: 310px;
   }
 }

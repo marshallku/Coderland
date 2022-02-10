@@ -4,6 +4,7 @@
   padding: 20px;
   line-height: 1.7;
   box-shadow: var(--box-shadow-2);
+  background-color: var(--background-base);
 }
 
 .card-item__link {
@@ -12,7 +13,7 @@
 }
 
 .card-item--completed {
-  background-color: var(--multipurpose);
+  background-color: var(--purple-second);
   color: var(--gray-5);
 }
 
