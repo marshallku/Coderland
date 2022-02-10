@@ -36,7 +36,9 @@ export default function App() {
                   <Route path="/recruit" element={<Recruit />} />
                   <Route path="/chat" element={<Chat />} />
                   <Route element={<RequireAuth />}>
-                    <Route path="/add/:subject" element={<Add />} />
+                    <Route path="/add/:subject" element={<Add />}>
+                      <Route path=":category" element={<Add />} />
+                    </Route>
                     <Route path="/user/*" element={<User />}>
                       <Route path="bookmarks" element={<UserBookmarks />} />
                       <Route path="*" element={<UserInfo />} />

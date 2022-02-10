@@ -4,6 +4,7 @@ import Button from "../components/Button";
 import { Input } from "../components/Input";
 import MarkdownEditor from "../components/MarkdownEditor";
 import Select from "../components/Select";
+import formatClassName from "../utils/formatClassName";
 import toast from "../utils/toast";
 import "./Add.css";
 
@@ -263,7 +264,8 @@ export default function Add() {
   const [area, setArea] = useState<string>("");
   const [tags, setTags] = useState<Array<string>>([]);
   const [content, setContent] = useState<string>("");
-  const subject = useParams().subject || "chat";
+  const { subject = "chat", category = "study" } = useParams();
+
   const subjects: Array<TSubject> = [
     "review",
     "gather",
@@ -280,9 +282,42 @@ export default function Add() {
     "채용 정보",
     "잡담",
   ];
+  const categories: Array<TGatherCategory> = ["study", "code", "team"];
+  const categoriesInKr = ["스터디", "모각코", "프로젝트"];
 
   return (
     <div>
+      <div
+        className={formatClassName(
+          "editor__item",
+          subject === "gather" && "editor__item--gather"
+        )}
+      >
+        <Select
+          id="subject"
+          list={subjects.map((x, i) => ({
+            key: x,
+            name: subjectsInKr[i],
+            selected: x === subject,
+          }))}
+          cb={({ key }) =>
+            key !== "gather"
+              ? navigate(`/add/${key}`)
+              : navigate(`/add/${key}/${category}`)
+          }
+        />
+        {subject === "gather" && (
+          <Select
+            id="category"
+            list={categories.map((x, i) => ({
+              key: x,
+              name: categoriesInKr[i],
+              selected: x === category,
+            }))}
+            cb={({ key }) => navigate(`/add/gather/${key}`)}
+          />
+        )}
+      </div>
       <div className="editor__item">
         <Input
           id="title"
@@ -290,17 +325,6 @@ export default function Add() {
           label="제목"
           value={title}
           setValue={setTitle}
-        />
-      </div>
-      <div className="editor__item">
-        <Select
-          id="category"
-          list={subjects.map((x, i) => ({
-            key: x,
-            name: subjectsInKr[i],
-            selected: x === subject,
-          }))}
-          cb={({ key }) => navigate(`/add/${key}`)}
         />
       </div>
       {subject === "gather" && (
