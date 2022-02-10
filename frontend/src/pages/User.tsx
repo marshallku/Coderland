@@ -10,7 +10,6 @@ import { useAuth } from "../hooks/auth";
 import "./User.css";
 
 export function UserInfo() {
-  const { group } = useParams();
   const auth = useAuth();
   const user = auth?.user;
 
@@ -107,7 +106,7 @@ export function UserInfo() {
 export function UserBookmarks() {
   // TODO: 작업한 컴포넌트 활용해 렌더링
   // TODO: 일반 글과 모집 글 분류 방식 고민
-  return <div>북마크한 글</div>;
+  return <div className="user-info">북마크한 글</div>;
 }
 
 export default function User() {

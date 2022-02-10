@@ -6,10 +6,16 @@
   width: 100%;
   height: 60px;
   padding: 0 10px;
-  background-color: var(--background-base);
+  background-color: var(--background-transparency);
+  -webkit-backdrop-filter: blur(8px) saturate(180%);
+  backdrop-filter: blur(8px) saturate(180%);
   box-shadow: var(--box-shadow-1);
   line-height: 60px;
   z-index: 5000;
+}
+
+html.dark .gnb {
+  box-shadow: none;
 }
 
 .gnb__grow {
