@@ -1,13 +1,12 @@
 .list-item__link {
   display: flex;
-  padding: 20px;
+  padding: 30px;
+  margin: 10px;
   flex-direction: column;
   line-height: 1.7rem;
-  border-bottom: 1px solid var(--gray-4);
-}
-
-.list-item:last-of-type > .list-item__link {
-  border-bottom: none;
+  background-color: var(--background-base);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-1);
 }
 
 .list-item__header {
