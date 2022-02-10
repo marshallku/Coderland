@@ -8,6 +8,8 @@ import {
   solarizedlight,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { useTheme } from "../hooks/theme";
+import formatClassName from "../utils/formatClassName";
+import "./MarkdownViewer.css";
 
 export default function MarkdownViewer({
   className,
@@ -24,36 +26,37 @@ export default function MarkdownViewer({
     });
 
   return (
-    <ReactMarkdown
-      className={className || ""}
-      remarkPlugins={[remarkGfm]}
-      rehypePlugins={[RehypeRaw, sanitize]}
-      components={{
-        h1: "h2",
-        // eslint-disable-next-line react/no-unstable-nested-components
-        code({ inline, className: childClassName, children }) {
-          const match = /language-(\w+)/.exec(childClassName || "");
+    <article className={formatClassName("markdown-article", className)}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[RehypeRaw, sanitize]}
+        components={{
+          h1: "h2",
+          // eslint-disable-next-line react/no-unstable-nested-components
+          code({ inline, className: childClassName, children }) {
+            const match = /language-(\w+)/.exec(childClassName || "");
 
-          return !inline && match ? (
-            <Prism
-              style={
-                // TODO: theme 상태관리 추가해 리렌더링
-                theme?.theme === "dark" ? vscDarkPlus : solarizedlight
-              }
-              language={match[1]}
-              PreTag="div"
-            >
-              {String(children).replace(/\n$/, "")}
-            </Prism>
-          ) : (
-            <code className={childClassName} data-tmp={`${inline}`}>
-              {children}
-            </code>
-          );
-        },
-      }}
-    >
-      {value ?? ""}
-    </ReactMarkdown>
+            return !inline && match ? (
+              <Prism
+                style={
+                  // TODO: theme 상태관리 추가해 리렌더링
+                  theme?.theme === "dark" ? vscDarkPlus : solarizedlight
+                }
+                language={match[1]}
+                PreTag="div"
+              >
+                {String(children).replace(/\n$/, "")}
+              </Prism>
+            ) : (
+              <code className={childClassName} data-tmp={`${inline}`}>
+                {children}
+              </code>
+            );
+          },
+        }}
+      >
+        {value ?? ""}
+      </ReactMarkdown>
+    </article>
   );
 }
