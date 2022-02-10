@@ -38,5 +38,30 @@ export default (app: Router) => {
     })
   );
 
+  // 유저 인증키 가져오기
+  route.get(
+    "/auth",
+    loginRequired,
+    asyncHandler(async (req, res) => {
+      const { user } = req;
+      const userService = new UserService();
+      const authKey = await userService.getUserAuthKey(user.id);
+      res.status(200).json({ isOk: true, authKey });
+    })
+  );
+
+  // 유저 깃랩 주소 입력 검증
+  route.post(
+    "/auth",
+    loginRequired,
+    asyncHandler(async (req, res) => {
+      const { user } = req;
+      const { username } = req.body;
+      const userService = new UserService();
+      await userService.checkUserAuthKey(user.id, username);
+      res.status(200).json({ isOk: true });
+    })
+  );
+
   app.use("/users", route);
 };
