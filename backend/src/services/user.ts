@@ -25,6 +25,10 @@ export default class UserService {
     await this.UserModel.updateUser(userId, nickname);
   }
 
+  async withdrawUser(userId: string) {
+    await this.UserModel.withdrawUser(userId);
+  }
+
   // 유저 인증 키 가져오기
   async getUserAuthKey(userId: string) {
     const authKey = await this.UserModel.getUserAuthKey(userId);

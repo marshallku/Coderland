@@ -117,6 +117,20 @@ UserSchema.statics.updateUser = async (userId: string, nickname: string) => {
   });
 };
 
+UserSchema.statics.withdrawUser = async (userId: string) => {
+  await User.findByIdAndUpdate(userId, {
+    googleId: "withdrawal",
+    nickname: "사라진 체셔 고양이",
+    name: "사라진 체셔 고양이",
+    grade: -1,
+    profile: "Not access",
+    provider: "Not access",
+    track: "Not access",
+    gitlab: "Not access",
+    refreshToken: "Not access",
+  });
+};
+
 UserSchema.statics.getUserAuthKey = async (userId: string) => {
   const { authKey } = await User.findById(userId).select("authKey");
   return authKey;
