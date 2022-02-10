@@ -17,7 +17,7 @@ describe("북마크 테스트", () => {
       nickname: "testuser2",
       name: "family given2",
       profile: "profile photo url2",
-      grade: 0,
+      grade: 1,
     });
 
     const user = <IUserDocument>await connection.collection("users").findOne({
@@ -114,7 +114,7 @@ describe("북마크 테스트 포스트 먼저 삭제", () => {
       nickname: "testuser2",
       name: "family given2",
       profile: "profile photo url2",
-      grade: 0,
+      grade: 1,
     });
 
     const user = <IUserDocument>await connection.collection("users").findOne({

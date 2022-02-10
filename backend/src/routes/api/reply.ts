@@ -4,13 +4,15 @@ import ReplyService from "../../services/reply";
 
 import { asyncHandler } from "../../utils";
 import { loginRequired } from "../../passport/guards";
-import checkReplyPermission from "../middlewares/check-reply-permission";
+import { checkReplyPermission, checkGrade } from "../middlewares";
 
 const replyRouter = Router({ mergeParams: true });
 
+// 답글 생성
 replyRouter.post(
   "/",
   loginRequired,
+  checkGrade,
   asyncHandler(async (req, res) => {
     const { user } = req;
     const { commentId, contents } = req.body;
@@ -20,6 +22,7 @@ replyRouter.post(
   })
 );
 
+// 답글 수정
 replyRouter.put(
   "/",
   loginRequired,

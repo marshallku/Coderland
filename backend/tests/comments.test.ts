@@ -19,7 +19,7 @@ describe("댓글 통합 테스트", () => {
       nickname: "testuser2",
       name: "family given2",
       profile: "profile photo url2",
-      grade: 0,
+      grade: 1,
     });
 
     const user = <IUserDocument>await connection.collection("users").findOne({
@@ -33,7 +33,7 @@ describe("댓글 통합 테스트", () => {
       nickname: "testuser2",
       name: "family given2",
       profile: "profile photo url2",
-      grade: 0,
+      grade: 1,
     });
 
     const notOwner = <IUserDocument>(

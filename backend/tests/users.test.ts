@@ -32,7 +32,7 @@ describe("유저 기능 테스트", () => {
       nickname: "testuser",
       name: "family given",
       profile: "profile photo url",
-      grade: 0,
+      grade: 1,
       refreshToken,
     });
 
