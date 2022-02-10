@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { v4 } from "uuid";
 import { IGoogleUser, IUserDocument, IUserModel } from "user";
 
 export const UserSchema = new mongoose.Schema<IUserDocument>(
@@ -27,6 +28,10 @@ export const UserSchema = new mongoose.Schema<IUserDocument>(
     grade: {
       type: Number,
       default: 0,
+    },
+    authKey: {
+      type: String,
+      default: () => v4(),
     },
     track: {
       type: String,
@@ -58,6 +63,7 @@ UserSchema.statics.findOrCreate = async (
     name: `${user.name.familyName} ${user.name.givenName}`,
     profile: user.photos[0].value,
   });
+
   return newUser;
 };
 
@@ -74,13 +80,15 @@ UserSchema.statics.findOneByGoogleIdAndUpdateRefreshToken = async (
 };
 
 UserSchema.statics.findByGoogleId = async ({ googleId }) => {
-  const user = User.findOne({ googleId });
-  return user.select("-bookmarks -refreshToken");
+  const user = await User.findOne({ googleId }).select(
+    "-bookmarks -refreshToken -authKey"
+  );
+  return user;
 };
 
 UserSchema.statics.getRefreshTokenByGoogleId = async ({ googleId }) => {
-  const user = User.findOne({ googleId });
-  return user.select("refreshToken");
+  const user = await User.findOne({ googleId }).select("refreshToken");
+  return user;
 };
 
 UserSchema.statics.updateBookmark = async (postId: string, userId: string) => {
@@ -106,6 +114,18 @@ UserSchema.statics.findAllBookmarks = async (userId: string) => {
 UserSchema.statics.updateUser = async (userId: string, nickname: string) => {
   await User.findByIdAndUpdate(userId, {
     nickname,
+  });
+};
+
+UserSchema.statics.getUserAuthKey = async (userId: string) => {
+  const { authKey } = await User.findById(userId).select("authKey");
+  return authKey;
+};
+
+UserSchema.statics.updateGrade = async (userId: string) => {
+  await User.findByIdAndUpdate(userId, {
+    grade: 1,
+    authKey: "already auth",
   });
 };
 

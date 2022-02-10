@@ -22,6 +22,7 @@ export interface IUser {
   provider: string;
   bookmarks: PopulatedDoc<IPostDocument>[];
   grade: number;
+  authKey: string;
   track?: string;
   gitlab?: string;
   refreshToken?: string;
@@ -51,4 +52,8 @@ export interface IUserModel extends Model<IUserDocument> {
   updateBookmark: (postId: string, userId: string) => Promise<void>;
 
   findAllBookmarks: (userId: string) => Promise<IUserDocument>;
+
+  getUserAuthKey: (userId: string) => Promise<string>;
+
+  updateGrade: (userId: string) => Promise<void>;
 }

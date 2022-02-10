@@ -137,6 +137,102 @@ describe("유저 기능 테스트", () => {
     await connection
       .collection("users")
       .deleteOne({ googleId: "1230419308012123" });
-    await db.disconnect();
+  });
+});
+
+describe("유저 레이서 인증 서비스", () => {
+  let token = "Bearer ";
+  const connection = db.createConnection(`${configs.mongoUri}/coderland`);
+  let refreshToken = "";
+  let authKey: string;
+
+  beforeAll(async () => {
+    const payload = { googleId: "1230419308012123" };
+    refreshToken += jwt.sign({}, configs.jwtSecret, { expiresIn: "14d" });
+    const authKey = "uniquekeyisgeneratedbyuuid";
+    await connection.collection("users").insertOne({
+      googleId: "1230419308012123",
+      nickname: "testuser",
+      name: "family given",
+      profile: "profile photo url",
+      grade: 0,
+      authKey,
+      refreshToken,
+    });
+
+    const signOpts: SignOptions = {
+      expiresIn: "1h",
+    };
+    token += jwt.sign(payload, configs.jwtSecret, signOpts);
+  });
+
+  it("유저 인증 페이지 접근, 인증키 발급", async () => {
+    const res = await request(server)
+      .get("/api/users/auth")
+      .set("authorization", token)
+      .send({ authKey });
+
+    expect(res.statusCode).toEqual(200);
+
+    const user = await connection
+      .collection("users")
+      .findOne({ googleId: "1230419308012123" });
+
+    expect(user.grade).toEqual(0);
+    expect(res.body.authKey).toEqual(user.authKey);
+  });
+
+  it("Fail 이상한 유저 ID 유저 인증 페이지 포스팅", async () => {
+    const username = "atatsdfkdkd";
+    const res = await request(server)
+      .post("/api/users/auth")
+      .set("authorization", token)
+      .send({ username });
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.msg).toEqual("유저 ID를 확인해주세요!");
+
+    const user = await connection
+      .collection("users")
+      .findOne({ googleId: "1230419308012123" });
+    expect(user.grade).toEqual(0);
+  });
+
+  it("Fail 인증키 다른거 유저 인증 페이지 포스팅", async () => {
+    const username = "marshallku";
+    const res = await request(server)
+      .post("/api/users/auth")
+      .set("authorization", token)
+      .send({ username });
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.msg).toEqual("인증키를 확인해주세요!");
+
+    const user = await connection
+      .collection("users")
+      .findOne({ googleId: "1230419308012123" });
+    expect(user.grade).toEqual(0);
+  });
+
+  it("유저 인증 페이지 포스팅", async () => {
+    const username = "wjdtp93";
+    const res = await request(server)
+      .post("/api/users/auth")
+      .set("authorization", token)
+      .send({ username });
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.isOk).toEqual(true);
+
+    const user = await connection
+      .collection("users")
+      .findOne({ googleId: "1230419308012123" });
+    expect(user.grade).toEqual(1);
+  });
+
+  afterAll(async () => {
+    await connection
+      .collection("users")
+      .deleteOne({ googleId: "1230419308012123" });
   });
 });
