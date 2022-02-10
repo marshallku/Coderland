@@ -12,6 +12,7 @@ describe("일반 포스트 기능 테스트", () => {
   const connection = db.createConnection(`${configs.mongoUri}/coderland`);
   let token = "Bearer ";
   let notOwnerToken = "Bearer ";
+  let notRacerToken = "Bearer ";
   let postId: string;
   let anonymousPostId: string;
 
@@ -21,12 +22,20 @@ describe("일반 포스트 기능 테스트", () => {
       nickname: "testuser2",
       name: "family given2",
       profile: "profile photo url2",
-      grade: 0,
+      grade: 1,
     });
 
     await connection.collection("users").insertOne({
       googleId: "1230809419304811",
       nickname: "testuser233",
+      name: "family given2",
+      profile: "profile photo url2",
+      grade: 1,
+    });
+
+    await connection.collection("users").insertOne({
+      googleId: "12309128390004041",
+      nickname: "notracer",
       name: "family given2",
       profile: "profile photo url2",
       grade: 0,
@@ -42,8 +51,15 @@ describe("일반 포스트 기능 테스트", () => {
       })
     );
 
+    const notRacer = <IUserDocument>(
+      await connection.collection("users").findOne({
+        googleId: "12309128390004041",
+      })
+    );
+
     token += createToken(user);
     notOwnerToken += createToken(notOwnerUser);
+    notRacerToken += createToken(notRacer);
   });
 
   it("일반 포스트 생성 테스트", async () => {
@@ -69,6 +85,23 @@ describe("일반 포스트 기능 테스트", () => {
     );
 
     postId = res.body.postId;
+  });
+
+  it("Fail 레이서 인증 없이 포스트 생성", async () => {
+    // given
+    const title = "new title";
+    const contents = "test contents";
+    const subject = "article";
+    const category = "none";
+
+    // when
+    const res = await request(server)
+      .post("/api/posts")
+      .set("authorization", notRacerToken)
+      .send({ title, contents, subject, category });
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.msg).toEqual("레이서 인증이 필요합니다!");
   });
 
   it("일반 포스트 조회 테스트", async () => {

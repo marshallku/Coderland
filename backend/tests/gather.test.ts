@@ -19,7 +19,7 @@ describe("모임 게시글 기능 테스트", () => {
       nickname: "testuuu",
       name: "family givn2",
       profile: "profile poto url2",
-      grade: 0,
+      grade: 1,
     });
     const user = <IUserDocument>await connection.collection("users").findOne({
       googleId: "130471033098230",
@@ -31,7 +31,7 @@ describe("모임 게시글 기능 테스트", () => {
       nickname: "te2434stuuu",
       name: "family givn2",
       profile: "profile poto url2",
-      grade: 0,
+      grade: 1,
     });
 
     const notAccessUser = <IUserDocument>(
@@ -389,7 +389,7 @@ describe("모든 모집 글 리스트 조회 테스트", () => {
       nickname: "testuuu",
       name: "family givn2",
       profile: "profile poto url2",
-      grade: 0,
+      grade: 1,
     });
     const user = <IUserDocument>await connection.collection("users").findOne({
       googleId: "0809032903902923",

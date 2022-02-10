@@ -3,7 +3,7 @@ import PostService from "../../services/post";
 
 import { asyncHandler, purifyHtml } from "../../utils";
 import { loginRequired, loginCheck } from "../../passport/guards";
-import { checkPermission, checkGatherPost } from "../middlewares";
+import { checkPermission, checkGatherPost, checkGrade } from "../middlewares";
 
 import commentRouter from "./comment";
 import replyRouter from "./reply";
@@ -61,6 +61,7 @@ export default (app: Router) => {
   route.post(
     "/",
     loginRequired,
+    checkGrade,
     asyncHandler(async (req, res) => {
       const { user } = req;
       const { title, contents, subject, category, area, tags, icon } = req.body;
@@ -78,6 +79,7 @@ export default (app: Router) => {
   route.put(
     "/:postId",
     loginRequired,
+    checkGrade,
     checkPermission,
     asyncHandler(async (req, res) => {
       const { postId } = req.params;
@@ -136,6 +138,7 @@ export default (app: Router) => {
   route.post(
     "/:postId/like",
     loginRequired,
+    checkGrade,
     asyncHandler(async (req, res) => {
       const { user } = req;
       const { postId } = req.params;
@@ -149,6 +152,7 @@ export default (app: Router) => {
   route.post(
     "/:postId/bookmark",
     loginRequired,
+    checkGrade,
     asyncHandler(async (req, res) => {
       const { postId } = req.params;
       const { user } = req;

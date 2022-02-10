@@ -3,7 +3,7 @@ import { asyncHandler } from "../../utils";
 import CommentService from "../../services/comment";
 import { Post, Comment } from "../../models";
 import { loginRequired, loginCheck } from "../../passport/guards";
-import { checkCommentPermission } from "../middlewares";
+import { checkCommentPermission, checkGrade } from "../middlewares";
 
 const commentRouter = Router({ mergeParams: true });
 
@@ -11,6 +11,7 @@ const commentRouter = Router({ mergeParams: true });
 commentRouter.post(
   "/",
   loginRequired,
+  checkGrade,
   asyncHandler(async (req, res) => {
     const { user } = req;
     const { postId } = req.params;
@@ -69,6 +70,7 @@ commentRouter.delete(
 commentRouter.post(
   "/like",
   loginRequired,
+  checkGrade,
   asyncHandler(async (req, res) => {
     const { commentId } = req.body;
     const { user } = req;
