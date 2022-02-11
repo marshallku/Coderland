@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import { dummyCommentsResponse } from "../api/dummy";
+import { scrollTo } from "../animation/scroll";
 import Comment from "./Comment";
 import "./Comments.css";
+
+const COMMENT_LIMIT = 10;
 
 export default function Comments() {
   const [commentText, setCommentText] = useState("");
   const [commentList, setCommentList] = useState<IComment[]>([]);
+  const [startIdx, setStartIdx] = useState(0);
+  const [focused, setFocused] = useState("");
 
   // TODO: GET Comment
   useEffect(() => {
@@ -16,11 +21,15 @@ export default function Comments() {
     getComments();
   }, []);
 
+  useEffect(() => {
+    setStartIdx(Math.max(commentList.length - COMMENT_LIMIT, 0));
+  }, [commentList]);
+
   const handleCommentSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (commentText) {
       // TODO: POST Comment
-      const newComment: IComment = {
+      const newComment = {
         _id: String(Date.now()),
         contents: commentText,
         author: "익명의 도도새",
@@ -33,6 +42,7 @@ export default function Comments() {
       };
       setCommentList([...commentList, newComment]);
       setCommentText("");
+      scrollTo(document.body.scrollHeight);
     }
   };
 
@@ -57,32 +67,26 @@ export default function Comments() {
         </div>
       </form>
 
-      {commentList.map(
-        ({
-          _id,
-          contents,
-          author,
-          postId,
-          likes,
-          isPostAuthor,
-          createdAt,
-          updatedAt,
-          replies,
-        }: IComment) => (
-          <Comment
-            key={_id}
-            _id={_id}
-            contents={contents}
-            author={author}
-            postId={postId}
-            likes={likes}
-            isPostAuthor={isPostAuthor}
-            createdAt={createdAt}
-            updatedAt={updatedAt}
-            replies={replies}
-          />
-        )
+      {startIdx > 0 && (
+        <button
+          type="button"
+          className="comment__view-more"
+          onClick={() => setStartIdx(0)}
+        >
+          댓글 {startIdx}개 더 보기
+        </button>
       )}
+
+      {commentList.slice(startIdx, commentList.length).map((comment) => (
+        <Comment
+          key={comment._id}
+          comment={comment}
+          commentList={commentList}
+          setCommentList={setCommentList}
+          focused={focused}
+          setFocused={setFocused}
+        />
+      ))}
     </div>
   );
 }

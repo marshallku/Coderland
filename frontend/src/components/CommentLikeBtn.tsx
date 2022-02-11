@@ -1,11 +1,12 @@
-import { useState } from "react";
 import formatClassName from "../utils/formatClassName";
 import "./CommentLikeBtn.css";
 
-export default function CommentLikeBtn({ likes }: ILikeProps) {
-  const [likesCount, setLikesCount] = useState(likes);
-  const [isLiked, setIsLiked] = useState(false);
-
+export default function CommentLikeBtn({
+  likesCount,
+  setLikesCount,
+  isLiked,
+  setIsLiked,
+}: ILikeProps) {
   const handleLikeClick = () => {
     if (isLiked) {
       setLikesCount((prev) => prev - 1);
@@ -25,7 +26,7 @@ export default function CommentLikeBtn({ likes }: ILikeProps) {
       onClick={handleLikeClick}
     >
       <i className="icon-thumb_up" />
-      좋아요 {likesCount === 0 ? "" : likesCount}
+      {likesCount === 0 ? "좋아요" : likesCount}
     </button>
   );
 }

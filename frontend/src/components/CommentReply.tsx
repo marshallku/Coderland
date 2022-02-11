@@ -1,40 +1,38 @@
 import { useState } from "react";
-import formatClassName from "../utils/formatClassName";
 import { formatToReadableTime } from "../utils/time";
 
-export default function Reply({ contents, author, createdAt }: ICommentReply) {
-  const [editMode, setEditMode] = useState(false);
+export default function Reply({
+  reply: { _id, contents, author, isPostAuthor, createdAt },
+  focused,
+  setFocused,
+}: IReplyProps) {
+  const [mode, setMode] = useState<TCommentMode>("read");
   const [editedText, setEditedText] = useState(contents);
-
-  const toggleEditMode = () => {
-    setEditMode((prev) => !prev);
-    setEditedText(contents);
-  };
 
   const handleEditSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (editedText) {
       // TODO: PUT Reply
-      // const editedReply = {
-      //   contents: editedText,
-      //   updatedAt: new Date(Date.now()).toISOString(),
-      // };
-      toggleEditMode();
+      setMode("read");
     }
+  };
+
+  const handleEditClick = (id: string) => {
+    setFocused(id);
+    setMode(mode === "edit" ? "read" : "edit");
   };
 
   return (
     <div className="comment comment--reply">
       <div className="comment__author-wrap">
         <span className="comment__author">{author}</span>
+        {isPostAuthor && <span className="comment__post-author">작성자</span>}
+
         <button
           type="button"
-          className={formatClassName(
-            "comment__edit-button",
-            editMode && "comment__edit--on"
-          )}
+          className="comment__edit-button"
           aria-label="답글 수정 버튼"
-          onClick={toggleEditMode}
+          onClick={() => handleEditClick(_id)}
         >
           <i className="icon-create" />
           수정
@@ -49,7 +47,7 @@ export default function Reply({ contents, author, createdAt }: ICommentReply) {
         </button>
       </div>
 
-      {editMode ? (
+      {mode === "edit" && focused === _id ? (
         <form
           onSubmit={handleEditSubmit}
           className="comment-form comment-form--edit"
@@ -66,7 +64,7 @@ export default function Reply({ contents, author, createdAt }: ICommentReply) {
             </button>
             <button
               type="button"
-              onClick={toggleEditMode}
+              onClick={() => setMode("read")}
               className="comment-form__button comment-form__button--cancel"
             >
               취소
