@@ -17,4 +17,5 @@ interface IInstance {
   post(resource: string, init?: RequestInit): Promise<any | IFailResponse>;
   delete(resource: string, init?: RequestInit): Promise<any | IFailResponse>;
   put(resource: string, init?: RequestInit): Promise<any | IFailResponse>;
+  patch(resource: string, init?: RequestInit): Promise<any | IFailResponse>;
 }

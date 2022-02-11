@@ -2,13 +2,16 @@ import { Link } from "react-router-dom";
 import favicon from "../../static/image/favicon.svg";
 import ThemeSwitch from "./ThemeSwitch";
 import Dropdown from "./Dropdown";
-import "./GNB.css";
 import formatClassName from "../utils/formatClassName";
+import { useAuth } from "../hooks/auth";
+import "./GNB.css";
 
 export default function GlobalNavigationBar({
   drawerRevealed,
   setDrawerRevealed,
 }: IDrawerStatusProps) {
+  const auth = useAuth();
+
   return (
     <nav className="gnb">
       <div className="gnb__grow">
@@ -38,21 +41,30 @@ export default function GlobalNavigationBar({
             </>
           }
         />
-        <Dropdown
-          ButtonChildren={<img src={favicon} alt="유저 프로필" />}
-          ContentChildren={
-            <>
-              {/* TODO: 유저 정보 추가 */}
-              <img src={favicon} alt="유저 프로필" />
-              <div>
+        {auth?.user ? (
+          <Dropdown
+            ButtonChildren={<img src={favicon} alt="유저 프로필" />}
+            ContentChildren={
+              <>
+                {/* TODO: 유저 정보 추가 */}
+                <img
+                  src={auth?.user ? auth.user.profile : favicon}
+                  alt="유저 프로필"
+                />
                 <div>
-                  <Link to="/user">정보 수정</Link>
+                  <div>
+                    <Link to="/user">정보 수정</Link>
+                  </div>
+                  <div>로그아웃</div>
                 </div>
-                <div>로그아웃</div>
-              </div>
-            </>
-          }
-        />
+              </>
+            }
+          />
+        ) : (
+          <Link className="gnb__sign-in" to="/api/auth/google">
+            로그인
+          </Link>
+        )}
         <button
           type="button"
           className={formatClassName(

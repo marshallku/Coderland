@@ -1,66 +1,90 @@
 import { useState } from "react";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import useApi from "../hooks/api";
-import { dummyGatherResponse, dummyPostResponse } from "../api/dummy";
 import { formatToReadableTime } from "../utils/time";
 import MarkdownViewer from "../components/MarkdownViewer";
 import Comments from "../components/Comments";
-import "./Details.css";
 import formatClassName from "../utils/formatClassName";
 import Clap from "../components/Clap";
+import {
+  addBookmark,
+  addClap,
+  getPost,
+  removeBookmark,
+  removeClap,
+} from "../api";
+import { useAuth } from "../hooks/auth";
+import "./Details.css";
 
 export function GatherDetails() {
-  const [likesStatus, setLikesStatus] = useState(false);
-  const [bookmarkStatus, setBookmarkStatus] = useState(false);
-
-  const selected = useApi(dummyGatherResponse);
-  // response.find((post) => post._id === params.id);
-
-  // useEffect(() => {}, [likesStatus, bookmarkStatus]);
+  const [clapped, setClapped] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
+  const { id } = useParams();
+  if (!id) {
+    return <Navigate to="/404" />;
+  }
+  const response = useApi(getPost<IGatherPostResponse>(id));
+  const navigate = useNavigate();
+  const auth = useAuth();
 
   function handleBookmarkClick() {
-    setBookmarkStatus(!bookmarkStatus);
+    if (auth?.user && id) {
+      if (bookmarked) {
+        removeBookmark({ id, token: auth?.user.token });
+      } else {
+        addBookmark({ id, token: auth?.user.token });
+      }
+
+      setBookmarked(!bookmarked);
+      return;
+    }
+
+    navigate("/login");
   }
 
   function handleLikesClick() {
-    setLikesStatus(!likesStatus);
-    // TODO: put?patch? 통신하여 likesStatus에 따라 증가/감소값 넘겨주기 (id건네주어서 해당 db값 변경)
-    // 참고: async function postTopic(evt) {
-    //   const response = await fetch('http://localhost:3000/topics/', {
-    //     method: 'PUT',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    // body: JSON.stringify({ _id: , likes: selected +-1 })
-    //   });
-    //   const result = await response.json();
-    //   return result;
-    // }
+    if (auth?.user && id) {
+      if (clapped) {
+        removeClap({ id, token: auth?.user.token });
+      } else {
+        addClap({ id, token: auth?.user.token });
+      }
+
+      setClapped(!clapped);
+      return;
+    }
+
+    navigate("/login");
+  }
+
+  if (response && !response.isOk) {
+    return <Navigate to="/" />;
   }
 
   return (
     <>
       <header className="details-header">
-        <h2 className="details-header__title">{selected?.gather.title}</h2>
+        <h2 className="details-header__title">{response?.gather.title}</h2>
         <div className="details-header__contents">
           <div className="details-header__author">
-            {selected?.gather.author}
+            {response?.gather.author}
           </div>
           <time
             className="details-header__created"
-            dateTime={selected?.gather.createdAt || ""}
+            dateTime={response?.gather.createdAt || ""}
           >
-            {formatToReadableTime(selected?.gather.createdAt || "")}
+            {formatToReadableTime(response?.gather.createdAt || "")}
           </time>
           <div className="details-header__views">
             <i className="icon-visibility" role="img" aria-label="조회 수" />
-            {selected?.gather.views}
+            {response?.gather.views}
           </div>
         </div>
       </header>
       <div className="details-body">
         <article className="details-body__article">
           <div className="details-body__tags">
-            {selected?.gather.tags.map((tag) => (
+            {response?.gather.tags.map((tag) => (
               <i
                 key={tag}
                 className={`icon-${tag}`}
@@ -71,24 +95,24 @@ export function GatherDetails() {
           </div>
           <div className="details-body__info">
             <i className="icon-info_outline" />
-            상태: 모집 {`${selected?.gather.isCompleted ? "완료" : "중"}`}
+            상태: 모집 {`${response?.gather.isCompleted ? "완료" : "중"}`}
           </div>
           <div className="details-body__info">
             <i className="icon-desktop_windows" />
-            장소: {selected?.gather.area}
+            장소: {response?.gather.area}
           </div>
           <div className="details-body__info">
             <i className="icon-person" />
-            인원: {selected?.gather.members.length}명
+            인원: {response?.gather.members.length}명
           </div>
           <MarkdownViewer
-            value={selected?.gather.contents || ""}
+            value={response?.gather.contents || ""}
             className="details-body__content"
           />
           <div className="details-body__members member-list">
             <h3 className="member-list__title">현재 팀원</h3>
             <ul className="member-list__container">
-              {selected?.gather.members.map((member: IMemberProps) => (
+              {response?.gather.members.map((member: IMemberProps) => (
                 <li key={member.nickname} className="member-list__item">
                   <img
                     src={member.profile}
@@ -106,7 +130,7 @@ export function GatherDetails() {
             type="button"
             className={formatClassName(
               "details-body__button",
-              bookmarkStatus && "details-body__button--activated"
+              bookmarked && "details-body__button--activated"
             )}
             onClick={handleBookmarkClick}
           >
@@ -114,7 +138,7 @@ export function GatherDetails() {
               role="img"
               aria-label="북마크"
               className={`${
-                bookmarkStatus ? "icon-bookmark" : "icon-bookmark_outline"
+                bookmarked ? "icon-bookmark" : "icon-bookmark_outline"
               }`}
             />
           </button>
@@ -122,12 +146,12 @@ export function GatherDetails() {
             type="button"
             className={formatClassName(
               "details-body__button",
-              likesStatus && "details-body__button--activated"
+              clapped && "details-body__button--activated"
             )}
             onClick={handleLikesClick}
           >
-            <span>{selected?.gather.likes}</span>
-            <Clap activated={likesStatus} />
+            <span>{response?.gather.likes}</span>
+            <Clap activated={clapped} />
           </button>
         </div>
       </div>
@@ -137,57 +161,72 @@ export function GatherDetails() {
 }
 
 export function PostDetails() {
-  const [likesStatus, setLikesStatus] = useState(false);
-  const [bookmarkStatus, setBookmarkStatus] = useState(false);
-
-  const selected = useApi(dummyPostResponse);
-
-  // response.find((post) => post._id === params.id);
-
-  // useEffect(() => {}, [likesStatus, bookmarkStatus]);
+  const [clapped, setClapped] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
+  const { id } = useParams();
+  if (!id) {
+    return <Navigate to="/404" />;
+  }
+  const response = useApi(getPost<IPostResponse>(id));
+  const navigate = useNavigate();
+  const auth = useAuth();
 
   function handleBookmarkClick() {
-    setBookmarkStatus(!bookmarkStatus);
+    if (auth?.user && id) {
+      if (bookmarked) {
+        removeBookmark({ id, token: auth?.user.token });
+      } else {
+        addBookmark({ id, token: auth?.user.token });
+      }
+
+      setBookmarked(!bookmarked);
+      return;
+    }
+
+    navigate("/login");
   }
 
   function handleLikesClick() {
-    setLikesStatus(!likesStatus);
-    // TODO: put?patch? 통신하여 likesStatus에 따라 증가/감소값 넘겨주기 (id건네주어서 해당 db값 변경)
-    // 참고: async function postTopic(evt) {
-    //   const response = await fetch('http://localhost:3000/topics/', {
-    //     method: 'PUT',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    // body: JSON.stringify({ _id: , likes: selected +-1 })
-    //   });
-    //   const result = await response.json();
-    //   return result;
-    // }
+    if (auth?.user && id) {
+      if (clapped) {
+        removeClap({ id, token: auth?.user.token });
+      } else {
+        addClap({ id, token: auth?.user.token });
+      }
+
+      setClapped(!clapped);
+      return;
+    }
+
+    navigate("/login");
+  }
+
+  if (response && !response.isOk) {
+    return <Navigate to="/" />;
   }
 
   return (
     <>
       <div className="details-header">
-        <h2 className="details-header__title">{selected?.post.title}</h2>
+        <h2 className="details-header__title">{response?.post.title}</h2>
         <div className="details-header__contents">
           <div className="details-header__subject">
-            {selected?.post.subject}
+            {response?.post.subject}
           </div>
-          <div className="details-header__author">{selected?.post.author}</div>
+          <div className="details-header__author">{response?.post.author}</div>
           <div className="details-header__created">
-            {formatToReadableTime(selected?.post.createdAt || "")}
+            {formatToReadableTime(response?.post.createdAt || "")}
           </div>
           <div className="details-header__views">
             <i className="icon-visibility" role="img" aria-label="조회 수" />
-            {selected?.post.views}
+            {response?.post.views}
           </div>
         </div>
       </div>
       <div className="details-body">
         <div className="details-body__article">
           <MarkdownViewer
-            value={selected?.post.contents || ""}
+            value={response?.post.contents || ""}
             className="details-body__content"
           />
         </div>
@@ -196,7 +235,7 @@ export function PostDetails() {
             type="button"
             className={formatClassName(
               "details-body__button",
-              bookmarkStatus && "details-body__button--activated"
+              bookmarked && "details-body__button--activated"
             )}
             onClick={handleBookmarkClick}
           >
@@ -204,7 +243,7 @@ export function PostDetails() {
               role="img"
               aria-label="북마크"
               className={`${
-                bookmarkStatus ? "icon-bookmark" : "icon-bookmark_outline"
+                bookmarked ? "icon-bookmark" : "icon-bookmark_outline"
               }`}
             />
           </button>
@@ -212,12 +251,12 @@ export function PostDetails() {
             type="button"
             className={formatClassName(
               "details-body__button",
-              likesStatus && "details-body__button--activated"
+              clapped && "details-body__button--activated"
             )}
             onClick={handleLikesClick}
           >
-            <span>{selected?.post.likes}</span>
-            <Clap activated={likesStatus} />
+            <span>{response?.post.likes}</span>
+            <Clap activated={clapped} />
           </button>
         </div>
       </div>

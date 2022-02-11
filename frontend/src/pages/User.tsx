@@ -1,8 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { useEffect, useState } from "react";
-import { Link, Navigate, Outlet, useParams } from "react-router-dom";
-import useApi from "../hooks/api";
-import { dummyUser } from "../api/dummy";
+import { Link, Navigate, Outlet } from "react-router-dom";
 import Button from "../components/Button";
 import { Input } from "../components/Input";
 import Navigation from "../components/Navigation";
@@ -20,8 +18,6 @@ export function UserInfo() {
   const { nickname, track, gitlab } = user;
   const isAuthorized = !user.authKey && !!user.gitlab;
 
-  const selectedUser = useApi(dummyUser);
-
   useEffect(() => {
     setName(user.name);
   }, [editMode]);
@@ -35,10 +31,7 @@ export function UserInfo() {
   return (
     <form className="user-info" onSubmit={handleSubmit}>
       <div className="user-info__image">
-        <img
-          src={selectedUser?.profile}
-          alt={`${selectedUser?.profile}님의 이미지`}
-        />
+        <img src={user.profile} alt={`${user.name}님의 이미지`} />
       </div>
       {!isAuthorized && (
         <div className="user-info__content">

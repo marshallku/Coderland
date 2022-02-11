@@ -4,8 +4,10 @@ import Button from "../components/Button";
 import { Input } from "../components/Input";
 import MarkdownEditor from "../components/MarkdownEditor";
 import Select from "../components/Select";
+import { useAuth } from "../hooks/auth";
 import formatClassName from "../utils/formatClassName";
 import toast from "../utils/toast";
+import { createGatherPost, createPost } from "../api";
 import "./Add.css";
 
 const MAX_TAGS_LENGTH = 5;
@@ -268,6 +270,8 @@ export default function Add() {
   const [tags, setTags] = useState<Array<string>>([]);
   const [content, setContent] = useState<string>("");
   const { subject = "chat", category = "study" } = useParams();
+  const auth = useAuth();
+  const isGather = subject === "gather";
 
   const subjects: Array<TSubject> = [
     "review",
@@ -288,12 +292,56 @@ export default function Add() {
   const categories: Array<TGatherCategory> = ["study", "code", "team"];
   const categoriesInKr = ["스터디", "모각코", "프로젝트"];
 
+  const handleSubmit = async () => {
+    if (!auth) {
+      navigate("/login");
+      return;
+    }
+
+    const { user } = auth;
+
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    const post = {
+      title,
+      content,
+      subject: subject as TSubject,
+    };
+
+    if (isGather) {
+      const postRequest = await createGatherPost(
+        { ...post, area, tags, category: category as TGatherCategory },
+        user.token
+      );
+
+      if (postRequest.isOk === false) {
+        toast(postRequest.msg || "글 작성에 실패했습니다.");
+        return;
+      }
+
+      navigate(`/gathers/${postRequest.gatherId}`);
+      return;
+    }
+
+    const postRequest = await createPost(post, user.token);
+
+    if (postRequest.isOk === false) {
+      toast(postRequest.msg || "글 작성에 실패했습니다.");
+      return;
+    }
+
+    navigate(`/posts/${postRequest.postId}`);
+  };
+
   return (
-    <div>
+    <div role="form">
       <div
         className={formatClassName(
           "editor__item",
-          subject === "gather" && "editor__item--gather"
+          isGather && "editor__item--gather"
         )}
       >
         <Select
@@ -309,7 +357,7 @@ export default function Add() {
               : navigate(`/add/${key}/${category}`)
           }
         />
-        {subject === "gather" && (
+        {isGather && (
           <Select
             id="category"
             list={categories.map((x, i) => ({
@@ -330,7 +378,7 @@ export default function Add() {
           setValue={setTitle}
         />
       </div>
-      {subject === "gather" && (
+      {isGather && (
         <>
           <div className="editor__item">
             <Input
@@ -354,7 +402,7 @@ export default function Add() {
         />
       </div>
       <div className="editor__item">
-        <Button value="제출하기" type="submit" />
+        <Button value="제출하기" type="submit" onClick={handleSubmit} />
       </div>
     </div>
   );

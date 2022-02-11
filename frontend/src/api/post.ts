@@ -21,7 +21,7 @@ export function getGatherPostList({
   page = 1,
   perPage,
 }: {
-  category?: "study" | "code" | "team";
+  category?: TGatherCategory;
   perPage?: number;
   page?: number;
 } = {}): Promise<IGatherPostListResponse | IFailResponse> {
@@ -32,9 +32,9 @@ export function getGatherPostList({
   );
 }
 
-export function getPost(
+export function getPost<T = IPostResponse | IGatherPostResponse>(
   id: string
-): Promise<IPostResponse | IGatherPostResponse | IFailResponse> {
+): Promise<T | IFailResponse> {
   return instance.get(`/posts/${id}`);
 }
 
@@ -45,7 +45,7 @@ export function createPost(
     subject: TSubject;
   },
   token: string
-) {
+): Promise<IPostModifyResponse | IFailResponse> {
   return instance.post("/posts", {
     headers: {
       "Content-Type": "application/json",
@@ -106,7 +106,7 @@ export function deletePost({
   });
 }
 
-export function addLike({
+export function addClap({
   id,
   token,
 }: {
@@ -120,7 +120,7 @@ export function addLike({
   });
 }
 
-export function removeLike({
+export function removeClap({
   id,
   token,
 }: {

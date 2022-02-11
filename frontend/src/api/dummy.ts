@@ -46,6 +46,7 @@ const tmpUser: IUser = {
   grade: 0,
   track: "SW 엔지니어 트랙 1기",
   gitlab: "https://kdt-gitlab.elice.io/marshallku",
+  token: "just_token",
 };
 
 const tmpUser2: IUser = {
@@ -56,6 +57,7 @@ const tmpUser2: IUser = {
   grade: 0,
   track: "SW 엔지니어 트랙 1기",
   gitlab: "https://kdt-gitlab.elice.io/marshallku",
+  token: "just_token",
 };
 
 const tmpComments: Array<IComment> = [
