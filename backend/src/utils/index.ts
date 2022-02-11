@@ -3,6 +3,7 @@ import parsePostBySubject from "./parse-post";
 import parseReply from "./parse-reply";
 import createAuthorName from "./create-author-name";
 import purifyHtml from "./purify-html";
+import createExcerpt from "./create-excerpt";
 
 export {
   asyncHandler,
@@ -10,4 +11,5 @@ export {
   parseReply,
   createAuthorName,
   purifyHtml,
+  createExcerpt,
 };

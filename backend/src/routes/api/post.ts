@@ -64,11 +64,12 @@ export default (app: Router) => {
     checkGrade,
     asyncHandler(async (req, res) => {
       const { user } = req;
-      const { title, contents, subject, category, area, tags, icon } = req.body;
+      const { title, contents, excerpt, subject, category, area, tags, icon } =
+        req.body;
       const postService = new PostService();
       const postId = await postService.createPost(
         user,
-        { title, contents: purifyHtml(contents), subject },
+        { title, contents: purifyHtml(contents), excerpt, subject },
         { category, area, tags, icon }
       );
       res.status(201).json({ isOk: true, postId });
@@ -83,11 +84,12 @@ export default (app: Router) => {
     checkPermission,
     asyncHandler(async (req, res) => {
       const { postId } = req.params;
-      const { title, contents, subject, category, area, tags, icon } = req.body;
+      const { title, contents, excerpt, subject, category, area, tags, icon } =
+        req.body;
       const postService = new PostService();
       await postService.updatePost(
         postId,
-        { title, contents: purifyHtml(contents), subject },
+        { title, contents: purifyHtml(contents), excerpt, subject },
         { category, area, tags, icon }
       );
       res.status(200).json({ isOk: true, postId });
