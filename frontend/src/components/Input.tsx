@@ -24,6 +24,7 @@ export function Input({
   name,
   pattern,
   readOnly,
+  hideLabelOnFocus,
   value,
   setValue,
   onKeyDown,
@@ -69,7 +70,13 @@ export function Input({
         }}
         onKeyDown={onKeyDown}
       />
-      <label htmlFor={id} className="input__label">
+      <label
+        htmlFor={id}
+        className={formatClassName(
+          "input__label",
+          hideLabelOnFocus && "input__label--hide"
+        )}
+      >
         {label}
         {required ? " *" : ""}
       </label>
@@ -86,6 +93,7 @@ export function Textarea({
   maxLength,
   minLength,
   wrap,
+  hideLabelOnFocus,
   value,
   setValue,
 }: ITextareaProps) {
@@ -131,7 +139,13 @@ export function Textarea({
         value={value}
         onChange={handleChange}
       />
-      <label htmlFor={id} className="input__label">
+      <label
+        htmlFor={id}
+        className={formatClassName(
+          "input__label",
+          hideLabelOnFocus && "input__label--hide"
+        )}
+      >
         {label}
         {required ? " *" : ""}
       </label>

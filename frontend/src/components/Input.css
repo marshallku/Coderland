@@ -17,10 +17,23 @@
   transition: transform 0.25s ease-in-out, font-size 0.25s ease-in-out;
 }
 
-.input__input:placeholder-shown:not(:focus) ~ .input__label {
+.input__label--hide {
+  font-size: 1rem;
+  transform: translate3d(1.05rem, 0.7rem, 0);
+  color: var(--gray-2);
+  opacity: 0;
+  transition: opacity 0.25s ease-in-out;
+}
+
+.input__input:placeholder-shown:not(:focus)
+  ~ .input__label:not(.input__label--hide) {
   font-size: 1rem;
   transform: translate3d(0.75rem, 0.7rem, 0);
   color: var(--gray-2);
+}
+
+.input__input:placeholder-shown:not(:focus) ~ .input__label--hide {
+  opacity: 1;
 }
 
 .input__input {
