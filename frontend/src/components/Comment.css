@@ -1,21 +1,18 @@
 .comment-form__button-wrap {
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
   margin-top: 8px;
-}
-
-.comment-wrap {
-  border-bottom: 1px solid var(--gray-5);
 }
 
 .comment {
   padding: 12px 20px;
   line-height: 1.5rem;
+  border-bottom: 1px solid var(--gray-5);
 }
 
 .comment--reply {
-  margin-left: 20px;
-  border-top: 1px solid var(--gray-5);
+  padding: 12px 20px 12px 40px;
+  background-color: var(--multipurpose);
 }
 
 .comment__author-wrap,
@@ -50,11 +47,12 @@
   margin-right: 4px;
 }
 
-.comment__edit-button--on,
-.comment__reply--on {
-  color: var(--primary);
-}
-
 .comment-form--reply {
   padding: 12px 20px;
+  border-bottom: 1px solid var(--gray-5);
+}
+
+.comment__post-author {
+  margin-left: 12px;
+  color: var(--red-base);
 }

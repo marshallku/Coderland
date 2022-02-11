@@ -1,73 +1,93 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CommentLikeBtn from "./CommentLikeBtn";
 import Reply from "./CommentReply";
 import { formatToReadableTime } from "../utils/time";
 import "./Comment.css";
-import formatClassName from "../utils/formatClassName";
+
+const REPLY_LIMIT = 3;
 
 export default function Comment({
-  contents,
-  author,
-  createdAt,
-  likes,
-  replies,
-}: IComment) {
-  const [editMode, setEditMode] = useState(false);
-  const [replyMode, setReplyMode] = useState(false);
+  comment: { _id, contents, author, isPostAuthor, createdAt, likes, replies },
+  commentList,
+  setCommentList,
+  focused,
+  setFocused,
+}: ICommentProps) {
+  const [mode, setMode] = useState<TCommentMode>("read");
   const [editedText, setEditedText] = useState(contents);
   const [replyText, setReplyText] = useState("");
+  const [startIdx, setStartIdx] = useState(0);
+  const [likesCount, setLikesCount] = useState(likes);
+  const [isLiked, setIsLiked] = useState(false);
 
-  const toggleEditMode = () => {
-    setEditMode((prev) => !prev);
-    setEditedText(contents);
-  };
+  useEffect(() => {
+    setStartIdx(Math.max(replies.length - REPLY_LIMIT, 0));
+  }, [replies]);
 
-  const toggleReplyMode = () => {
-    setReplyMode((prev) => !prev);
-    setReplyText("");
-  };
-
-  const handleEditSubmit = (event: React.FormEvent) => {
+  const handleEditSubmit = (event: React.FormEvent, id: string) => {
     event.preventDefault();
     if (editedText) {
       // TODO: PUT Comment
-      // const editedComment = {
-      //   contents: editedText,
-      //   updatedAt: new Date(Date.now()).toISOString(),
-      // };
-      toggleEditMode();
+      setCommentList(
+        commentList.map((comment) =>
+          comment._id === id ? { ...comment, contents: editedText } : comment
+        )
+      );
+      setMode("read");
     }
   };
 
-  const handleReplySubmit = (event: React.FormEvent) => {
+  const handleDeleteClick = (id: string) => {
+    setCommentList(commentList.filter((comment) => comment._id !== id));
+  };
+
+  const handleReplySubmit = (event: React.FormEvent, id: string) => {
     event.preventDefault();
     if (replyText) {
       // TODO: POST Reply
-      // const reply: ICommentReply = {
-      //   _id: String(Date.now()),
-      //   contents: replyText,
-      //   author: "익명의 도도새",
-      //   isPostAuthor: false,
-      //   createdAt: new Date(Date.now()).toISOString(),
-      //   updatedAt: new Date(Date.now()).toISOString(),
-      // };
-      toggleReplyMode();
+      const newReply: ICommentReply = {
+        _id: String(Date.now()),
+        contents: replyText,
+        author: "익명의 도도새",
+        isPostAuthor: false,
+        createdAt: new Date(Date.now()).toISOString(),
+        updatedAt: new Date(Date.now()).toISOString(),
+      };
+
+      setCommentList(
+        commentList.map((comment) =>
+          comment._id === id
+            ? { ...comment, replies: [...replies, newReply] }
+            : comment
+        )
+      );
+      setReplyText("");
+      setMode("read");
     }
   };
 
+  const handleEditClick = (id: string) => {
+    setFocused(id);
+    setMode(mode === "edit" ? "read" : "edit");
+  };
+
+  const handleReplyClick = (id: string) => {
+    setFocused(id);
+    setMode(mode === "reply" ? "read" : "reply");
+  };
+
   return (
-    <div className="comment-wrap">
+    <>
       <div className="comment">
         <div className="comment__author-wrap">
           <span className="comment__author">{author}</span>
+          {isPostAuthor && <span className="comment__post-author">작성자</span>}
+
           <button
-            className={formatClassName(
-              "comment__edit-button",
-              editMode && "comment__edit--on"
-            )}
+            className="comment__edit-button"
             type="button"
             aria-label="댓글 수정 버튼"
-            onClick={toggleEditMode}
+            onClick={() => handleEditClick(_id)}
           >
             <i className="icon-create" />
             수정
@@ -76,15 +96,16 @@ export default function Comment({
             className="comment__delete-button"
             type="button"
             aria-label="댓글 삭제 버튼"
+            onClick={() => handleDeleteClick(_id)}
           >
             <i className="icon-clear" />
             삭제
           </button>
         </div>
 
-        {editMode ? (
+        {mode === "edit" && focused === _id ? (
           <form
-            onSubmit={handleEditSubmit}
+            onSubmit={(event) => handleEditSubmit(event, _id)}
             className="comment-form comment-form--edit"
           >
             <input
@@ -99,7 +120,7 @@ export default function Comment({
               </button>
               <button
                 type="button"
-                onClick={toggleEditMode}
+                onClick={() => setMode("read")}
                 className="comment-form__button comment-form__button--cancel"
               >
                 취소
@@ -113,14 +134,16 @@ export default function Comment({
               <span className="comment__date">
                 {formatToReadableTime(createdAt)}
               </span>
-              <CommentLikeBtn likes={likes} />
+              <CommentLikeBtn
+                likesCount={likesCount}
+                setLikesCount={setLikesCount}
+                isLiked={isLiked}
+                setIsLiked={setIsLiked}
+              />
               <button
-                className={formatClassName(
-                  "comment__edit",
-                  replyMode && "comment__reply--on"
-                )}
+                className="comment__reply-button"
                 type="button"
-                onClick={toggleReplyMode}
+                onClick={() => handleReplyClick(_id)}
               >
                 <i className="icon-chat" />
                 답글
@@ -130,9 +153,9 @@ export default function Comment({
         )}
       </div>
 
-      {replyMode ? (
+      {mode === "reply" && focused === _id && (
         <form
-          onSubmit={handleReplySubmit}
+          onSubmit={(event) => handleReplySubmit(event, _id)}
           className="comment-form comment-form--reply"
         >
           <input
@@ -148,39 +171,36 @@ export default function Comment({
             </button>
             <button
               type="button"
-              onClick={toggleReplyMode}
+              onClick={() => setMode("read")}
               className="comment-form__button comment-form__button--cancel"
             >
               취소
             </button>
           </div>
         </form>
-      ) : (
-        ""
       )}
 
-      {replies.length > 0
-        ? replies.map(
-            ({
-              _id: replyId,
-              contents: replyContents,
-              author: replyAuthor,
-              isPostAuthor,
-              createdAt: replyCreatedAt,
-              updatedAt: replyUpdatedAt,
-            }: ICommentReply) => (
-              <Reply
-                key={replyId}
-                _id={replyId}
-                contents={replyContents}
-                author={replyAuthor}
-                isPostAuthor={isPostAuthor}
-                createdAt={replyCreatedAt}
-                updatedAt={replyUpdatedAt}
-              />
-            )
-          )
-        : ""}
-    </div>
+      {startIdx > 0 && (
+        <button
+          type="button"
+          className="comment__view-more comment__view-more--reply"
+          onClick={() => setStartIdx(0)}
+        >
+          답글 {startIdx}개 더 보기
+        </button>
+      )}
+
+      {replies.length > 0 &&
+        replies
+          .slice(startIdx, replies.length)
+          .map((reply) => (
+            <Reply
+              key={reply._id}
+              reply={reply}
+              focused={focused}
+              setFocused={setFocused}
+            />
+          ))}
+    </>
   );
 }
