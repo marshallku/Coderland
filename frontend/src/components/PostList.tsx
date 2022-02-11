@@ -1,16 +1,21 @@
 import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
-import { dummyGathersResponse, dummyPostsResponse } from "../api/dummy";
 import Pagination from "./Pagination";
 import PostCardItem, { PostCardItemSkeleton } from "./PostCardItem";
 import PostListItem, { PostListItemSkeleton } from "./PostListItem";
 import parseQuery from "../utils/url";
+import { getGatherPostList, getPostList } from "../api";
+import toast from "../utils/toast";
 import "./PostList.css";
 
 const USES_CARD_DESIGN = ["gather", "study", "code", "team"];
 const SKELETONS_LENGTH = 8;
 
-export default function PostList({ subject, preventPaginate }: IPostListProps) {
+export default function PostList({
+  subject,
+  limit,
+  preventPaginate,
+}: IPostListProps) {
   const { search } = useLocation();
   const { page } = parseQuery(search);
   const [response, setResponse] = useState<
@@ -25,9 +30,23 @@ export default function PostList({ subject, preventPaginate }: IPostListProps) {
 
   useEffect(() => {
     async function getCardOrListPosts() {
+      const gatherSubject = subject.replace("gather", "");
       const postsResponse = await (usesCardDesign
-        ? dummyGathersResponse
-        : dummyPostsResponse);
+        ? getGatherPostList({
+            category: gatherSubject as TGatherCategory,
+            perPage: limit,
+            page: currentPage,
+          })
+        : getPostList({
+            subject,
+            perPage: limit,
+            page: currentPage,
+          }));
+
+      if (postsResponse.isOk === false) {
+        toast("글 목록을 불러오는 데 실패했습니다!");
+        return;
+      }
 
       setResponse(postsResponse);
     }

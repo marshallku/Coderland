@@ -61,5 +61,8 @@ export default function createInstance(
     async put(resource: string, init: RequestInit = {}) {
       return sendRequest(resource, { ...init, method: "PUT" });
     },
+    async patch(resource: string, init: RequestInit = {}) {
+      return sendRequest(resource, { ...init, method: "PATCH" });
+    },
   };
 }

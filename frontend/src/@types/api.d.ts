@@ -9,7 +9,7 @@ declare type TSubject =
   | "study"
   | "code"
   | "team";
-declare type TGatherCategory = "study" | "code" | "team";
+declare type TGatherCategory = "gather" | "study" | "code" | "team";
 
 interface IUser {
   googleId: string;
@@ -19,6 +19,7 @@ interface IUser {
   grade: 0;
   track: string;
   gitlab: string;
+  token: string;
   authKey?: string;
 }
 

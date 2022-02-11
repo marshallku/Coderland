@@ -2,7 +2,7 @@ import createInstance from "../utils/fetcher";
 
 const instance = createInstance({
   // FIXME: Add URL
-  baseUrl: "",
+  baseUrl: "/api",
 });
 
 export default instance;
