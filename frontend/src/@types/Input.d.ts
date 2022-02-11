@@ -1,5 +1,4 @@
 interface IInputBoxProps {
-  id: string;
   hideLabelOnFocus?: boolean;
   label?: string;
   setValue?: React.Dispatch<React.SetStateAction<string>>;
