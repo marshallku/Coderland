@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { getMyInfo } from "../api/user";
-import parseQuery from "../utils/url";
+import parseCookie from "../utils/cookie";
 
 const authContext = createContext<IAuth | null>(null);
 
@@ -53,18 +53,21 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
 }
 
 function saveUser(token: string) {
+  if (!token) {
+    return;
+  }
+
   localStorage.setItem("token", token);
 }
 
 export function tryLoginOnLoad() {
-  const { search } = window.location;
-  if (!search.includes("code=")) {
+  const savedToken = localStorage.getItem("token");
+
+  if (savedToken || !document.cookie) {
     return;
   }
 
-  const { code } = parseQuery(search);
+  const { accessToken } = parseCookie();
 
-  if (code) {
-    saveUser(code);
-  }
+  saveUser(accessToken);
 }

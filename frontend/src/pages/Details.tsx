@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import useApi from "../hooks/api";
 import { formatToReadableTime } from "../utils/time";
@@ -56,6 +56,15 @@ export function GatherDetails() {
 
     navigate("/login");
   }
+
+  useEffect(() => {
+    if (!response || !response.isOk) {
+      return;
+    }
+
+    setBookmarked(!!response.gather.isBookmarked);
+    setClapped(!!response.gather.isLiked);
+  }, [response]);
 
   if (response && !response.isOk) {
     return <Navigate to="/" />;
@@ -155,7 +164,7 @@ export function GatherDetails() {
           </button>
         </div>
       </div>
-      <Comments />
+      {response && <Comments postId={response.gather._id} />}
     </>
   );
 }
@@ -200,6 +209,15 @@ export function PostDetails() {
 
     navigate("/login");
   }
+
+  useEffect(() => {
+    if (!response || !response.isOk) {
+      return;
+    }
+
+    setBookmarked(!!response.post.isBookmarked);
+    setClapped(!!response.post.isLiked);
+  }, [response]);
 
   if (response && !response.isOk) {
     return <Navigate to="/" />;
@@ -260,7 +278,7 @@ export function PostDetails() {
           </button>
         </div>
       </div>
-      <Comments />
+      {response && <Comments postId={response.post._id} />}
     </>
   );
 }

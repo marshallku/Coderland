@@ -18,6 +18,7 @@ import Dev from "./pages/Dev";
 import Recruit from "./pages/Recruit";
 import Chat from "./pages/Chat";
 import Authorize from "./pages/Authorize";
+import Login from "./pages/Login";
 
 export default function App() {
   return (
@@ -50,6 +51,7 @@ export default function App() {
                 </Route>
                 <Route path="/posts/:id" element={<PostDetails />} />
                 <Route path="/gathers/:id" element={<GatherDetails />} />
+                <Route path="/login" element={<Login />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

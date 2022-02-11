@@ -1,14 +1,23 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/auth";
+import toast from "../utils/toast";
 import CommentLikeBtn from "./CommentLikeBtn";
 import Reply from "./CommentReply";
 import { formatToReadableTime } from "../utils/time";
 import "./Comment.css";
+import {
+  createReply,
+  deleteComment,
+  getCommentList,
+  updateComment,
+} from "../api";
 
 const REPLY_LIMIT = 3;
 
 export default function Comment({
+  postId,
   comment: { _id, contents, author, isPostAuthor, createdAt, likes, replies },
-  commentList,
   setCommentList,
   focused,
   setFocused,
@@ -19,60 +28,114 @@ export default function Comment({
   const [startIdx, setStartIdx] = useState(0);
   const [likesCount, setLikesCount] = useState(likes);
   const [isLiked, setIsLiked] = useState(false);
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+  const updateCommentList = async () => {
+    const response = await getCommentList({ postId });
+
+    if (response.isOk === false) {
+      toast("댓글을 불러오는 데 실패했습니다");
+      return;
+    }
+
+    setCommentList(response.comments);
+  };
 
   useEffect(() => {
     setStartIdx(Math.max(replies.length - REPLY_LIMIT, 0));
   }, [replies]);
 
-  const handleEditSubmit = (event: React.FormEvent, id: string) => {
+  const handleEditSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (editedText) {
-      // TODO: PUT Comment
-      setCommentList(
-        commentList.map((comment) =>
-          comment._id === id ? { ...comment, contents: editedText } : comment
-        )
-      );
-      setMode("read");
+    const token = auth?.user?.token;
+
+    if (!token) {
+      navigate("/login");
+      return;
     }
+
+    if (!editedText) {
+      toast("댓글을 입력해주세요!");
+      return;
+    }
+
+    const editCommentResponse = await updateComment({
+      contents: editedText,
+      commentId: _id,
+      postId,
+      token,
+    });
+
+    if (editCommentResponse.isOk === false) {
+      toast("댓글을 수정하는 데 실패했습니다");
+      return;
+    }
+
+    updateCommentList();
+    setMode("read");
   };
 
-  const handleDeleteClick = (id: string) => {
-    setCommentList(commentList.filter((comment) => comment._id !== id));
+  const handleDeleteClick = async () => {
+    const token = auth?.user?.token;
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    const deleteCommentResponse = await deleteComment({
+      commentId: _id,
+      postId,
+      token,
+    });
+
+    if (deleteCommentResponse.isOk === false) {
+      toast("댓글을 삭제하는 데 실패했습니다");
+      return;
+    }
+
+    updateCommentList();
   };
 
-  const handleReplySubmit = (event: React.FormEvent, id: string) => {
+  const handleReplySubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (replyText) {
-      // TODO: POST Reply
-      const newReply: ICommentReply = {
-        _id: String(Date.now()),
-        contents: replyText,
-        author: "익명의 도도새",
-        isPostAuthor: false,
-        createdAt: new Date(Date.now()).toISOString(),
-        updatedAt: new Date(Date.now()).toISOString(),
-      };
+    const token = auth?.user?.token;
 
-      setCommentList(
-        commentList.map((comment) =>
-          comment._id === id
-            ? { ...comment, replies: [...replies, newReply] }
-            : comment
-        )
-      );
-      setReplyText("");
-      setMode("read");
+    if (!token) {
+      navigate("/login");
+      return;
     }
+
+    if (!replyText) {
+      toast("댓글을 입력해주세요!");
+      return;
+    }
+
+    const newCommentResponse = await createReply({
+      contents: replyText,
+      commentId: _id,
+      postId,
+      token,
+    });
+
+    if (newCommentResponse.isOk === false) {
+      toast("댓글을 작성하는 데 실패했습니다");
+      return;
+    }
+
+    updateCommentList();
+    setReplyText("");
+    setMode("read");
   };
 
-  const handleEditClick = (id: string) => {
-    setFocused(id);
+  const handleEditClick = () => {
+    setFocused(_id);
     setMode(mode === "edit" ? "read" : "edit");
   };
 
-  const handleReplyClick = (id: string) => {
-    setFocused(id);
+  const handleReplyClick = () => {
+    setFocused(_id);
     setMode(mode === "reply" ? "read" : "reply");
   };
 
@@ -87,7 +150,7 @@ export default function Comment({
             className="comment__edit-button"
             type="button"
             aria-label="댓글 수정 버튼"
-            onClick={() => handleEditClick(_id)}
+            onClick={handleEditClick}
           >
             <i className="icon-create" />
             수정
@@ -96,7 +159,7 @@ export default function Comment({
             className="comment__delete-button"
             type="button"
             aria-label="댓글 삭제 버튼"
-            onClick={() => handleDeleteClick(_id)}
+            onClick={handleDeleteClick}
           >
             <i className="icon-clear" />
             삭제
@@ -105,7 +168,7 @@ export default function Comment({
 
         {mode === "edit" && focused === _id ? (
           <form
-            onSubmit={(event) => handleEditSubmit(event, _id)}
+            onSubmit={handleEditSubmit}
             className="comment-form comment-form--edit"
           >
             <input
@@ -143,7 +206,7 @@ export default function Comment({
               <button
                 className="comment__reply-button"
                 type="button"
-                onClick={() => handleReplyClick(_id)}
+                onClick={handleReplyClick}
               >
                 <i className="icon-chat" />
                 답글
@@ -155,7 +218,7 @@ export default function Comment({
 
       {mode === "reply" && focused === _id && (
         <form
-          onSubmit={(event) => handleReplySubmit(event, _id)}
+          onSubmit={handleReplySubmit}
           className="comment-form comment-form--reply"
         >
           <input
@@ -196,9 +259,12 @@ export default function Comment({
           .map((reply) => (
             <Reply
               key={reply._id}
+              postId={postId}
+              parentId={_id}
               reply={reply}
               focused={focused}
               setFocused={setFocused}
+              updateCommentList={updateCommentList}
             />
           ))}
     </>

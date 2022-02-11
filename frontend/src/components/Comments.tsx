@@ -1,49 +1,77 @@
 import { useEffect, useState } from "react";
-import { dummyCommentsResponse } from "../api/dummy";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/auth";
+import { createComment, getCommentList } from "../api";
 import { scrollTo } from "../animation/scroll";
 import Comment from "./Comment";
+import toast from "../utils/toast";
 import "./Comments.css";
 
 const COMMENT_LIMIT = 10;
 
-export default function Comments() {
+export default function Comments({ postId }: ICommentsProps) {
   const [commentText, setCommentText] = useState("");
   const [commentList, setCommentList] = useState<IComment[]>([]);
   const [startIdx, setStartIdx] = useState(0);
   const [focused, setFocused] = useState("");
+  const auth = useAuth();
+  const navigate = useNavigate();
 
   // TODO: GET Comment
   useEffect(() => {
-    const getComments = async () => {
-      const response = await dummyCommentsResponse;
-      setCommentList(response?.comments || []);
+    const init = async () => {
+      const response = await getCommentList({ postId });
+
+      if (response.isOk === false) {
+        toast("댓글을 불러오는 데 실패했습니다");
+        return;
+      }
+
+      setCommentList(response.comments);
     };
-    getComments();
+    init();
   }, []);
 
   useEffect(() => {
     setStartIdx(Math.max(commentList.length - COMMENT_LIMIT, 0));
   }, [commentList]);
 
-  const handleCommentSubmit = (event: React.FormEvent) => {
+  const handleCommentSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (commentText) {
-      // TODO: POST Comment
-      const newComment = {
-        _id: String(Date.now()),
-        contents: commentText,
-        author: "익명의 도도새",
-        postId: "",
-        likes: 0,
-        isPostAuthor: false,
-        createdAt: new Date(Date.now()).toISOString(),
-        updatedAt: new Date(Date.now()).toISOString(),
-        replies: [],
-      };
-      setCommentList([...commentList, newComment]);
-      setCommentText("");
-      scrollTo(document.body.scrollHeight);
+    const token = auth?.user?.token;
+
+    if (!token) {
+      navigate("/login");
+      return;
     }
+
+    if (!commentText) {
+      toast("댓글을 입력해주세요!");
+      return;
+    }
+
+    const newCommentResponse = await createComment({
+      contents: commentText,
+      postId,
+      token,
+    });
+
+    if (newCommentResponse.isOk === false) {
+      toast("댓글을 작성하는 데 실패했습니다");
+      return;
+    }
+
+    const response = await getCommentList({ postId });
+
+    if (response.isOk === false) {
+      toast("댓글을 불러오는 데 실패했습니다");
+      return;
+    }
+
+    setCommentList(response.comments);
+    setCommentText("");
+    // FIXME: 스크롤 위치 수정
+    scrollTo(document.body.scrollHeight);
   };
 
   return (
@@ -79,9 +107,9 @@ export default function Comments() {
 
       {commentList.slice(startIdx, commentList.length).map((comment) => (
         <Comment
+          postId={postId}
           key={comment._id}
           comment={comment}
-          commentList={commentList}
           setCommentList={setCommentList}
           focused={focused}
           setFocused={setFocused}

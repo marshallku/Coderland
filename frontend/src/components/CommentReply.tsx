@@ -1,20 +1,75 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { deleteReply, updateReply } from "../api";
+import { useAuth } from "../hooks/auth";
 import { formatToReadableTime } from "../utils/time";
+import toast from "../utils/toast";
 
 export default function Reply({
+  parentId,
+  postId,
   reply: { _id, contents, author, isPostAuthor, createdAt },
   focused,
   setFocused,
+  updateCommentList,
 }: IReplyProps) {
   const [mode, setMode] = useState<TCommentMode>("read");
   const [editedText, setEditedText] = useState(contents);
+  const navigate = useNavigate();
+  const auth = useAuth();
 
-  const handleEditSubmit = (event: React.FormEvent) => {
+  const handleEditSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (editedText) {
-      // TODO: PUT Reply
-      setMode("read");
+    const token = auth?.user?.token;
+
+    if (!token) {
+      navigate("/login");
+      return;
     }
+
+    if (!editedText) {
+      toast("댓글을 입력해주세요!");
+      return;
+    }
+
+    const editCommentResponse = await updateReply({
+      contents: editedText,
+      parentId,
+      commentId: _id,
+      postId,
+      token,
+    });
+
+    if (editCommentResponse.isOk === false) {
+      toast("댓글을 수정하는 데 실패했습니다");
+      return;
+    }
+
+    updateCommentList();
+    setMode("read");
+  };
+
+  const handleDeleteClick = async () => {
+    const token = auth?.user?.token;
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    const deleteCommentResponse = await deleteReply({
+      postId,
+      parentId,
+      commentId: _id,
+      token,
+    });
+
+    if (deleteCommentResponse.isOk === false) {
+      toast("댓글을 삭제하는 데 실패했습니다");
+      return;
+    }
+
+    updateCommentList();
   };
 
   const handleEditClick = (id: string) => {
@@ -41,6 +96,7 @@ export default function Reply({
           className="comment__delete-button"
           type="button"
           aria-label="답글 삭제 버튼"
+          onClick={handleDeleteClick}
         >
           <i className="icon-clear" />
           삭제

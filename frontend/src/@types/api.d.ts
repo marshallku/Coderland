@@ -32,6 +32,8 @@ interface IPost {
   likes: number;
   author: string;
   commentCount: number;
+  isBookmarked?: boolean;
+  isLiked?: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -48,6 +50,8 @@ interface IGatherPost {
   likes: number;
   views: number;
   commentCount: number;
+  isBookmarked?: boolean;
+  isLiked?: boolean;
   createdAt: string;
   updatedAt: string;
   isCompleted: boolean;
