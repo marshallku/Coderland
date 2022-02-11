@@ -61,9 +61,9 @@ export default function GlobalNavigationBar({
             }
           />
         ) : (
-          <Link className="gnb__sign-in" to="/api/auth/google">
+          <a className="gnb__sign-in" href="/api/auth/google">
             로그인
-          </Link>
+          </a>
         )}
         <button
           type="button"
