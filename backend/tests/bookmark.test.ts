@@ -7,7 +7,9 @@ import configs from "../src/config";
 import { createToken } from "../src/utils/jwt";
 
 describe("북마크 테스트", () => {
-  const connection = db.createConnection(`${configs.mongoUri}/coderland`);
+  const connection = db.createConnection(
+    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+  );
   let token = "Bearer ";
   let postId: string;
 
@@ -104,7 +106,9 @@ describe("북마크 테스트", () => {
 });
 
 describe("북마크 테스트 포스트 먼저 삭제", () => {
-  const connection = db.createConnection(`${configs.mongoUri}/coderland`);
+  const connection = db.createConnection(
+    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+  );
   let token = "Bearer ";
   let postId: string;
 

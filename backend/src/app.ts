@@ -17,11 +17,20 @@ const logger = pino({
 
 passportInit();
 
-const { mongoUri, port } = configs;
+const { mongoHost, mongoPort, mongoDBName, port } = configs;
 
-mongoose.connect(`${mongoUri}/coderland`, () => {
-  logger.info("DB connected");
-});
+mongoose.connect(
+  `mongodb://${mongoHost}:${mongoPort}/${mongoDBName}`,
+  (error) => {
+    if (error) {
+      logger.info(error);
+    } else {
+      logger.info(
+        `DB connected at mongodb://${mongoHost}:${mongoPort}/${mongoDBName}`
+      );
+    }
+  }
+);
 
 app.use(cors());
 app.use(express.json());

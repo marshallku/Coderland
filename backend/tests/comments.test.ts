@@ -7,7 +7,9 @@ import configs from "../src/config";
 import { createToken } from "../src/utils/jwt";
 
 describe("댓글 통합 테스트", () => {
-  const connection = db.createConnection(`${configs.mongoUri}/coderland`);
+  const connection = db.createConnection(
+    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+  );
   let token = "Bearer ";
   let notAccessToken = "Bearer ";
   let postId: string;
@@ -265,7 +267,9 @@ describe("댓글 통합 테스트", () => {
 });
 
 describe("답글 있는 댓글 삭제 테스트", () => {
-  const connection = db.createConnection(`${configs.mongoUri}/coderland`);
+  const connection = db.createConnection(
+    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+  );
   let token = "Bearer ";
   let postId: string;
   let commentId: string;

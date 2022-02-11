@@ -41,7 +41,7 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
     },
     excerpt: {
       type: String,
-      required: true,
+      default: "",
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
