@@ -24,7 +24,7 @@ staging-frontend:
     - npm ci
   script:
     # Build
-    - npm run build
+    - npm run stage-build
     # Send dist folder via scp
     - scp -P "$STAGING_SERVER_PORT" -r dist "$STAGING_SERVER_USER"@"$STAGING_SERVER_IP":/var/www
     # Run bash script
