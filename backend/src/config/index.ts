@@ -4,6 +4,7 @@ dotenv.config();
 
 export default {
   port: Number(process.env.PORT) || 3000,
+  domain: process.env.DOMAIN,
   mongoHost: process.env.MONGO_HOST,
   mongoPort: process.env.MONGO_PORT,
   mongoDBName: process.env.MONGO_DBNAME,

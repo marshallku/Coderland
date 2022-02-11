@@ -5,12 +5,12 @@ import {
 import { User } from "../../models/User";
 import configs from "../../config";
 
-const { clientID, clientSecret, port } = configs;
+const { clientID, clientSecret, domain } = configs;
 
 const opts: StrategyOptions = {
   clientID,
   clientSecret,
-  callbackURL: `http://localhost:${port}/api/auth/google/callback`,
+  callbackURL: `${domain}/api/auth/google/callback`,
 };
 
 export default new GoogleStrategy(
