@@ -1,12 +1,14 @@
-interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface IInputBoxProps {
   id: string;
+  hideLabelOnFocus?: boolean;
   label?: string;
   setValue?: React.Dispatch<React.SetStateAction<string>>;
 }
 
+interface IInputProps
+  extends React.InputHTMLAttributes<HTMLInputElement>,
+    IInputBoxProps {}
+
 interface ITextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  id: string;
-  label?: string;
-  setValue?: React.Dispatch<React.SetStateAction<string>>;
-}
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+    IInputBoxProps {}
