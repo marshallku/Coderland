@@ -9,7 +9,7 @@ export default function PostListItem({
   commentCount,
   likes,
   views,
-}: Omit<IPost, "contents" | "subject">) {
+}: IPostInList) {
   return (
     <article key={_id} className="list-item">
       <Link className="list-item__link" to={`/posts/${_id}`}>

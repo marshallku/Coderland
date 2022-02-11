@@ -5,13 +5,13 @@ import "./PostCardItem.css";
 export default function PostCardItem({
   _id,
   title,
-  contents,
+  excerpt,
   area,
   members,
   icon,
   tags,
   isCompleted,
-}: IGatherPost) {
+}: IGatherPostInList) {
   return (
     <article
       key={_id}
@@ -30,7 +30,7 @@ export default function PostCardItem({
           >{`모집${isCompleted ? "완료" : "중"}`}</span>
         </div>
         <h2 className="card-item__title">{title}</h2>
-        <p className="card-item__contents">{contents}</p>
+        <p className="card-item__contents">{excerpt}</p>
         <i
           className={`card-item__icon icon-${icon}`}
           role="img"

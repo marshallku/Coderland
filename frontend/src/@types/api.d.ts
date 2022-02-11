@@ -35,7 +35,9 @@ interface IPost {
   updatedAt: string;
 }
 
-type TPostInList = Array<Omit<IPost, "contents" | "subject">>;
+interface IPostInList extends Omit<IPost, "contents" | "subject"> {
+  excerpt: string;
+}
 
 interface IGatherPost {
   _id: string;
@@ -53,6 +55,10 @@ interface IGatherPost {
   tags: Array<string>;
   members: Array<IUser>;
   icon: string;
+}
+
+interface IGatherPostInList extends Omit<IGatherPost, "contents"> {
+  excerpt: string;
 }
 
 interface ICommentReply {
@@ -94,7 +100,7 @@ interface IFailResponse {
 // Api Response
 // Post
 interface IPostListResponse extends ISuccessResponse {
-  posts: Array<Omit<IPost, "contents" | "subject">>;
+  posts: Array<IPostInList>;
   pagination: IPagination;
 }
 
@@ -108,7 +114,7 @@ interface IPostModifyResponse extends ISuccessResponse {
 
 // Gather Post
 interface IGatherPostListResponse extends ISuccessResponse {
-  posts: Array<IGatherPost>;
+  posts: Array<IGatherPostInList>;
   pagination: IPagination;
 }
 

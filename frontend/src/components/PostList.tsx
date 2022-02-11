@@ -37,12 +37,10 @@ export default function PostList({ subject, preventPaginate }: IPostListProps) {
   const ListOfElements = () => {
     if (response) {
       if (usesCardDesign) {
-        return (response.posts as Array<IGatherPost>).map(PostCardItem);
+        return (response.posts as Array<IGatherPostInList>).map(PostCardItem);
       }
 
-      return (response.posts as Array<Omit<IPost, "contents" | "subject">>).map(
-        PostListItem
-      );
+      return (response.posts as Array<IPostInList>).map(PostListItem);
     }
 
     const tmpArray = Array.from({ length: SKELETONS_LENGTH });

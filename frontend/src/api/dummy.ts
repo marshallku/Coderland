@@ -119,10 +119,11 @@ const tmpPagination: IPagination = {
   lastPage: 9,
 };
 
-const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
+const tmpPostList: Array<IPostInList> = [
   {
     _id: "60f6af6812485f28ad1876e7",
     title: "First Post",
+    excerpt: "some text",
     views: 30,
     likes: 20,
     commentCount: 5,
@@ -133,6 +134,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f9475b934f247bad759a2d",
     title: "Second Post",
+    excerpt: "some text",
     views: 40,
     likes: 30,
     commentCount: 5,
@@ -143,6 +145,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f6af6812132485f28ad1876e7",
     title: "First Post",
+    excerpt: "some text",
     views: 30,
     likes: 20,
     commentCount: 5,
@@ -153,6 +156,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f9475b934f123247bad759a2d",
     title: "Second Post",
+    excerpt: "some text",
     views: 40,
     likes: 30,
     commentCount: 5,
@@ -163,6 +167,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f6af6812412385f28ad1876e7",
     title: "First Post",
+    excerpt: "some text",
     views: 30,
     likes: 20,
     commentCount: 5,
@@ -173,6 +178,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f9475b934f21312247bad759a2d",
     title: "Second Post",
+    excerpt: "some text",
     views: 40,
     likes: 30,
     commentCount: 5,
@@ -183,6 +189,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f6af681241232185f28ad1876e7",
     title: "First Post",
+    excerpt: "some text",
     views: 30,
     likes: 20,
     commentCount: 5,
@@ -193,6 +200,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f9475122133b934f247bad759a2d",
     title: "Second Post",
+    excerpt: "some text",
     views: 40,
     likes: 30,
     commentCount: 5,
@@ -203,6 +211,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f6af6812132233485f28ad1876e7",
     title: "First Post",
+    excerpt: "some text",
     views: 30,
     likes: 20,
     commentCount: 5,
@@ -213,6 +222,7 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   {
     _id: "60f9475b934f247b32ad759a2d",
     title: "Second Post",
+    excerpt: "some text",
     views: 40,
     likes: 30,
     commentCount: 5,
@@ -222,11 +232,11 @@ const tmpPostList: Array<Omit<IPost, "contents" | "subject">> = [
   },
 ];
 
-const tmpGatherList: Array<IGatherPost> = [
+const tmpGatherList: Array<IGatherPostInList> = [
   {
     _id: "611b6748bfc2290fd11ec5a5",
     title: "모집 완료 안 된 글",
-    contents: "도도새와 함께하는 사이드 프로젝트",
+    excerpt: "도도새와 함께하는 사이드 프로젝트",
     author: "도도새",
     likes: 30,
     views: 40,
@@ -243,7 +253,7 @@ const tmpGatherList: Array<IGatherPost> = [
   {
     _id: "611e6748bff22900d11ec5a5",
     title: "모집은 안료됐으나 사람은 꽉 안 찬 글",
-    contents: "체셔 고양이와 함께하는 타입스크립트 스터디",
+    excerpt: "체셔 고양이와 함께하는 타입스크립트 스터디",
     author: "체셔 고양이",
     likes: 30,
     views: 40,
