@@ -9,7 +9,9 @@ import { createToken } from "../src/utils/jwt";
 jest.setTimeout(10000);
 
 describe("일반 포스트 기능 테스트", () => {
-  const connection = db.createConnection(`${configs.mongoUri}/coderland`);
+  const connection = db.createConnection(
+    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+  );
   let token = "Bearer ";
   let notOwnerToken = "Bearer ";
   let notRacerToken = "Bearer ";
@@ -76,7 +78,6 @@ describe("일반 포스트 기능 테스트", () => {
       .post("/api/posts")
       .set("authorization", token)
       .send({ title, contents, subject, category });
-
     // then
     expect(res.statusCode).toEqual(201);
     expect(res.body.isOk).toEqual(true);

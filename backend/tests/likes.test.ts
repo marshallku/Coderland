@@ -7,7 +7,9 @@ import configs from "../src/config";
 import { createToken } from "../src/utils/jwt";
 
 describe("좋아요 테스트", () => {
-  const connection = db.createConnection(`${configs.mongoUri}/coderland`);
+  const connection = db.createConnection(
+    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+  );
   let token = "Bearer ";
   let postId: string;
   let commentId: string;

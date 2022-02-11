@@ -7,7 +7,9 @@ import { createToken } from "../src/utils/jwt";
 import configs from "../src/config";
 
 describe("모임 게시글 기능 테스트", () => {
-  const connection = db.createConnection(`${configs.mongoUri}/coderland`);
+  const connection = db.createConnection(
+    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+  );
   let token = "Bearer ";
   let postId: string;
   let notAccessToken = "Bearer ";
@@ -380,7 +382,9 @@ describe("모임 게시글 기능 테스트", () => {
 });
 
 describe("모든 모집 글 리스트 조회 테스트", () => {
-  const connection = db.createConnection(`${configs.mongoUri}/coderland`);
+  const connection = db.createConnection(
+    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+  );
   let token = "Bearer ";
 
   beforeAll(async () => {

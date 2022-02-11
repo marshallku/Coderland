@@ -18,7 +18,9 @@ describe("구글 기능 테스트", () => {
 
 describe("유저 기능 테스트", () => {
   let token = "Bearer ";
-  const connection = db.createConnection(`${configs.mongoUri}/coderland`);
+  const connection = db.createConnection(
+    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+  );
   let expiredToken = "Bearer ";
   let refreshToken = "";
   let expiredRefreshToken = "";
@@ -142,7 +144,9 @@ describe("유저 기능 테스트", () => {
 
 describe("유저 레이서 인증 서비스", () => {
   let token = "Bearer ";
-  const connection = db.createConnection(`${configs.mongoUri}/coderland`);
+  const connection = db.createConnection(
+    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+  );
   let refreshToken = "";
   let authKey: string;
 
@@ -239,7 +243,9 @@ describe("유저 레이서 인증 서비스", () => {
 
 describe("회원 탈퇴 기능", () => {
   let token = "Bearer ";
-  const connection = db.createConnection(`${configs.mongoUri}/coderland`);
+  const connection = db.createConnection(
+    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+  );
   let refreshToken = "";
   let postId: string;
 
