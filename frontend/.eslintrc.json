@@ -29,6 +29,7 @@
     "linebreak-style": 0,
     "quotes": ["error", "double"],
     "semi": ["error", "always"],
+    "no-underscore-dangle": "off",
     "react/react-in-jsx-scope": "off",
     "prettier/prettier": [
       "error",

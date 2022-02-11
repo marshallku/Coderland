@@ -268,7 +268,7 @@ export default function Add() {
   const [title, setTitle] = useState<string>("");
   const [area, setArea] = useState<string>("");
   const [tags, setTags] = useState<Array<string>>([]);
-  const [content, setContent] = useState<string>("");
+  const [contents, setContents] = useState<string>("");
   const { subject = "chat", category = "study" } = useParams();
   const auth = useAuth();
   const isGather = subject === "gather";
@@ -293,28 +293,29 @@ export default function Add() {
   const categoriesInKr = ["스터디", "모각코", "프로젝트"];
 
   const handleSubmit = async () => {
-    if (!auth) {
-      navigate("/login");
-      return;
-    }
+    const token = auth?.user?.token;
 
-    const { user } = auth;
-
-    if (!user) {
+    if (!token) {
       navigate("/login");
       return;
     }
 
     const post = {
       title,
-      content,
+      contents,
       subject: subject as TSubject,
     };
 
     if (isGather) {
       const postRequest = await createGatherPost(
-        { ...post, area, tags, category: category as TGatherCategory },
-        user.token
+        {
+          ...post,
+          area,
+          tags,
+          icon: tags[0],
+          category: category as TGatherCategory,
+        },
+        token
       );
 
       if (postRequest.isOk === false) {
@@ -326,7 +327,7 @@ export default function Add() {
       return;
     }
 
-    const postRequest = await createPost(post, user.token);
+    const postRequest = await createPost(post, token);
 
     if (postRequest.isOk === false) {
       toast(postRequest.msg || "글 작성에 실패했습니다.");
@@ -397,8 +398,8 @@ export default function Add() {
           id="contents"
           name="contents"
           label="내용"
-          value={content}
-          setValue={setContent}
+          value={contents}
+          setValue={setContents}
         />
       </div>
       <div className="editor__item">

@@ -1,7 +1,10 @@
 type TCommentMode = "read" | "edit" | "reply";
 
+interface ICommentsProps {
+  postId: string;
+}
+
 interface ICommentState {
-  commentList: IComment[];
   setCommentList: React.Dispatch<React.SetStateAction<IComment[]>>;
 }
 
@@ -11,11 +14,15 @@ interface IFocusState {
 }
 
 interface ICommentProps extends ICommentState, IFocusState {
+  postId: string;
   comment: IComment;
 }
 
 interface IReplyProps extends IFocusState {
+  postId: string;
+  parentId: string;
   reply: ICommentReply;
+  updateCommentList: () => void;
 }
 
 interface ILikeProps {

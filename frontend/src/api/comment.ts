@@ -9,12 +9,12 @@ export function getCommentList({
 }
 
 export function createComment({
-  contents,
   postId,
+  contents,
   token,
 }: {
-  contents: string;
   postId: string;
+  contents: string;
   token: string;
 }): Promise<ICommentModifyResponse | IFailResponse> {
   return instance.post(`/posts/${postId}/comments`, {
@@ -26,15 +26,35 @@ export function createComment({
   });
 }
 
-export function updateComment({
-  contents,
-  commentId,
+export function createReply({
   postId,
+  commentId,
+  contents,
   token,
 }: {
-  contents: string;
-  commentId: string;
   postId: string;
+  commentId: string;
+  contents: string;
+  token: string;
+}): Promise<ICommentModifyResponse | IFailResponse> {
+  return instance.post(`/posts/${postId}/replies`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ contents, commentId }),
+  });
+}
+
+export function updateComment({
+  postId,
+  commentId,
+  contents,
+  token,
+}: {
+  postId: string;
+  commentId: string;
+  contents: string;
   token: string;
 }): Promise<ICommentModifyResponse | IFailResponse> {
   return instance.put(`/posts/${postId}/comments`, {
@@ -46,9 +66,31 @@ export function updateComment({
   });
 }
 
-export function deleteComment({
-  commentId,
+export function updateReply({
   postId,
+  parentId: commentId,
+  commentId: replyId,
+  contents,
+  token,
+}: {
+  parentId: string;
+  postId: string;
+  commentId: string;
+  contents: string;
+  token: string;
+}): Promise<ICommentModifyResponse | IFailResponse> {
+  return instance.put(`/posts/${postId}/replies`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ commentId, replyId, contents }),
+  });
+}
+
+export function deleteComment({
+  postId,
+  commentId,
   token,
 }: {
   commentId: string;
@@ -61,5 +103,25 @@ export function deleteComment({
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ commentId }),
+  });
+}
+
+export function deleteReply({
+  postId,
+  parentId: commentId,
+  commentId: replyId,
+  token,
+}: {
+  parentId: string;
+  postId: string;
+  commentId: string;
+  token: string;
+}): Promise<ICommentModifyResponse | IFailResponse> {
+  return instance.delete(`/posts/${postId}/replies`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ commentId, replyId }),
   });
 }

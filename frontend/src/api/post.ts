@@ -41,7 +41,7 @@ export function getPost<T = IPostResponse | IGatherPostResponse>(
 export function createPost(
   post: {
     title: string;
-    content: string;
+    contents: string;
     subject: TSubject;
   },
   token: string
@@ -58,9 +58,10 @@ export function createPost(
 export function createGatherPost(
   post: {
     title: string;
-    content: string;
+    contents: string;
     category: TGatherCategory;
     area: string;
+    icon: string;
     tags: Array<string>;
   },
   token: string
