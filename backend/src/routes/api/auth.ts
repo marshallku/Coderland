@@ -26,7 +26,7 @@ export default (app: Router) => {
         httpOnly: true,
         maxAge: config.COOKIE_MAX_AGE,
       });
-      res.status(200).json({ isOk: true });
+      res.redirect("/");
     })
   );
 
