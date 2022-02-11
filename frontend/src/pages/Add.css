@@ -3,6 +3,10 @@
   gap: 20px;
 }
 
+.editor__item:first-child {
+  width: clamp(0px, 100%, 300px);
+}
+
 .editor__item:not(:last-child) {
   margin-bottom: 20px;
 }
