@@ -1,6 +1,6 @@
 import { IUserDocument, IUserModel } from "user";
 import { IPostDocument, IPostModel } from "post";
-import { parsePostBySubject } from "../utils";
+import { createExcerpt, parsePostBySubject } from "../utils";
 import { User, Post } from "../models";
 
 export default class PostService {
@@ -25,9 +25,13 @@ export default class PostService {
       currentPage,
       perPage
     );
-    const parsedPosts = posts.map((post) =>
-      parsePostBySubject(post.subject, post.toObject())
-    );
+    const parsedPosts = posts.map((post) => {
+      const { contents, excerpt, ...rest } = parsePostBySubject(
+        post.subject,
+        post.toObject()
+      );
+      return { ...rest, excerpt: createExcerpt(contents, excerpt) };
+    });
     return [parsedPosts, pagination];
   }
 

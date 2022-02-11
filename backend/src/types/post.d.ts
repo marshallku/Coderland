@@ -15,6 +15,7 @@ export type categories = "study" | "code" | "team" | "none";
 export interface IPost {
   title: string;
   contents: string;
+  excerpt: string;
   author: PopulatedDoc<IUserDocument>;
   commentCount: number;
   views: number;
