@@ -24,7 +24,7 @@ RUN apk --no-cache add tzdata && \
 WORKDIR /app
 
 # package.json
-COPY package*.json .
+COPY package*.json ./
 RUN npm install
 
 # Docker demon port mapping
