@@ -5,6 +5,7 @@
     "dev": "vite",
     "prebuild": "npm run test",
     "build": "tsc && vite build",
+    "stage-build": "tsc && vite build --mode staging",
     "preview": "vite preview",
     "test": "jest"
   },
