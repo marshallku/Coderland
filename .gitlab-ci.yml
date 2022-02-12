@@ -1,18 +1,9 @@
-<<<<<<< HEAD
-image: node:latest
-
-stages:
-  - staging-frontend
-
-staging-frontend:
-=======
 stages:
   - staging-frontend
   - staging-backend
 
 staging-frontend:
   image: node:latest
->>>>>>> 438c31b9b081f2c067271ac0871f395922c43750
   stage: staging-frontend
   only:
     - Frontend-Sprint
@@ -33,17 +24,11 @@ staging-frontend:
     - npm ci
   script:
     # Build
-<<<<<<< HEAD
-    - npm run build
-=======
     - npm run stage-build
->>>>>>> 438c31b9b081f2c067271ac0871f395922c43750
     # Send dist folder via scp
     - scp -P "$STAGING_SERVER_PORT" -r dist "$STAGING_SERVER_USER"@"$STAGING_SERVER_IP":/var/www
     # Run bash script
     - ssh -p "$STAGING_SERVER_PORT" "$STAGING_SERVER_USER"@"$STAGING_SERVER_IP" "cd /var/www; bash start.sh"
-<<<<<<< HEAD
-=======
 
 staging-backend:
   stage: staging-backend
@@ -51,7 +36,7 @@ staging-backend:
     - Backend-Sprint
   before_script:
     # Setup ssh
-    - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )'
+    - "command -v ssh-agent >/dev/null || ( apk add --update openssh )"
     - eval $(ssh-agent -s)
     - echo "$SSH_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
@@ -60,4 +45,3 @@ staging-backend:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - ssh -p "$STAGING_SERVER_PORT" "$STAGING_SERVER_USER"@"$STAGING_SERVER_IP" "cd ~/elice-project; bash start.sh"
->>>>>>> 438c31b9b081f2c067271ac0871f395922c43750
