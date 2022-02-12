@@ -43,8 +43,14 @@ export default class CommentService {
         ...rest,
         isPostAuthor,
         isLiked: likeUsers.includes(userId),
-        replies: parseReply(replies, anonymous, author, isPostAuthor),
-        author: createAuthorName(anonymous, author),
+        replies: parseReply(
+          replies,
+          anonymous,
+          author,
+          isPostAuthor,
+          this.parentId
+        ),
+        author: createAuthorName(anonymous, author, this.parentId),
       };
     });
     return parsedComments;

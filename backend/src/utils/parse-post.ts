@@ -34,7 +34,7 @@ export default function parsePostBySubject(
       views: viewUsers.length,
       isBookmarked: bookmarkUsers.includes(userId),
       isLiked: likeUsers.includes(userId),
-      author: createAuthorName(anonymous, author),
+      author: createAuthorName(anonymous, author, post._id.toString()),
     };
   }
   return {
@@ -43,6 +43,6 @@ export default function parsePostBySubject(
     views: viewUsers.length,
     isBookmarked: bookmarkUsers.includes(userId),
     isLiked: likeUsers.includes(userId),
-    author: createAuthorName(anonymous, author),
+    author: createAuthorName(anonymous, author, post._id.toString()),
   };
 }
