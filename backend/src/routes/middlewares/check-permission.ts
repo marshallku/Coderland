@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { Post } from "../../models/Post";
 
+/**
+ * 포스트 존재 여부 확인
+ * 포스트 소유 권한 확인
+ */
 export default async (req: Request, res: Response, next: NextFunction) => {
   const { postId } = req.params;
   const { user } = req;

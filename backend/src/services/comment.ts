@@ -1,22 +1,19 @@
 import { IUserDocument } from "user";
 import { ICommentModel } from "comment";
 import { IPostModel } from "post";
+import { Post, Comment } from "../models";
 import { parseReply, createAuthorName } from "../utils";
 
 export default class CommentService {
-  ParentModel: IPostModel | ICommentModel;
+  private ParentModel: IPostModel | ICommentModel;
 
-  parentId: string | undefined;
+  private CommentModel: ICommentModel;
 
-  CommentModel: ICommentModel;
+  private parentId: string | undefined;
 
-  constructor(
-    ParentModel: IPostModel | ICommentModel,
-    CommentModel: ICommentModel,
-    parentId?: string
-  ) {
-    this.ParentModel = ParentModel;
-    this.CommentModel = CommentModel;
+  constructor(parentId?: string) {
+    this.ParentModel = Post;
+    this.CommentModel = Comment;
     this.parentId = parentId;
   }
 

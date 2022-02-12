@@ -1,6 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import { Post } from "../../models";
 
+/**
+ * 모임 글 존재 여부 확인
+ * 로그인 유저 모임글 소유 권한 확인
+ * 모임 글 여부 확인
+ * 이미 모집 완료된 글인지 확인
+ * 이미 등록된 유저인지, 유저가 존재하는 유저인지 확인
+ */
 export default async (req: Request, res: Response, next: NextFunction) => {
   const { user } = req;
   const { postId } = req.params;

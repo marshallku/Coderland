@@ -1,31 +1,29 @@
 import { ICommentModel, IReplyDto } from "comment";
 import { IUserDocument } from "user";
+import { Comment } from "../models";
 
 export default class ReplyService {
-  CommentModel: ICommentModel;
+  private CommentModel: ICommentModel;
 
-  constructor(CommentModel: ICommentModel) {
-    this.CommentModel = CommentModel;
+  constructor() {
+    this.CommentModel = Comment;
   }
 
   async createReply(commentId: string, user: IUserDocument, contents: string) {
     await this.CommentModel.createReply(commentId, user, contents);
   }
 
-  async updateReply(user: IUserDocument, replyDto: IReplyDto) {
+  async updateReply(replyDto: IReplyDto) {
     try {
-      await this.CommentModel.updateReply(user, replyDto);
+      await this.CommentModel.updateReply(replyDto);
     } catch (error) {
       throw new Error("뭔가가 잘못되었어요...");
     }
   }
 
-  async deleteReply(
-    user: IUserDocument,
-    replyDto: Pick<IReplyDto, "commentId" | "replyId">
-  ) {
+  async deleteReply(replyDto: Pick<IReplyDto, "commentId" | "replyId">) {
     try {
-      await this.CommentModel.deleteReply(user, replyDto);
+      await this.CommentModel.deleteReply(replyDto);
     } catch (error) {
       throw new Error("뭔가가 잘못되었어요...");
     }

@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { Comment } from "../../models";
 import ReplyService from "../../services/reply";
 
 import { asyncHandler } from "../../utils";
@@ -16,7 +15,7 @@ replyRouter.post(
   asyncHandler(async (req, res) => {
     const { user } = req;
     const { commentId, contents } = req.body;
-    const replyService = new ReplyService(Comment);
+    const replyService = new ReplyService();
     await replyService.createReply(commentId, user, contents);
     res.status(201).json({ isOk: true });
   })
@@ -28,23 +27,22 @@ replyRouter.put(
   loginRequired,
   checkReplyPermission,
   asyncHandler(async (req, res) => {
-    const { user } = req;
     const { replyId, commentId, contents } = req.body;
-    const replyService = new ReplyService(Comment);
-    await replyService.updateReply(user, { commentId, replyId, contents });
+    const replyService = new ReplyService();
+    await replyService.updateReply({ commentId, replyId, contents });
     res.status(200).json({ isOk: true });
   })
 );
 
+// 답글 삭제
 replyRouter.delete(
   "/",
   loginRequired,
   checkReplyPermission,
   asyncHandler(async (req, res) => {
-    const { user } = req;
     const { replyId, commentId } = req.body;
-    const replyService = new ReplyService(Comment);
-    await replyService.deleteReply(user, { commentId, replyId });
+    const replyService = new ReplyService();
+    await replyService.deleteReply({ commentId, replyId });
     res.status(200).json({ isOk: true });
   })
 );

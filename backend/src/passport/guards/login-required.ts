@@ -5,6 +5,14 @@ import { ExtractJwt } from "passport-jwt";
 import config from "../../config";
 import { User } from "../../models";
 
+/**
+ * 로그인이 필요한 서비스에서 토큰을 검증해
+ * 로그인한 유저인지 확인합니다.
+ *
+ * 액세스 토큰이 만료된 경우
+ * 리프레시 토큰을 조회해 확인 후,
+ * 액세스 토큰 재발급 혹은 다시 구글 로그인으로 안내합니다.
+ */
 export default (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate(
     "jwt",
@@ -14,11 +22,12 @@ export default (req: Request, res: Response, next: NextFunction) => {
         return next(error);
       }
       if (!payload) {
-        // TODO: 액세스 토큰 만료 시 리프레시 토큰 확인하고, 리프레시 토큰에 따라 새 토큰 or 로그인 필요
+        // 액세스 토큰이 만료된 경우
         if (info instanceof TokenExpiredError) {
           const accessToken = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
           const { googleId } = Object(decode(accessToken));
 
+          // 유저가 가지고 있는 리프레시 토큰 확인 만료 시 로그인 필요
           const refreshTokenInRequest =
             ExtractJwt.fromHeader("refresh-token")(req);
           try {
@@ -27,10 +36,12 @@ export default (req: Request, res: Response, next: NextFunction) => {
             return next(new Error("로그인이 필요합니다!"));
           }
 
+          // DB의 유저 정보에 저장된 리프레시 토큰 조회
           const { refreshToken } = await User.getRefreshTokenByGoogleId({
             googleId,
           });
 
+          // 리프레시 토큰 비교 후 액세스 토큰 재발급
           if (refreshToken === refreshTokenInRequest) {
             const newToken = sign({ googleId }, config.jwtSecret, {
               expiresIn: "7d",

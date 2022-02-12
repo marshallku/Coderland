@@ -1,12 +1,13 @@
 import { sign } from "jsonwebtoken";
 import { IUserModel, IUserDocument } from "user";
+import { User } from "../models";
 import config from "../config";
 
 export default class AuthService {
-  UserModel: IUserModel;
+  private UserModel: IUserModel;
 
-  constructor(UserModel: IUserModel) {
-    this.UserModel = UserModel;
+  constructor() {
+    this.UserModel = User;
   }
 
   async login(user: IUserDocument) {

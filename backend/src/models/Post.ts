@@ -3,6 +3,12 @@ import { IPostDocument, IPostModel, subjects } from "post";
 import { IUserDocument } from "user";
 import { UserSchema } from "./User";
 
+/**
+ * 게시판 주제에 따른 검색 쿼리 설정 함수
+ * @param subject 게시판 주제
+ * @param category 게시판 상세 카테고리 (모임)
+ * @returns 검색 쿼리
+ */
 function conditionBySubject(subject: string, category: string) {
   if (["study", "code", "team"].includes(category)) {
     return { subject, category };
@@ -10,10 +16,22 @@ function conditionBySubject(subject: string, category: string) {
   return { subject };
 }
 
+/**
+ * review, chat의 경우 익명으로 처리하기 위한 함수
+ * @param subject 게시판 주제
+ * @returns 게시판 익명 여부
+ */
 function isAnonymous(subject: subjects) {
   return ["review", "chat"].includes(subject);
 }
 
+/**
+ * 모임 글에만 들어갈 내용을 구분하기 위한 함수
+ * @param subject 게시판 주제
+ * @param postDto 포스트 담길 내용
+ * @param gatherDto 모임 포스트에서만 담길 내용
+ * @returns 게시판 주제에 따른 저장 내용
+ */
 function createDto(
   subject: string,
   postDto: Partial<IPostDocument>,
@@ -110,6 +128,14 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
   }
 );
 
+/**
+ * 게시글 리스트 조회
+ * @param subject 게시판 주제
+ * @param category 게시판 세부 카테고리
+ * @param currentPage 현재 페이지
+ * @param perPage 페이지 당 게시글
+ * @returns 현재 페이지 게시글 리스트
+ */
 PostSchema.statics.findAllPosts = async (
   subject: string,
   category: string,
@@ -134,17 +160,34 @@ PostSchema.statics.findAllPosts = async (
   ];
 };
 
+/**
+ * 포스트 상세 조회
+ * @param postId 상세 조회할 포스트 ID
+ * @returns 조회 포스트
+ */
 PostSchema.statics.findPostById = async (postId: string) => {
   const post = await Post.findById(postId).populate("author", "nickname");
   return post;
 };
 
+/**
+ * 포스트 조회 시 조회 수 업데이트 함수
+ * @param postId 조회한 포스트 ID
+ * @param userId 조회한 유저 정보
+ */
 PostSchema.statics.countViews = async (postId: string, userId: string) => {
   await Post.findByIdAndUpdate(postId, {
     $addToSet: { viewUsers: userId },
   });
 };
 
+/**
+ * 포스트 생성
+ * @param user 작성자 정보
+ * @param postDto 공통으로 들어갈 내용
+ * @param gatherDto 모임 포스트에만 들어갈 내용
+ * @returns 생성된 포스트
+ */
 PostSchema.statics.createPost = async (
   user: IUserDocument,
   postDto: Partial<IPostDocument>,
@@ -160,6 +203,12 @@ PostSchema.statics.createPost = async (
   return post;
 };
 
+/**
+ * 포스트 수정
+ * @param postId 수정할 포스트 ID
+ * @param postDto 공통으로 들어가는 내용
+ * @param gatherDto 모임 글에만 들어가는 내용
+ */
 PostSchema.statics.updatePost = async (
   postId: string,
   postDto: Partial<IPostDocument>,
@@ -172,17 +221,32 @@ PostSchema.statics.updatePost = async (
   });
 };
 
+/**
+ * 포스트 삭제
+ * @param postId 삭제할 포스트 ID
+ * @returns 삭제된 포스트
+ */
 PostSchema.statics.deletePost = async (postId: string) => {
   const post = await Post.findByIdAndDelete(postId);
   return post.toObject();
 };
 
+/**
+ * 모임 포스트 모집 완료 함수
+ * @param postId 완료 처리할 모임 포스트
+ */
 PostSchema.statics.completePost = async (postId: string) => {
   await Post.findByIdAndUpdate(postId, {
     isCompleted: true,
   });
 };
 
+/**
+ * 포스트 좋아요 로직
+ * @param postId 좋아요 업데이트할 포스트 ID
+ * @param userId 좋아요 클릭한 유저 ID
+ * @returns void
+ */
 PostSchema.statics.updateLike = async (postId: string, userId: string) => {
   // 먼저 찾아서, 유저가 좋아요 눌렀는지 확인하고,
   // 눌렀으면 취소, 안눌렀으면 좋아요
@@ -200,6 +264,12 @@ PostSchema.statics.updateLike = async (postId: string, userId: string) => {
   });
 };
 
+/**
+ * 포스트 북마크
+ * @param postId 북마크 업데이트 포스트 ID
+ * @param userId 북마크 지정한 유저 ID
+ * @returns void
+ */
 PostSchema.statics.updateBookmark = async (postId: string, userId: string) => {
   const post = await Post.findById(postId);
   if (post.bookmarkUsers.length > 0 && post.bookmarkUsers.includes(userId)) {
@@ -215,6 +285,11 @@ PostSchema.statics.updateBookmark = async (postId: string, userId: string) => {
   });
 };
 
+/**
+ * 모임 포스트 신청자 수락 함수
+ * @param postId 모임 포스트 ID
+ * @param user 신청한 유저 정보
+ */
 PostSchema.statics.allowAppliedUser = async (
   postId: string,
   user: IUserDocument
