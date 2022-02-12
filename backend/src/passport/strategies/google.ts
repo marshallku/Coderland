@@ -13,6 +13,7 @@ const opts: StrategyOptions = {
   callbackURL: `${domain}/api/auth/google/callback`,
 };
 
+// 구글 로그인
 export default new GoogleStrategy(
   opts,
   async (accessToken, refreshToken, profile, done) => {

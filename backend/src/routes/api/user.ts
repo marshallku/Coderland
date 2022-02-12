@@ -6,6 +6,7 @@ import UserService from "../../services/user";
 export default (app: Router) => {
   const route = Router();
 
+  // 유저 정보 조회
   route.get(
     "/",
     loginRequired,
@@ -15,6 +16,7 @@ export default (app: Router) => {
     })
   );
 
+  // 유저 북마크 리스트 조회
   route.get(
     "/bookmark",
     loginRequired,
@@ -26,6 +28,7 @@ export default (app: Router) => {
     })
   );
 
+  // 유저 닉네임 변경
   route.patch(
     "/",
     loginRequired,

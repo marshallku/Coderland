@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { Comment } from "../../models/Comment";
 
+/**
+ * 답글이 달린 댓글 존재여부 확인
+ * 답글 존재 여부 확인
+ * 답글 소유 여부 확인
+ */
 export default async (req: Request, res: Response, next: NextFunction) => {
   const { commentId, replyId } = req.body;
   const { user } = req;

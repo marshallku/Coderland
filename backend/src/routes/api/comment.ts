@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { asyncHandler } from "../../utils";
 import CommentService from "../../services/comment";
-import { Post, Comment } from "../../models";
 import { loginRequired, loginCheck } from "../../passport/guards";
 import { checkCommentPermission, checkGrade } from "../middlewares";
 
@@ -16,7 +15,7 @@ commentRouter.post(
     const { user } = req;
     const { postId } = req.params;
     const { contents } = req.body;
-    const commentService = new CommentService(Post, Comment, postId);
+    const commentService = new CommentService(postId);
     const commentId = await commentService.createComment(user, contents);
     res.status(201).json({ isOk: true, commentId });
   })
@@ -30,7 +29,7 @@ commentRouter.get(
     const { user } = req;
     const { postId } = req.params;
     const userId = user ? user.id : undefined;
-    const commentService = new CommentService(Post, Comment, postId);
+    const commentService = new CommentService(postId);
     const comments = await commentService.findAllComments(userId);
     res.status(200).json({ isOk: true, comments });
   })
@@ -43,7 +42,7 @@ commentRouter.put(
   checkCommentPermission,
   asyncHandler(async (req, res) => {
     const { contents, commentId } = req.body;
-    const commentService = new CommentService(Post, Comment);
+    const commentService = new CommentService();
     await commentService.updateComment(commentId, contents);
     res.status(200).json({ isOk: true, commentId });
   })
@@ -57,7 +56,7 @@ commentRouter.delete(
   asyncHandler(async (req, res) => {
     const { postId } = req.params;
     const { commentId } = req.body;
-    const commentService = new CommentService(Post, Comment, postId);
+    const commentService = new CommentService(postId);
     await commentService.deleteComment(commentId);
     res.status(200).json({ isOk: true, commentId });
   })
@@ -70,7 +69,7 @@ commentRouter.post(
   asyncHandler(async (req, res) => {
     const { commentId } = req.body;
     const { user } = req;
-    const commentService = new CommentService(Post, Comment);
+    const commentService = new CommentService();
     await commentService.updateLike(commentId, user.id);
     res.status(200).json({ isOk: true });
   })

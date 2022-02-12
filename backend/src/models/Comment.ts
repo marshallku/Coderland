@@ -8,6 +8,10 @@ import {
 } from "comment";
 import { UserSchema } from "./User";
 
+/**
+ * 답글 스키마
+ * 내용, 작성자 정보
+ */
 const ReplySchema = new mongoose.Schema<IReplyDocument>(
   {
     contents: {
@@ -22,6 +26,13 @@ const ReplySchema = new mongoose.Schema<IReplyDocument>(
   }
 );
 
+/**
+ * 댓글 스키마
+ * 내용, 작성자, 상위 포스트 ID, 좋아요, 좋아요한 유저, 익명성,
+ * 포스트 작성자 여부 (작성자 태그를 위해),
+ * 삭제 여부 (답글 있는 경우 글 내용만 삭제)
+ * 답글 리스트
+ */
 export const CommentSchema = new mongoose.Schema<ICommentDocument>(
   {
     contents: {
@@ -66,6 +77,11 @@ export const CommentSchema = new mongoose.Schema<ICommentDocument>(
   }
 );
 
+/**
+ * 댓글 불러오기
+ * @param commentId 댓글 ID
+ * @returns 댓글
+ */
 CommentSchema.statics.findCommentById = async (commentId: string) => {
   const comment = await Comment.findById(commentId).populate(
     "author",
@@ -74,6 +90,12 @@ CommentSchema.statics.findCommentById = async (commentId: string) => {
   return comment;
 };
 
+/**
+ * 댓글 생성
+ * @param user 유저 정보
+ * @param commentDto 댓글에 담길 내용 (포스트 id, 내용)
+ * @returns 생성된 댓글
+ */
 CommentSchema.statics.createComment = async (
   user: IUserDocument,
   commentDto: { parent: ParentDocument; contents: string }
@@ -91,6 +113,11 @@ CommentSchema.statics.createComment = async (
   return comment;
 };
 
+/**
+ * 포스트에 종속된 댓글 전체 리스트 호출
+ * @param parentId 포스트 ID
+ * @returns 댓글 리스트
+ */
 CommentSchema.statics.findAllComments = async (parentId: string) => {
   const comments = await Comment.find({
     parentId,
@@ -99,6 +126,11 @@ CommentSchema.statics.findAllComments = async (parentId: string) => {
   return comments;
 };
 
+/**
+ * 댓글 수정
+ * @param commentId 댓글 ID
+ * @param contents 수정될 내용
+ */
 CommentSchema.statics.updateComment = async (
   commentId: string,
   contents: string
@@ -106,6 +138,11 @@ CommentSchema.statics.updateComment = async (
   await Comment.findByIdAndUpdate(commentId, { contents });
 };
 
+/**
+ * 댓글 삭제
+ * @param commentId 삭제할 댓글 ID
+ * @returns 댓글 실제 삭제 여부 (답글 있는 경우 false, 답글 없는 경우 true)
+ */
 CommentSchema.statics.deleteComment = async (commentId) => {
   // 삭제가 아니라 삭제된 댓글로 표현
   const comment = await Comment.findById(commentId);
@@ -124,6 +161,12 @@ CommentSchema.statics.deleteComment = async (commentId) => {
   return true;
 };
 
+/**
+ * 답글 생성
+ * @param commentId 답글이 달릴 댓글 ID
+ * @param user 작성자 정보
+ * @param contents 내용
+ */
 CommentSchema.statics.createReply = async (commentId, user, contents) => {
   const replyId = new mongoose.Types.ObjectId();
   await Comment.findByIdAndUpdate(commentId, {
@@ -137,7 +180,11 @@ CommentSchema.statics.createReply = async (commentId, user, contents) => {
   });
 };
 
-CommentSchema.statics.updateReply = async (user, replyDto) => {
+/**
+ * 댓글 수정
+ * @param replyDto 답글 들어갈 내용
+ */
+CommentSchema.statics.updateReply = async (replyDto) => {
   const { commentId, replyId, contents } = replyDto;
   await Comment.findByIdAndUpdate(
     commentId,
@@ -150,14 +197,23 @@ CommentSchema.statics.updateReply = async (user, replyDto) => {
   );
 };
 
-CommentSchema.statics.deleteReply = async (user, replyDto) => {
-  // 삭제가 아니라 삭제된 답글로 표현
+/**
+ * 답글 삭제1
+ * @param replyDto 답글 삭제에 필요한 댓글 ID, 답글 ID
+ */
+CommentSchema.statics.deleteReply = async (replyDto) => {
   const { commentId, replyId } = replyDto;
   await Comment.findByIdAndUpdate(commentId, {
     $pull: { replies: { _id: replyId } },
   });
 };
 
+/**
+ * 댓글에 대한 좋아요
+ * @param commentId 댓글 ID
+ * @param userId 유저 정보
+ * @returns void
+ */
 CommentSchema.statics.updateLike = async (
   commentId: string,
   userId: string
