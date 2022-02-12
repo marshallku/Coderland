@@ -20,7 +20,7 @@ export default function parsePostBySubject(
     ...rest
   } = post;
 
-  if (subject === "gathering") {
+  if (subject === "gather") {
     return {
       ...rest,
       tags,
