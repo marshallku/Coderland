@@ -7,9 +7,25 @@ import parseQuery from "../utils/url";
 import { getGatherPostList, getPostList } from "../api";
 import toast from "../utils/toast";
 import "./PostList.css";
+import formatClassName from "../utils/formatClassName";
 
 const USES_CARD_DESIGN = ["gather", "study", "code", "team"];
 const SKELETONS_LENGTH = 8;
+
+const subjectsInKr: {
+  // eslint-disable-next-line no-unused-vars
+  [key in TSubject]: string;
+} = {
+  article: "댓글 남겨줘",
+  dev: "개발 정보",
+  recruit: "채용 정보",
+  chat: "잡담",
+  review: "후기 / 회고",
+  gather: "팀원 모집",
+  study: "스터디 모집",
+  code: "모각코 모집",
+  team: "팀 모집",
+};
 
 export default function PostList({
   subject,
@@ -80,6 +96,14 @@ export default function PostList({
           usesCardDesign ? "post-list--card" : "post-list--list"
         }`}
       >
+        <h2
+          className={formatClassName(
+            "post-list__title",
+            limit && "post-list__title--limit"
+          )}
+        >
+          {subjectsInKr[subject]}
+        </h2>
         {ListOfElements()}
       </div>
       {!preventPaginate && response && (
