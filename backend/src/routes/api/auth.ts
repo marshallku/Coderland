@@ -18,10 +18,10 @@ export default (app: Router) => {
 
       const authService = new AuthService(User);
       const [accessToken, refreshToken] = await authService.login(user);
-      res.cookie("accessToken", accessToken, {
+      res.cookie("access-token", accessToken, {
         maxAge: config.COOKIE_MAX_AGE,
       });
-      res.cookie("refreshToken", refreshToken, {
+      res.cookie("refresh-token", refreshToken, {
         maxAge: config.COOKIE_MAX_AGE,
       });
       res.redirect("/");

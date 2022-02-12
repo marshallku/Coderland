@@ -20,7 +20,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
           const { googleId } = Object(decode(accessToken));
 
           const refreshTokenInRequest =
-            ExtractJwt.fromHeader("refreshtoken")(req);
+            ExtractJwt.fromHeader("refresh-token")(req);
           try {
             verify(refreshTokenInRequest, config.jwtSecret);
           } catch (error) {
@@ -35,7 +35,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
             const newToken = sign({ googleId }, config.jwtSecret, {
               expiresIn: "7d",
             });
-            res.cookie("accesstoken", newToken, {
+            res.cookie("access-token", newToken, {
               httpOnly: true,
               maxAge: config.COOKIE_MAX_AGE,
             });
