@@ -287,7 +287,7 @@ export default function Add() {
     "팀원 모집",
     "댓글 남겨줘",
     "개발 정보",
-    "채용 정보",
+    "취업 정보",
     "잡담",
   ];
   const categories: Array<TGatherCategory> = ["study", "code", "team"];

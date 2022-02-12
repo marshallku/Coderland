@@ -21,9 +21,34 @@
   font-size: 0.875rem;
 }
 
+.list-item__title {
+  position: relative;
+  max-height: 4.5rem;
+  margin-bottom: 0.6rem;
+  font-size: 1.5rem;
+  line-height: 2.25rem;
+  overflow: hidden;
+}
+
+.list-item__title::after {
+  content: "";
+  position: absolute;
+  top: 2.25rem;
+  right: 0;
+  width: 30%;
+  height: 2.25rem;
+  background: linear-gradient(45deg, transparent, var(--background-base) 90%);
+  background: -webkit-linear-gradient(
+    45deg,
+    transparent,
+    var(--background-base) 90%
+  );
+}
+
 .list-item__excerpt {
   position: relative;
   max-height: 3rem;
+  margin-bottom: 0.4rem;
   font-size: 0.875rem;
   line-height: 1.5rem;
   overflow: hidden;
@@ -92,14 +117,4 @@ svg.list-item__info-icon {
     var(--background-base)
   );
   animation: loading-list-item 1s ease-in-out infinite;
-}
-
-@media screen and (min-width: 680px) {
-  .list-item__title {
-    min-width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex-shrink: 2;
-  }
 }

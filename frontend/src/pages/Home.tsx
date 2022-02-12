@@ -10,7 +10,7 @@ function HomePostList({ subject, isLarge }: IHomePostListProps) {
   } = {
     article: "댓글 남겨줘",
     dev: "개발 정보",
-    recruit: "채용 정보",
+    recruit: "취업 정보",
     chat: "잡담",
     review: "후기 / 회고",
     gather: "팀원 모집",
@@ -25,11 +25,12 @@ function HomePostList({ subject, isLarge }: IHomePostListProps) {
     >
       <header className="home-posts__header">
         <h2 className="home-posts__title">{subjectsInKr[subject]}</h2>
+        <Link className="home-posts__link" to={`/${subject}`}>
+          더 보기
+          <i className="icon-east" />
+        </Link>
       </header>
       <PostList subject={subject} limit={3} preventPaginate />
-      <footer className="home-posts__footer">
-        <Link to={`/${subject}`}>더 보기</Link>
-      </footer>
     </section>
   );
 }

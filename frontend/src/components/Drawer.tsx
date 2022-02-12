@@ -79,7 +79,7 @@ export default function Drawer({
           <DrawerLink
             cb={hideDrawer}
             icon="home_repair_service"
-            title="채용 정보"
+            title="취업 정보"
             to="/recruit"
           />
           <DrawerLink cb={hideDrawer} icon="chat" title="잡담" to="/chat" />

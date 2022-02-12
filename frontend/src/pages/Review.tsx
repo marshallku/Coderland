@@ -1,13 +1,5 @@
-import AddPostButton from "../components/AddPostButton";
-import PageTitle from "../components/PageTitle";
-import PostList from "../components/PostList";
+import ListPage from "../components/ListPage";
 
 export default function Review() {
-  return (
-    <>
-      <PageTitle subject="review" />
-      <PostList subject="review" />
-      <AddPostButton to="review" />
-    </>
-  );
+  return <ListPage subject="review" />;
 }

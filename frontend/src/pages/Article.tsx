@@ -1,13 +1,5 @@
-import AddPostButton from "../components/AddPostButton";
-import PageTitle from "../components/PageTitle";
-import PostList from "../components/PostList";
+import ListPage from "../components/ListPage";
 
 export default function Article() {
-  return (
-    <>
-      <PageTitle subject="article" />
-      <PostList subject="article" />
-      <AddPostButton to="article" />
-    </>
-  );
+  return <ListPage subject="article" />;
 }
