@@ -224,7 +224,7 @@ function TechStacksInput({
         <Input
           id="tags"
           name="tags"
-          label="태그 추가"
+          label="기술 스택 추가"
           autoComplete="off"
           value={tag}
           onChange={(event) => {
