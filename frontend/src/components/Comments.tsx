@@ -17,7 +17,6 @@ export default function Comments({ postId }: ICommentsProps) {
   const auth = useAuth();
   const navigate = useNavigate();
 
-  // TODO: GET Comment
   useEffect(() => {
     const init = async () => {
       const response = await getCommentList({ postId });
@@ -70,8 +69,10 @@ export default function Comments({ postId }: ICommentsProps) {
 
     setCommentList(response.comments);
     setCommentText("");
-    // FIXME: 스크롤 위치 수정
-    scrollTo(document.body.scrollHeight);
+    scrollTo(
+      document.getElementById(`comment-${newCommentResponse.commentId}`)
+        ?.offsetTop || null
+    );
   };
 
   return (
@@ -106,14 +107,30 @@ export default function Comments({ postId }: ICommentsProps) {
       )}
 
       {commentList.slice(startIdx, commentList.length).map((comment) => (
-        <Comment
-          postId={postId}
-          key={comment._id}
-          comment={comment}
-          setCommentList={setCommentList}
-          focused={focused}
-          setFocused={setFocused}
-        />
+        <>
+          <Comment
+            postId={postId}
+            key={comment._id}
+            parentId=""
+            data={comment}
+            setCommentList={setCommentList}
+            focused={focused}
+            setFocused={setFocused}
+          />
+
+          {/* TODO: 답글 더보기 버튼 추가 */}
+          {comment.replies.map((reply) => (
+            <Comment
+              postId={postId}
+              key={reply._id}
+              parentId={comment._id}
+              data={reply}
+              setCommentList={setCommentList}
+              focused={focused}
+              setFocused={setFocused}
+            />
+          ))}
+        </>
       ))}
     </div>
   );

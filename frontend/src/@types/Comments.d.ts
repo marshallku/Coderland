@@ -4,25 +4,18 @@ interface ICommentsProps {
   postId: string;
 }
 
-interface ICommentState {
-  setCommentList: React.Dispatch<React.SetStateAction<IComment[]>>;
+interface IUniversalComment extends ICommentReply {
+  likes?: number;
+  replies?: Array<ICommentReply>;
 }
 
-interface IFocusState {
-  focused: string;
-  setFocused: React.Dispatch<React.SetStateAction<string>>;
-}
-
-interface ICommentProps extends ICommentState, IFocusState {
-  postId: string;
-  comment: IComment;
-}
-
-interface IReplyProps extends IFocusState {
+interface ICommentProps {
   postId: string;
   parentId: string;
-  reply: ICommentReply;
-  updateCommentList: () => void;
+  data: IUniversalComment;
+  setCommentList: React.Dispatch<React.SetStateAction<IComment[]>>;
+  focused: string;
+  setFocused: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface ILikeProps {
