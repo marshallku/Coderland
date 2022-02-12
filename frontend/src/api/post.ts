@@ -26,7 +26,7 @@ export function getGatherPostList({
   page?: number;
 } = {}): Promise<IGatherPostListResponse | IFailResponse> {
   return instance.get(
-    `/posts?subject=gathering${
+    `/posts?subject=gather${
       category ? `&category=${category}` : ""
     }&page=${page}${perPage ? `&perPage=${perPage}` : ""}`
   );
@@ -71,7 +71,7 @@ export function createGatherPost(
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ subject: "gathering", ...post }),
+    body: JSON.stringify({ subject: "gather", ...post }),
   });
 }
 

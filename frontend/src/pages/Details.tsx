@@ -67,8 +67,8 @@ export function GatherDetails() {
       }
 
       setResponse(apiResponse);
-      setBookmarked(!!apiResponse.gather.isBookmarked);
-      setClapped(!!apiResponse.gather.isLiked);
+      setBookmarked(!!apiResponse.post.isBookmarked);
+      setClapped(!!apiResponse.post.isLiked);
     }
 
     handleAsync();
@@ -78,28 +78,26 @@ export function GatherDetails() {
     <>
       <header className="details-header">
         <h1 className="main-title details-header__title">
-          {response?.gather.title}
+          {response?.post.title}
         </h1>
         <div className="details-header__contents">
-          <div className="details-header__author">
-            {response?.gather.author}
-          </div>
+          <div className="details-header__author">{response?.post.author}</div>
           <time
             className="details-header__created"
-            dateTime={response?.gather.createdAt || ""}
+            dateTime={response?.post.createdAt || ""}
           >
-            {formatToReadableTime(response?.gather.createdAt || "")}
+            {formatToReadableTime(response?.post.createdAt || "")}
           </time>
           <div className="details-header__views">
             <i className="icon-visibility" role="img" aria-label="조회 수" />
-            {response?.gather.views}
+            {response?.post.views}
           </div>
         </div>
       </header>
       <div className="details-body">
         <article className="details-body__article">
           <div className="details-body__tags">
-            {response?.gather.tags.map((tag) => (
+            {response?.post.tags.map((tag) => (
               <i
                 key={tag}
                 className={`icon-${tag}`}
@@ -110,24 +108,24 @@ export function GatherDetails() {
           </div>
           <div className="details-body__info">
             <i className="icon-info_outline" />
-            상태: 모집 {`${response?.gather.isCompleted ? "완료" : "중"}`}
+            상태: 모집 {`${response?.post.isCompleted ? "완료" : "중"}`}
           </div>
           <div className="details-body__info">
             <i className="icon-desktop_windows" />
-            장소: {response?.gather.area}
+            장소: {response?.post.area}
           </div>
           <div className="details-body__info">
             <i className="icon-person" />
-            인원: {response?.gather.members.length}명
+            인원: {response?.post.members.length}명
           </div>
           <MarkdownViewer
-            value={response?.gather.contents || ""}
+            value={response?.post.contents || ""}
             className="details-body__content"
           />
           <div className="details-body__members member-list">
             <h3 className="member-list__title">현재 팀원</h3>
             <ul className="member-list__container">
-              {response?.gather.members.map((member: IMemberProps) => (
+              {response?.post.members.map((member: IMemberProps) => (
                 <li key={member.nickname} className="member-list__item">
                   <img
                     src={member.profile}
@@ -165,12 +163,12 @@ export function GatherDetails() {
             )}
             onClick={handleLikesClick}
           >
-            <span>{response?.gather.likes}</span>
+            <span>{response?.post.likes}</span>
             <Clap activated={clapped} />
           </button>
         </div>
       </div>
-      {response && <Comments postId={response.gather._id} />}
+      {response && <Comments postId={response.post._id} />}
     </>
   );
 }
