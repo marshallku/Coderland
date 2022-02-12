@@ -1,0 +1,29 @@
+/* TODO: 크기 및 위치 조정 */
+.to-top {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease-in-out;
+  z-index: 5000;
+}
+
+.to-top--revealed {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.to-top__circle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  fill: transparent;
+  stroke: var(--primary);
+  stroke-width: 3px;
+  transform: rotate(-90deg);
+}
