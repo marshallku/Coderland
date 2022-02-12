@@ -1,17 +1,21 @@
-import { useEffect, useState } from "react";
+import to from "../utils/awaitTo";
+import toast from "../utils/toast";
 
-// TODO: API 응답에 맞게 업데이트
-// TODO: isOk가 false인 경우까지 처리
-export default function useApi<T>(promiseData: Promise<T | undefined>) {
-  const [data, setData] = useState<T | undefined>();
+export default async function useApi<T extends ISuccessResponse>(
+  promiseData: Promise<T | IFailResponse>
+): Promise<T | undefined> {
+  const [err, data] = await to(promiseData);
 
-  useEffect(() => {
-    async function changeHandler() {
-      setData(await promiseData);
-    }
+  if (err || !data) {
+    toast(err?.message || "오류가 발생했습니다");
+    return;
+  }
 
-    changeHandler();
-  }, []);
+  if (data.isOk === false) {
+    toast("API를 정상적으로 호출하지 못했습니다");
+    return;
+  }
 
+  // eslint-disable-next-line consistent-return
   return data;
 }

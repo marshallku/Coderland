@@ -9,6 +9,7 @@ import formatClassName from "../utils/formatClassName";
 import toast from "../utils/toast";
 import { createGatherPost, createPost } from "../api";
 import "./Add.css";
+import useApi from "../hooks/api";
 
 const MAX_TAGS_LENGTH = 5;
 
@@ -307,34 +308,36 @@ export default function Add() {
     };
 
     if (isGather) {
-      const postRequest = await createGatherPost(
-        {
-          ...post,
-          area,
-          tags,
-          icon: tags[0],
-          category: category as TGatherCategory,
-        },
-        token
+      const apiResponse = await useApi(
+        createGatherPost(
+          {
+            ...post,
+            area,
+            tags,
+            icon: tags[0],
+            category: category as TGatherCategory,
+          },
+          token
+        )
       );
 
-      if (postRequest.isOk === false) {
-        toast(postRequest.msg || "글 작성에 실패했습니다.");
+      if (!apiResponse) {
+        toast("글 작성에 실패했습니다.");
         return;
       }
 
-      navigate(`/gathers/${postRequest.postId}`);
+      navigate(`/gathers/${apiResponse.postId}`);
       return;
     }
 
-    const postRequest = await createPost(post, token);
+    const apiResponse = await useApi(createPost(post, token));
 
-    if (postRequest.isOk === false) {
-      toast(postRequest.msg || "글 작성에 실패했습니다.");
+    if (!apiResponse) {
+      toast("글 작성에 실패했습니다.");
       return;
     }
 
-    navigate(`/posts/${postRequest.postId}`);
+    navigate(`/posts/${apiResponse.postId}`);
   };
 
   return (

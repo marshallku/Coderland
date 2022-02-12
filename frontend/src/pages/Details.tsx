@@ -23,7 +23,7 @@ export function GatherDetails() {
   if (!id) {
     return <Navigate to="/404" />;
   }
-  const response = useApi(getPost<IGatherPostResponse>(id));
+  const [response, setResponse] = useState<IGatherPostResponse>();
   const navigate = useNavigate();
   const auth = useAuth();
 
@@ -58,17 +58,21 @@ export function GatherDetails() {
   }
 
   useEffect(() => {
-    if (!response || !response.isOk) {
-      return;
+    async function handleAsync() {
+      const apiResponse = await useApi(getPost<IGatherPostResponse>(`${id}`));
+
+      if (!apiResponse) {
+        navigate("/");
+        return;
+      }
+
+      setResponse(apiResponse);
+      setBookmarked(!!apiResponse.gather.isBookmarked);
+      setClapped(!!apiResponse.gather.isLiked);
     }
 
-    setBookmarked(!!response.gather.isBookmarked);
-    setClapped(!!response.gather.isLiked);
-  }, [response]);
-
-  if (response && !response.isOk) {
-    return <Navigate to="/" />;
-  }
+    handleAsync();
+  }, []);
 
   return (
     <>
@@ -176,7 +180,7 @@ export function PostDetails() {
   if (!id) {
     return <Navigate to="/404" />;
   }
-  const response = useApi(getPost<IPostResponse>(id));
+  const [response, setResponse] = useState<IPostResponse>();
   const navigate = useNavigate();
   const auth = useAuth();
 
@@ -211,17 +215,21 @@ export function PostDetails() {
   }
 
   useEffect(() => {
-    if (!response || !response.isOk) {
-      return;
+    async function handleAsync() {
+      const apiResponse = await useApi(getPost<IPostResponse>(`${id}`));
+
+      if (!apiResponse) {
+        navigate("/");
+        return;
+      }
+
+      setResponse(apiResponse);
+      setBookmarked(!!apiResponse.post.isBookmarked);
+      setClapped(!!apiResponse.post.isLiked);
     }
 
-    setBookmarked(!!response.post.isBookmarked);
-    setClapped(!!response.post.isLiked);
-  }, [response]);
-
-  if (response && !response.isOk) {
-    return <Navigate to="/" />;
-  }
+    handleAsync();
+  }, []);
 
   return (
     <>
