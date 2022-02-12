@@ -5,6 +5,7 @@ import { AuthProvider } from "./hooks/auth";
 import { ThemeProvider } from "./hooks/theme";
 import RequireAuth from "./routes/RequireAuth";
 import ScrollController from "./components/ScrollController";
+import ScrollToTop from "./components/ScrollToTop";
 
 import Home from "./pages/Home";
 import Gather from "./pages/Gather";
@@ -56,6 +57,7 @@ export default function App() {
               </Routes>
             </main>
           </div>
+          <ScrollToTop />
         </BrowserRouter>
       </AuthProvider>
     </ThemeProvider>
