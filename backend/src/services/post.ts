@@ -38,6 +38,7 @@ export default class PostService {
   async findPostById(postId: string, userId: string) {
     try {
       const post = await this.PostModel.findPostById(postId);
+      await this.PostModel.countViews(postId, userId);
       return parsePostBySubject(post.subject, post.toObject(), userId);
     } catch (error) {
       throw new Error("존재하지 않는 글입니다.");

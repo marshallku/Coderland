@@ -18,7 +18,7 @@ export interface IPost {
   excerpt: string;
   author: PopulatedDoc<IUserDocument>;
   commentCount: number;
-  views: number;
+  viewUsers: string[];
   likes: number;
   likeUsers: string[];
   bookmarks: number;
@@ -50,6 +50,8 @@ export interface IPostModel extends Model<IPostDocument> {
   ) => Promise<[IPostDocument[], IPagination]>;
 
   findPostById: (postId: string) => Promise<IPostDocument>;
+
+  countViews: (postId: string, userId: string) => Promise<void>;
 
   createPost: (
     user: IUserDocument,

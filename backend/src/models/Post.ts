@@ -52,10 +52,9 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
       type: Number,
       default: 0,
     },
-    views: {
-      type: Number,
-      default: 0,
-      min: 0,
+    viewUsers: {
+      type: [String],
+      default: [],
     },
     likes: {
       type: Number,
@@ -138,6 +137,12 @@ PostSchema.statics.findAllPosts = async (
 PostSchema.statics.findPostById = async (postId: string) => {
   const post = await Post.findById(postId).populate("author", "nickname");
   return post;
+};
+
+PostSchema.statics.countViews = async (postId: string, userId: string) => {
+  await Post.findByIdAndUpdate(postId, {
+    $addToSet: { viewUsers: userId },
+  });
 };
 
 PostSchema.statics.createPost = async (

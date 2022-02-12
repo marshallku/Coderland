@@ -17,6 +17,7 @@ export default function parsePostBySubject(
     category,
     likeUsers,
     bookmarkUsers,
+    viewUsers,
     ...rest
   } = post;
 
@@ -30,6 +31,7 @@ export default function parsePostBySubject(
       area,
       category,
       anonymous,
+      views: viewUsers.length,
       isBookmarked: bookmarkUsers.includes(userId),
       isLiked: likeUsers.includes(userId),
       author: createAuthorName(anonymous, author),
@@ -38,6 +40,7 @@ export default function parsePostBySubject(
   return {
     ...rest,
     anonymous,
+    views: viewUsers.length,
     isBookmarked: bookmarkUsers.includes(userId),
     isLiked: likeUsers.includes(userId),
     author: createAuthorName(anonymous, author),
