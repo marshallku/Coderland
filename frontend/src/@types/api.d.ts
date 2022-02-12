@@ -124,7 +124,7 @@ interface IGatherPostListResponse extends ISuccessResponse {
 }
 
 interface IGatherPostResponse extends ISuccessResponse {
-  gather: IGatherPost;
+  post: IGatherPost;
 }
 // Comment
 interface ICommentListResponse extends ISuccessResponse {

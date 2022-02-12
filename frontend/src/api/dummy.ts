@@ -462,7 +462,7 @@ export const dummyGathersResponse: Promise<IGatherPostListResponse> =
 
 export const dummyGatherResponse: Promise<IGatherPostResponse> = dummyAsync({
   isOk: true,
-  gather: {
+  post: {
     _id: "611b6748bfc2290fd11ec5a5",
     title: "모집 완료 안 된 글",
     contents: dummyMarkDown,
