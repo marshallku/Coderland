@@ -29,6 +29,7 @@ interface IPost {
   contents: string;
   subject: TSubject;
   views: number;
+  bookmarks: number;
   likes: number;
   author: string;
   commentCount: number;
@@ -47,6 +48,7 @@ interface IGatherPost {
   title: string;
   contents: string;
   author: string;
+  bookmarks: number;
   likes: number;
   views: number;
   commentCount: number;

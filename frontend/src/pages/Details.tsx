@@ -17,8 +17,10 @@ import { useAuth } from "../hooks/auth";
 import "./Details.css";
 
 export function GatherDetails() {
-  const [clapped, setClapped] = useState(false);
-  const [bookmarked, setBookmarked] = useState(false);
+  const [clapped, setClapped] = useState<boolean>(false);
+  const [bookmarked, setBookmarked] = useState<boolean>(false);
+  const [numBookmark, setNumBookmark] = useState<number>(0);
+  const [numClap, setNumClap] = useState<number>(0);
   const { id } = useParams();
   if (!id) {
     return <Navigate to="/404" />;
@@ -27,12 +29,14 @@ export function GatherDetails() {
   const navigate = useNavigate();
   const auth = useAuth();
 
-  function handleBookmarkClick() {
+  async function handleBookmarkClick() {
     if (auth?.user && id) {
       if (bookmarked) {
         removeBookmark({ id, token: auth?.user.token });
+        setNumBookmark(numBookmark - 1);
       } else {
         addBookmark({ id, token: auth?.user.token });
+        setNumBookmark(numBookmark + 1);
       }
 
       setBookmarked(!bookmarked);
@@ -42,12 +46,14 @@ export function GatherDetails() {
     navigate("/login");
   }
 
-  function handleLikesClick() {
+  async function handleLikesClick() {
     if (auth?.user && id) {
       if (clapped) {
         removeClap({ id, token: auth?.user.token });
+        setNumClap(numClap - 1);
       } else {
         addClap({ id, token: auth?.user.token });
+        setNumClap(numClap + 1);
       }
 
       setClapped(!clapped);
@@ -59,7 +65,9 @@ export function GatherDetails() {
 
   useEffect(() => {
     async function handleAsync() {
-      const apiResponse = await useApi(getPost<IGatherPostResponse>(`${id}`));
+      const apiResponse = await useApi(
+        getPost<IGatherPostResponse>(`${id}`, `${auth?.user?.token}`)
+      );
 
       if (!apiResponse) {
         navigate("/");
@@ -69,6 +77,8 @@ export function GatherDetails() {
       setResponse(apiResponse);
       setBookmarked(!!apiResponse.post.isBookmarked);
       setClapped(!!apiResponse.post.isLiked);
+      setNumBookmark(apiResponse.post.bookmarks);
+      setNumClap(apiResponse.post.likes);
     }
 
     handleAsync();
@@ -143,10 +153,12 @@ export function GatherDetails() {
             type="button"
             className={formatClassName(
               "details-body__button",
-              bookmarked && "details-body__button--activated"
+              bookmarked && "details-body__button--activated",
+              numBookmark === 0 && "details-body__button--num-hidden"
             )}
             onClick={handleBookmarkClick}
           >
+            <span>{numBookmark}</span>
             <i
               role="img"
               aria-label="북마크"
@@ -159,11 +171,12 @@ export function GatherDetails() {
             type="button"
             className={formatClassName(
               "details-body__button",
-              clapped && "details-body__button--activated"
+              clapped && "details-body__button--activated",
+              numClap === 0 && "details-body__button--num-hidden"
             )}
             onClick={handleLikesClick}
           >
-            <span>{response?.post.likes}</span>
+            <span>{numClap}</span>
             <Clap activated={clapped} />
           </button>
         </div>
@@ -174,8 +187,10 @@ export function GatherDetails() {
 }
 
 export function PostDetails() {
-  const [clapped, setClapped] = useState(false);
-  const [bookmarked, setBookmarked] = useState(false);
+  const [clapped, setClapped] = useState<boolean>(false);
+  const [bookmarked, setBookmarked] = useState<boolean>(false);
+  const [numBookmark, setNumBookmark] = useState<number>(0);
+  const [numClap, setNumClap] = useState<number>(0);
   const { id } = useParams();
   if (!id) {
     return <Navigate to="/404" />;
@@ -184,12 +199,14 @@ export function PostDetails() {
   const navigate = useNavigate();
   const auth = useAuth();
 
-  function handleBookmarkClick() {
+  async function handleBookmarkClick() {
     if (auth?.user && id) {
       if (bookmarked) {
         removeBookmark({ id, token: auth?.user.token });
+        setNumBookmark(numBookmark - 1);
       } else {
         addBookmark({ id, token: auth?.user.token });
+        setNumBookmark(numBookmark + 1);
       }
 
       setBookmarked(!bookmarked);
@@ -199,12 +216,14 @@ export function PostDetails() {
     navigate("/login");
   }
 
-  function handleLikesClick() {
+  async function handleLikesClick() {
     if (auth?.user && id) {
       if (clapped) {
         removeClap({ id, token: auth?.user.token });
+        setNumClap(numClap - 1);
       } else {
         addClap({ id, token: auth?.user.token });
+        setNumClap(numClap + 1);
       }
 
       setClapped(!clapped);
@@ -216,7 +235,9 @@ export function PostDetails() {
 
   useEffect(() => {
     async function handleAsync() {
-      const apiResponse = await useApi(getPost<IPostResponse>(`${id}`));
+      const apiResponse = await useApi(
+        getPost<IPostResponse>(`${id}`, `${auth?.user?.token}`)
+      );
 
       if (!apiResponse) {
         navigate("/");
@@ -226,6 +247,8 @@ export function PostDetails() {
       setResponse(apiResponse);
       setBookmarked(!!apiResponse.post.isBookmarked);
       setClapped(!!apiResponse.post.isLiked);
+      setNumBookmark(apiResponse.post.bookmarks);
+      setNumClap(apiResponse.post.likes);
     }
 
     handleAsync();
@@ -263,10 +286,12 @@ export function PostDetails() {
             type="button"
             className={formatClassName(
               "details-body__button",
-              bookmarked && "details-body__button--activated"
+              bookmarked && "details-body__button--activated",
+              numBookmark === 0 && "details-body__button--num-hidden"
             )}
             onClick={handleBookmarkClick}
           >
+            <span>{numBookmark}</span>
             <i
               role="img"
               aria-label="북마크"
@@ -279,11 +304,12 @@ export function PostDetails() {
             type="button"
             className={formatClassName(
               "details-body__button",
-              clapped && "details-body__button--activated"
+              clapped && "details-body__button--activated",
+              numClap === 0 && "details-body__button--num-hidden"
             )}
             onClick={handleLikesClick}
           >
-            <span>{response?.post.likes}</span>
+            <span>{numClap}</span>
             <Clap activated={clapped} />
           </button>
         </div>

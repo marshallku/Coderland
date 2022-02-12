@@ -111,7 +111,7 @@
 .details-body__button {
   position: relative;
   display: flex;
-  padding: 1.2rem;
+  padding: 1rem;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -120,20 +120,25 @@
 }
 
 .details-body__button > i {
-  font-size: 1.4rem;
+  font-size: 1.8rem;
 }
 
 .details-body__button > svg {
-  width: 1.4rem;
-  height: 1.4rem;
+  width: 1.8rem;
+  height: 1.8rem;
 }
 
-.details-body__button > span + :is(i, svg) {
+.details-body__button > :is(i, svg) {
   transform: translate3d(0, -0.4rem, 0);
+  transition: transform 0.25s ease-in-out;
 }
 
 .details-body__button--activated > :is(i, svg) {
   color: var(--primary);
+}
+
+.details-body__button--num-hidden > :is(i, svg) {
+  transform: translateZ(0);
 }
 
 .details-body__button > span {
@@ -141,4 +146,9 @@
   margin-top: 6px;
   bottom: 0.6rem;
   font-size: 0.6rem;
+  transition: opacity 0.25s ease-in-out;
+}
+
+.details-body__button--num-hidden > span {
+  opacity: 0;
 }
