@@ -8,7 +8,7 @@ import ScrollController from "./components/ScrollController";
 
 import Home from "./pages/Home";
 import Gather from "./pages/Gather";
-import { PostDetails, GatherDetails } from "./pages/Details";
+import Details from "./pages/Details";
 import Add from "./pages/Add";
 import NotFound from "./pages/NotFound";
 import User, { UserInfo, UserBookmarks } from "./pages/User";
@@ -49,8 +49,8 @@ export default function App() {
                   </Route>
                   <Route path="/authorize" element={<Authorize />} />
                 </Route>
-                <Route path="/posts/:id" element={<PostDetails />} />
-                <Route path="/gathers/:id" element={<GatherDetails />} />
+                <Route path="/posts/:id" element={<Details />} />
+                <Route path="/gathers/:id" element={<Details />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
