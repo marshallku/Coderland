@@ -1,7 +1,3 @@
-.post-list__title {
-  font-size: 1.375rem;
-}
-
 .post-list--card {
   display: flex;
   margin-top: 16px;
@@ -33,11 +29,8 @@
   }
 }
 
-@media screen and (min-width: 1180px) {
+@media screen and (min-width: 1160px) {
   .post-list--card {
     grid-template-columns: repeat(4, 1fr);
-  }
-  .post-list__title:not(.post-list__title--limit) {
-    display: none;
   }
 }
