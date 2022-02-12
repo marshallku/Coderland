@@ -126,11 +126,6 @@ interface IGatherPostListResponse extends ISuccessResponse {
 interface IGatherPostResponse extends ISuccessResponse {
   gather: IGatherPost;
 }
-
-interface IGatherModifyResponse extends ISuccessResponse {
-  gatherId: string;
-}
-
 // Comment
 interface ICommentListResponse extends ISuccessResponse {
   comments: Array<IComment>;
