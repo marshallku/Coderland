@@ -65,7 +65,7 @@ export function createGatherPost(
     tags: Array<string>;
   },
   token: string
-): Promise<IGatherModifyResponse | IFailResponse> {
+): Promise<IPostModifyResponse | IFailResponse> {
   return instance.post("/posts", {
     headers: {
       "Content-Type": "application/json",

@@ -323,7 +323,7 @@ export default function Add() {
         return;
       }
 
-      navigate(`/gathers/${postRequest.gatherId}`);
+      navigate(`/gathers/${postRequest.postId}`);
       return;
     }
 
