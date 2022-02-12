@@ -1,35 +1,44 @@
 import mongoose from "mongoose";
-import shuffleArray from "./array";
 
 const anonymousNicknameList = [
+  "레이서",
   "도도새",
-  "카드 병정",
-  "체셔 고양이",
+  "트럼프 병정",
   "공작 부인",
   "하트 여왕",
+  "하트 왕",
   "모자장수",
   "흰 토끼",
-  "하트 왕",
-  "시골쥐",
-  "레이서",
-  "개구리 병사",
-  "어린 독수리",
-  "물고기 병사",
+  "산쥐",
+  "요리사",
+  "바닷가재",
+  "비둘기",
+  "쐐기벌레",
+  "강아지",
+  "가짜 거북",
   "도마뱀",
-  "사냥개",
-  "토끼",
 ];
 
 function selectAuthorName(id: string, nicknameList: Array<string>) {
-  const index = parseInt(id[0], 16);
+  const index = parseInt(id.slice(0, 10), 16) % 16;
   return `익명의 ${nicknameList[index]}`;
+}
+
+function rotateArray(array: string[], idx: number) {
+  const spliced = array.splice(array.length - idx, array.length);
+  array.unshift(...spliced);
+  return array;
 }
 
 export default function createAuthorName(
   anonymous: boolean,
-  author: { _id: mongoose.Types.ObjectId; nickname: string }
+  author: { _id: mongoose.Types.ObjectId; nickname: string },
+  postId: string
 ) {
-  const nicknameList = shuffleArray(anonymousNicknameList);
+  const rotateIdx = parseInt(postId.slice(0, 10), 16) % 16;
+
+  const nicknameList = rotateArray(anonymousNicknameList, rotateIdx);
+  // console.log(selectAuthorName(author._id.toString(), nicknameList));
   return anonymous
     ? selectAuthorName(author._id.toString(), nicknameList)
     : author.nickname;
