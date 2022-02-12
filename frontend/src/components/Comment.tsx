@@ -1,32 +1,32 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/auth";
 import toast from "../utils/toast";
-import CommentLikeBtn from "./CommentLikeBtn";
-import Reply from "./CommentReply";
 import { formatToReadableTime } from "../utils/time";
+import formatClassName from "../utils/formatClassName";
+import CommentLikeBtn from "./CommentLikeBtn";
 import "./Comment.css";
 import {
   createReply,
   deleteComment,
   getCommentList,
   updateComment,
+  deleteReply,
+  updateReply,
 } from "../api";
-
-const REPLY_LIMIT = 3;
 
 export default function Comment({
   postId,
-  comment: { _id, contents, author, isPostAuthor, createdAt, likes, replies },
+  parentId,
+  data,
   setCommentList,
   focused,
   setFocused,
 }: ICommentProps) {
   const [mode, setMode] = useState<TCommentMode>("read");
-  const [editedText, setEditedText] = useState(contents);
+  const [editedText, setEditedText] = useState(data.contents);
   const [replyText, setReplyText] = useState("");
-  const [startIdx, setStartIdx] = useState(0);
-  const [likesCount, setLikesCount] = useState(likes);
+  const [likesCount, setLikesCount] = useState(data.likes || 0);
   const [isLiked, setIsLiked] = useState(false);
   const auth = useAuth();
   const navigate = useNavigate();
@@ -42,10 +42,6 @@ export default function Comment({
     setCommentList(response.comments);
   };
 
-  useEffect(() => {
-    setStartIdx(Math.max(replies.length - REPLY_LIMIT, 0));
-  }, [replies]);
-
   const handleEditSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const token = auth?.user?.token;
@@ -60,12 +56,20 @@ export default function Comment({
       return;
     }
 
-    const editCommentResponse = await updateComment({
-      contents: editedText,
-      commentId: _id,
-      postId,
-      token,
-    });
+    const editCommentResponse = !parentId
+      ? await updateComment({
+          contents: editedText,
+          commentId: data._id,
+          postId,
+          token,
+        })
+      : await updateReply({
+          contents: editedText,
+          parentId,
+          commentId: data._id,
+          postId,
+          token,
+        });
 
     if (editCommentResponse.isOk === false) {
       toast("댓글을 수정하는 데 실패했습니다");
@@ -84,11 +88,18 @@ export default function Comment({
       return;
     }
 
-    const deleteCommentResponse = await deleteComment({
-      commentId: _id,
-      postId,
-      token,
-    });
+    const deleteCommentResponse = !parentId
+      ? await deleteComment({
+          commentId: data._id,
+          postId,
+          token,
+        })
+      : await deleteReply({
+          postId,
+          parentId,
+          commentId: data._id,
+          token,
+        });
 
     if (deleteCommentResponse.isOk === false) {
       toast("댓글을 삭제하는 데 실패했습니다");
@@ -114,7 +125,7 @@ export default function Comment({
 
     const newCommentResponse = await createReply({
       contents: replyText,
-      commentId: _id,
+      commentId: data._id,
       postId,
       token,
     });
@@ -130,26 +141,30 @@ export default function Comment({
   };
 
   const handleEditClick = () => {
-    setFocused(_id);
+    setFocused(data._id);
     setMode(mode === "edit" ? "read" : "edit");
   };
 
   const handleReplyClick = () => {
-    setFocused(_id);
+    setFocused(data._id);
     setMode(mode === "reply" ? "read" : "reply");
   };
 
   return (
     <>
-      <div className="comment">
+      <div
+        className={formatClassName("comment", parentId && "comment--reply")}
+        id={`comment-${data._id}`}
+      >
         <div className="comment__author-wrap">
-          <span className="comment__author">{author}</span>
-          {isPostAuthor && <span className="comment__post-author">작성자</span>}
+          <span className="comment__author">{data.author}</span>
+          {data.isPostAuthor && (
+            <span className="comment__post-author">작성자</span>
+          )}
 
           <button
             className="comment__edit-button"
             type="button"
-            aria-label="댓글 수정 버튼"
             onClick={handleEditClick}
           >
             <i className="icon-create" />
@@ -158,7 +173,6 @@ export default function Comment({
           <button
             className="comment__delete-button"
             type="button"
-            aria-label="댓글 삭제 버튼"
             onClick={handleDeleteClick}
           >
             <i className="icon-clear" />
@@ -166,7 +180,7 @@ export default function Comment({
           </button>
         </div>
 
-        {mode === "edit" && focused === _id ? (
+        {mode === "edit" && focused === data._id ? (
           <form
             onSubmit={handleEditSubmit}
             className="comment-form comment-form--edit"
@@ -192,31 +206,35 @@ export default function Comment({
           </form>
         ) : (
           <>
-            <p className="comment__text">{contents}</p>
+            <p className="comment__text">{data.contents}</p>
             <div className="comment__info">
               <span className="comment__date">
-                {formatToReadableTime(createdAt)}
+                {formatToReadableTime(data.createdAt)}
               </span>
-              <CommentLikeBtn
-                likesCount={likesCount}
-                setLikesCount={setLikesCount}
-                isLiked={isLiked}
-                setIsLiked={setIsLiked}
-              />
-              <button
-                className="comment__reply-button"
-                type="button"
-                onClick={handleReplyClick}
-              >
-                <i className="icon-chat" />
-                답글
-              </button>
+              {!parentId && (
+                <>
+                  <CommentLikeBtn
+                    likesCount={likesCount}
+                    setLikesCount={setLikesCount}
+                    isLiked={isLiked}
+                    setIsLiked={setIsLiked}
+                  />
+                  <button
+                    className="comment__reply-button"
+                    type="button"
+                    onClick={handleReplyClick}
+                  >
+                    <i className="icon-chat" />
+                    답글
+                  </button>
+                </>
+              )}
             </div>
           </>
         )}
       </div>
 
-      {mode === "reply" && focused === _id && (
+      {mode === "reply" && focused === data._id && (
         <form
           onSubmit={handleReplySubmit}
           className="comment-form comment-form--reply"
@@ -242,31 +260,6 @@ export default function Comment({
           </div>
         </form>
       )}
-
-      {startIdx > 0 && (
-        <button
-          type="button"
-          className="comment__view-more comment__view-more--reply"
-          onClick={() => setStartIdx(0)}
-        >
-          답글 {startIdx}개 더 보기
-        </button>
-      )}
-
-      {replies.length > 0 &&
-        replies
-          .slice(startIdx, replies.length)
-          .map((reply) => (
-            <Reply
-              key={reply._id}
-              postId={postId}
-              parentId={_id}
-              reply={reply}
-              focused={focused}
-              setFocused={setFocused}
-              updateCommentList={updateCommentList}
-            />
-          ))}
     </>
   );
 }
