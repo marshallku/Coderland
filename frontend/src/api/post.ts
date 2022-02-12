@@ -33,9 +33,14 @@ export function getGatherPostList({
 }
 
 export function getPost<T = IPostResponse | IGatherPostResponse>(
-  id: string
+  id: string,
+  token?: string
 ): Promise<T | IFailResponse> {
-  return instance.get(`/posts/${id}`);
+  return instance.get(`/posts/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 }
 
 export function createPost(
