@@ -48,7 +48,7 @@ describe("모임 게시글 기능 테스트", () => {
   it("모임 게시글 생성 테스트", async () => {
     const title = "모집 게시글 타이틀";
     const contents = "모집 게시글 내용";
-    const subject = "gathering";
+    const subject = "gather";
     const category = "study";
     const area = "서울";
     const tags = ["자바스크립트", "타입스크립트", "리액트"];
@@ -79,7 +79,7 @@ describe("모임 게시글 기능 테스트", () => {
   it("모임 게시글 리스트 조회 테스트", async () => {
     const res = await request(server)
       .get("/api/posts")
-      .query({ subject: "gathering", category: "study" })
+      .query({ subject: "gather", category: "study" })
       .send();
 
     expect(res.statusCode).toEqual(200);
@@ -146,7 +146,7 @@ describe("모임 게시글 기능 테스트", () => {
   it("모집 게시글 수정", async () => {
     const title = "업데이트 게시글 타이틀";
     const contents = "업데이트 게시글 내용";
-    const subject = "gathering";
+    const subject = "gather";
     const category = "team";
     const area = "게더타운";
     const tags = ["노드", "익스프레스", "타입스크립트"];
@@ -260,7 +260,7 @@ describe("모임 게시글 기능 테스트", () => {
   it("Fail 없는 모집 게시글 수정", async () => {
     const title = "업데이트 게시글 타이틀";
     const contents = "업데이트 게시글 내용";
-    const subject = "gathering";
+    const subject = "gather";
     const category = "team";
     const area = "게더타운";
     const tags = ["노드", "익스프레스", "타입스크립트"];
@@ -285,7 +285,7 @@ describe("모임 게시글 기능 테스트", () => {
   it("Fail 다른 작성자가 모집 게시글 수정", async () => {
     const title = "업데이트 게시글 타이틀";
     const contents = "업데이트 게시글 내용";
-    const subject = "gathering";
+    const subject = "gather";
     const category = "team";
     const area = "게더타운";
     const tags = ["노드", "익스프레스", "타입스크립트"];
@@ -310,7 +310,7 @@ describe("모임 게시글 기능 테스트", () => {
   it("Fail 로그인 없이 모집 게시글 수정", async () => {
     const title = "업데이트 게시글 타이틀";
     const contents = "업데이트 게시글 내용";
-    const subject = "gathering";
+    const subject = "gather";
     const category = "team";
     const area = "게더타운";
     const tags = ["노드", "익스프레스", "타입스크립트"];
@@ -408,7 +408,7 @@ describe("모든 모집 글 리스트 조회 테스트", () => {
       .send({
         title: "titlelkj",
         contents: "sdkfjlksdjf",
-        subject: "gathering",
+        subject: "gather",
         category: "study",
         area: "서울",
         tags: ["자바스크립트", "타입스크립트"],
@@ -420,7 +420,7 @@ describe("모든 모집 글 리스트 조회 테스트", () => {
       .send({
         title: "titlasdfsdfelkj",
         contents: "sdkfjasdfsdaflksdjf",
-        subject: "gathering",
+        subject: "gather",
         category: "code",
         area: "서울",
         tags: ["자바스크립트", "타입스크립트"],
@@ -432,7 +432,7 @@ describe("모든 모집 글 리스트 조회 테스트", () => {
       .send({
         title: "titlwerqerelkj",
         contents: "sdkfjlksdjf",
-        subject: "gathering",
+        subject: "gather",
         category: "team",
         area: "서울",
         tags: ["자바스크립트", "타입스크립트"],
@@ -440,7 +440,7 @@ describe("모든 모집 글 리스트 조회 테스트", () => {
 
     const res = await request(server)
       .get("/api/posts")
-      .query({ subject: "gathering" })
+      .query({ subject: "gather" })
       .send();
 
     expect(res.statusCode).toEqual(200);
@@ -449,7 +449,7 @@ describe("모든 모집 글 리스트 조회 테스트", () => {
 
     const res1 = await request(server)
       .get("/api/posts")
-      .query({ subject: "gathering", category: "team" })
+      .query({ subject: "gather", category: "team" })
       .send();
 
     expect(res1.statusCode).toEqual(200);

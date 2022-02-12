@@ -12,7 +12,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
       return next(new Error("권한이 없어요..."));
     }
     // gather인지 체크
-    if (post.subject !== "gathering") {
+    if (post.subject !== "gather") {
       return next(new Error("허용되지 않은 접근입니다."));
     }
     // 이미 모집된 글 체크

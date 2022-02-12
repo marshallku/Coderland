@@ -19,7 +19,7 @@ function createDto(
   postDto: Partial<IPostDocument>,
   gatherDto: Partial<IPostDocument>
 ) {
-  if (subject === "gathering") {
+  if (subject === "gather") {
     return {
       ...postDto,
       ...gatherDto,

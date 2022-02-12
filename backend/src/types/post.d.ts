@@ -8,7 +8,7 @@ export type subjects =
   | "dev"
   | "recruit"
   | "chat"
-  | "gathering";
+  | "gather";
 
 export type categories = "study" | "code" | "team" | "none";
 
@@ -30,7 +30,7 @@ export interface IPost {
 }
 
 export interface IGatherPost extends IPost {
-  // subejct가 gathering일 때만 포함될 내용
+  // subejct가 gather 때만 포함될 내용
   category?: categories;
   area?: string;
   isCompleted?: boolean;
