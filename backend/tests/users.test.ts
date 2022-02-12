@@ -64,7 +64,7 @@ describe("유저 기능 테스트", () => {
     const res = await request(server)
       .get("/api/users")
       .set("authorization", expiredToken)
-      .set("refreshToken", refreshToken)
+      .set("refresh-token", refreshToken)
       .send();
 
     expect(
@@ -79,7 +79,7 @@ describe("유저 기능 테스트", () => {
     const res = await request(server)
       .get("/api/users")
       .set("authorization", expiredToken)
-      .set("refreshToken", expiredRefreshToken)
+      .set("refresh-token", expiredRefreshToken)
       .send();
 
     expect(res.statusCode).toEqual(403);
