@@ -114,7 +114,6 @@ CommentSchema.statics.deleteComment = async (commentId) => {
     await comment.updateOne({
       contents: "작성자에 의해 삭제된 댓글입니다.",
       isDeleted: true,
-      author: new mongoose.Types.ObjectId(undefined),
       likes: 0,
       likeUsers: [],
       isPostAuthor: false,
