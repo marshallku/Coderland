@@ -2,7 +2,7 @@ import { IUserDocument } from "user";
 import { ICommentModel } from "comment";
 import { IPostModel } from "post";
 import { Post, Comment } from "../models";
-import { parseReply, createAuthorName } from "../utils";
+import { parseComment } from "../utils";
 
 export default class CommentService {
   private ParentModel: IPostModel | ICommentModel;
@@ -33,23 +33,9 @@ export default class CommentService {
 
   async findAllComments(userId: string) {
     const comments = await this.CommentModel.findAllComments(this.parentId);
-    const parsedComments = comments.map((comment) => {
-      const { author, anonymous, replies, isPostAuthor, likeUsers, ...rest } =
-        comment.toObject();
-      return {
-        ...rest,
-        isPostAuthor,
-        isLiked: likeUsers.includes(userId),
-        replies: parseReply(
-          replies,
-          anonymous,
-          author,
-          isPostAuthor,
-          this.parentId
-        ),
-        author: createAuthorName(anonymous, author, this.parentId),
-      };
-    });
+    const parsedComments = comments.map((comment) =>
+      parseComment(comment, userId, this.parentId)
+    );
     return parsedComments;
   }
 
