@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import AddPostButton from "../components/AddPostButton";
 import Navigation from "../components/Navigation";
+import PageTitle from "../components/PageTitle";
 import PostList from "../components/PostList";
 
 export default function Gather() {
@@ -23,6 +24,7 @@ export default function Gather() {
 
   return (
     <>
+      <PageTitle subject="gather" />
       <Navigation
         list={[
           { title: "전체", to: "/gather" },
