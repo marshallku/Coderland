@@ -7,6 +7,7 @@ import PostCardItem, { PostCardItemSkeleton } from "./PostCardItem";
 import PostListItem, { PostListItemSkeleton } from "./PostListItem";
 import parseQuery from "../utils/url";
 import "./PostList.css";
+import DisplayError from "./DisplayError";
 
 const USES_CARD_DESIGN = ["gather", "study", "code", "team"];
 const SKELETONS_LENGTH = 8;
@@ -23,6 +24,29 @@ export default function PostList({
   >();
   const [currentPage, setCurrentPage] = useState<number>(page ? +page || 1 : 1);
   const usesCardDesign = USES_CARD_DESIGN.includes(subject);
+  const ListOfElements = useCallback(() => {
+    if (response) {
+      if (response.posts.length === 0) {
+        return <DisplayError message="아직 아무런 글이 없어요" />;
+      }
+
+      if (usesCardDesign) {
+        return (response.posts as Array<IGatherPostInList>).map(PostCardItem);
+      }
+
+      return (response.posts as Array<IPostInList>).map(PostListItem);
+    }
+
+    const tmpArray = Array.from({ length: SKELETONS_LENGTH });
+
+    if (usesCardDesign) {
+      // eslint-disable-next-line react/no-array-index-key
+      return tmpArray.map((_, i) => <PostCardItemSkeleton key={i} />);
+    }
+
+    // eslint-disable-next-line react/no-array-index-key
+    return tmpArray.map((_, i) => <PostListItemSkeleton key={i} />);
+  }, [response]);
 
   const paginate = useCallback((pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -50,26 +74,6 @@ export default function PostList({
 
     getCardOrListPosts();
   }, [currentPage]);
-
-  const ListOfElements = () => {
-    if (response) {
-      if (usesCardDesign) {
-        return (response.posts as Array<IGatherPostInList>).map(PostCardItem);
-      }
-
-      return (response.posts as Array<IPostInList>).map(PostListItem);
-    }
-
-    const tmpArray = Array.from({ length: SKELETONS_LENGTH });
-
-    if (usesCardDesign) {
-      // eslint-disable-next-line react/no-array-index-key
-      return tmpArray.map((_, i) => <PostCardItemSkeleton key={i} />);
-    }
-
-    // eslint-disable-next-line react/no-array-index-key
-    return tmpArray.map((_, i) => <PostListItemSkeleton key={i} />);
-  };
 
   return (
     <>
