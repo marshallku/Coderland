@@ -316,7 +316,7 @@ describe("회원 탈퇴 기능", () => {
   it("탈퇴한 회원이 생성한 포스트 저자 확인", async () => {
     const res = await request(server).get(`/api/posts/${postId}`).send();
 
-    expect(res.body.post.author.nickname).toEqual("사라진 체셔 고양이");
+    expect(res.body.post.author).toEqual("사라진 체셔 고양이");
   });
 
   afterAll(async () => {
