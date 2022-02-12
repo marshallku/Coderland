@@ -15,6 +15,20 @@ export default function GlobalNavigationBar({
   return (
     <nav className="gnb">
       <div className="gnb__grow">
+        <button
+          type="button"
+          className={formatClassName(
+            "hbg",
+            "gnb__button",
+            drawerRevealed && "hbg--activated"
+          )}
+          aria-label="드로어 열기"
+          onClick={() => setDrawerRevealed(!drawerRevealed)}
+        >
+          <div className="hbg__line hbg__line--top" />
+          <div className="hbg__line hbg__line--mid" />
+          <div className="hbg__line hbg__line--bot" />
+        </button>
         <Link to="/" className="gnb__button">
           <img
             src={favicon}
@@ -65,20 +79,6 @@ export default function GlobalNavigationBar({
             로그인
           </a>
         )}
-        <button
-          type="button"
-          className={formatClassName(
-            "hbg",
-            "gnb__button",
-            drawerRevealed && "hbg--activated"
-          )}
-          aria-label="드로어 열기"
-          onClick={() => setDrawerRevealed(!drawerRevealed)}
-        >
-          <div className="hbg__line hbg__line--top" />
-          <div className="hbg__line hbg__line--mid" />
-          <div className="hbg__line hbg__line--bot" />
-        </button>
       </div>
     </nav>
   );
