@@ -1,13 +1,5 @@
-import AddPostButton from "../components/AddPostButton";
-import PageTitle from "../components/PageTitle";
-import PostList from "../components/PostList";
+import ListPage from "../components/ListPage";
 
 export default function Chat() {
-  return (
-    <>
-      <PageTitle subject="chat" />
-      <PostList subject="chat" />
-      <AddPostButton to="chat" />
-    </>
-  );
+  return <ListPage subject="chat" />;
 }

@@ -19,9 +19,37 @@
   margin-bottom: 1rem;
 }
 
+.home-posts__header {
+  display: flex;
+  margin-bottom: 1.3rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 .home-posts__title {
-  padding: 20px 0;
-  font-size: 1.3rem;
+  font-size: 1.75rem;
+  line-height: 1.5;
+}
+
+.home-posts__link {
+  display: inline-block;
+  margin-left: auto;
+  padding: 6px;
+  line-height: 1.5;
+  background-color: var(--background-elevated);
+  border-radius: var(--border-radius);
+}
+
+.home-posts__link > i {
+  display: inline-block;
+  margin-left: 5px;
+  transition: transform 0.25s ease-in-out;
+}
+
+@media (any-hover: hover) {
+  .home-posts__link:hover > i {
+    transform: translateX(3px);
+  }
 }
 
 .home-posts__footer {

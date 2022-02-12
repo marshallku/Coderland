@@ -77,7 +77,9 @@ export function GatherDetails() {
   return (
     <>
       <header className="details-header">
-        <h2 className="details-header__title">{response?.gather.title}</h2>
+        <h1 className="main-title details-header__title">
+          {response?.gather.title}
+        </h1>
         <div className="details-header__contents">
           <div className="details-header__author">
             {response?.gather.author}
@@ -234,7 +236,9 @@ export function PostDetails() {
   return (
     <>
       <div className="details-header">
-        <h2 className="details-header__title">{response?.post.title}</h2>
+        <h1 className="main-title details-header__title">
+          {response?.post.title}
+        </h1>
         <div className="details-header__contents">
           <div className="details-header__subject">
             {response?.post.subject}
