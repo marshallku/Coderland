@@ -1,11 +1,12 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import GlobalNavigation from "./components/GlobalNavigation";
 import { AuthProvider } from "./hooks/auth";
 import { ThemeProvider } from "./hooks/theme";
 import RequireAuth from "./routes/RequireAuth";
 import ScrollController from "./components/ScrollController";
 import ScrollToTop from "./components/ScrollToTop";
+import GlobalNavigationBar from "./components/GNB";
+import Drawer from "./components/Drawer";
 
 import Home from "./pages/Home";
 import Gather from "./pages/Gather";
@@ -27,7 +28,8 @@ export default function App() {
       <AuthProvider>
         <BrowserRouter>
           <ScrollController />
-          <GlobalNavigation />
+          <GlobalNavigationBar />
+          <Drawer />
           <div className="container">
             <main className="main-container">
               <Routes>

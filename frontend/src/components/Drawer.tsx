@@ -33,66 +33,28 @@ function DrawerLink({ title, to, icon, cb }: IDrawerItem) {
       }}
     >
       <i className={`icon-${icon}`} />
-      {title}
+      <span>{title}</span>
     </Link>
   );
 }
 
-export default function Drawer({
-  drawerRevealed,
-  setDrawerRevealed,
-}: IDrawerStatusProps) {
-  const hideDrawer = () => {
-    setDrawerRevealed(false);
-  };
-
+export default function Drawer() {
   return (
-    <>
-      <section
-        className={formatClassName(
-          "drawer",
-          drawerRevealed && "drawer--revealed"
-        )}
-      >
-        <h2 className="drawer__title">코더랜드</h2>
-        <nav className="drawer__navigation">
-          <DrawerLink cb={hideDrawer} icon="home" title="홈" to="/" />
-          <DrawerLink
-            cb={hideDrawer}
-            icon="thumbs_up_down"
-            title="후기 / 회고"
-            to="/review"
-          />
-          <DrawerLink
-            cb={hideDrawer}
-            icon="person_add_alt_1"
-            title="팀원 모집"
-            to="/gather"
-          />
-          <DrawerLink
-            cb={hideDrawer}
-            icon="create"
-            title="댓글 남겨줘"
-            to="/article"
-          />
-          <DrawerLink cb={hideDrawer} icon="code" title="개발 정보" to="/dev" />
-          <DrawerLink
-            cb={hideDrawer}
-            icon="home_repair_service"
-            title="취업 정보"
-            to="/recruit"
-          />
-          <DrawerLink cb={hideDrawer} icon="chat" title="잡담" to="/chat" />
-        </nav>
-      </section>
-      <button
-        className={`drawer-closer${
-          drawerRevealed ? " drawer-closer--revealed" : ""
-        }`}
-        onClick={hideDrawer}
-        type="button"
-        aria-label="드로어 닫기"
-      />
-    </>
+    <section className="drawer">
+      <h2 className="drawer__title">코더랜드</h2>
+      <nav className="drawer__navigation">
+        <DrawerLink icon="home" title="홈" to="/" />
+        <DrawerLink icon="thumbs_up_down" title="후기 / 회고" to="/review" />
+        <DrawerLink icon="person_add_alt_1" title="팀원 모집" to="/gather" />
+        <DrawerLink icon="create" title="댓글 남겨줘" to="/article" />
+        <DrawerLink icon="code" title="개발 정보" to="/dev" />
+        <DrawerLink
+          icon="home_repair_service"
+          title="취업 정보"
+          to="/recruit"
+        />
+        <DrawerLink icon="chat" title="잡담" to="/chat" />
+      </nav>
+    </section>
   );
 }
