@@ -13,7 +13,7 @@ import "./ScrollToTop.css";
     @marshallku
 
 */
-const SVG_SIZE = 87.9;
+const SVG_SIZE = 125.5;
 
 export default function ScrollToTop() {
   const location = useLocation();
@@ -55,14 +55,14 @@ export default function ScrollToTop() {
     >
       <svg
         className="to-top__circle"
-        width="30"
-        height="30"
+        width="44"
+        height="44"
         style={{
           strokeDasharray: SVG_SIZE,
           strokeDashoffset: `${SVG_SIZE - progress}`,
         }}
       >
-        <circle cx="15" cy="15" r="14" />
+        <circle cx="22" cy="22" r="20" />
       </svg>
     </button>
   );
