@@ -67,7 +67,7 @@ export function tryLoginOnLoad() {
     return;
   }
 
-  const { accessToken } = parseCookie();
+  const accessToken = parseCookie()["access-token"];
 
   saveUser(accessToken);
 }
