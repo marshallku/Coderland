@@ -27,6 +27,7 @@ export interface IPost {
   anonymous: boolean;
   createdAt: Date;
   updatedAt: Date;
+  isAuthor?: boolean;
 }
 
 export interface IGatherPost extends IPost {

@@ -66,6 +66,10 @@ export const PostSchema = new mongoose.Schema<IPostDocument>(
       ref: "User",
       required: true,
     },
+    isAuthor: {
+      type: Boolean,
+      default: false,
+    },
     commentCount: {
       type: Number,
       default: 0,

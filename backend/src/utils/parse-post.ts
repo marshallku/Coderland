@@ -35,6 +35,7 @@ export default function parsePostBySubject(
       isBookmarked: bookmarkUsers.includes(userId),
       isLiked: likeUsers.includes(userId),
       author: createAuthorName(anonymous, author, post._id.toString()),
+      isAuthor: `${author._id}` === `${userId}`,
     };
   }
   return {
@@ -44,5 +45,6 @@ export default function parsePostBySubject(
     isBookmarked: bookmarkUsers.includes(userId),
     isLiked: likeUsers.includes(userId),
     author: createAuthorName(anonymous, author, post._id.toString()),
+    isAuthor: `${author._id}` === `${userId}`,
   };
 }
