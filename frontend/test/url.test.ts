@@ -1,4 +1,4 @@
-import parseQuery from "../src/utils/url";
+import { parseQuery, composeQuery } from "../src/utils/url";
 
 describe("URL 관련 유틸 작동 검사", () => {
   test("쿼리 파싱", () => {
@@ -10,5 +10,18 @@ describe("URL 관련 유틸 작동 검사", () => {
       "foo=": "foo",
       "foo bar": "foo bar",
     });
+  });
+
+  test("쿼리 직렬화", () => {
+    const query = {
+      a: "apple",
+      b: "",
+      c: 1 > 2 && "falsy",
+      d: 1 < 2 && "truthy",
+      e: undefined,
+    };
+    const composed = composeQuery(query);
+
+    expect(composed).toBe("?a=apple&d=truthy");
   });
 });

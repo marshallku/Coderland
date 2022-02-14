@@ -1,3 +1,4 @@
+import { composeQuery } from "../utils/url";
 import instance from "./instance";
 
 export function getPostList({
@@ -9,11 +10,13 @@ export function getPostList({
   perPage?: number;
   page?: number;
 }): Promise<IPostListResponse | IFailResponse> {
-  return instance.get(
-    `/posts?subject=${subject}&page=${page}${
-      perPage ? `&perPage=${perPage}` : ""
-    }`
-  );
+  const query = composeQuery({
+    subject,
+    page,
+    perPage,
+  });
+
+  return instance.get(`/posts${query}`);
 }
 
 export function getGatherPostList({
@@ -25,11 +28,14 @@ export function getGatherPostList({
   perPage?: number;
   page?: number;
 } = {}): Promise<IGatherPostListResponse | IFailResponse> {
-  return instance.get(
-    `/posts?subject=gather${
-      category ? `&category=${category}` : ""
-    }&page=${page}${perPage ? `&perPage=${perPage}` : ""}`
-  );
+  const query = composeQuery({
+    subject: "gather",
+    category,
+    page,
+    perPage,
+  });
+
+  return instance.get(`/posts${query}`);
 }
 
 export function getPost<T = IPostResponse | IGatherPostResponse>(
