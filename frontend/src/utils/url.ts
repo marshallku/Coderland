@@ -1,5 +1,5 @@
-export default function parseQuery(query: string) {
-  const obj: parsedQuery = {};
+export function parseQuery(query: string) {
+  const obj: IParsedQuery = {};
 
   query
     .substring(1)
@@ -10,4 +10,20 @@ export default function parseQuery(query: string) {
     });
 
   return obj;
+}
+
+export function composeQuery(object: IQueryObject): string {
+  const filtered = Object.entries(object).filter(([, value]) => {
+    const typeOfValue = typeof value;
+
+    if (!value || (typeOfValue !== "number" && typeOfValue !== "string")) {
+      return null;
+    }
+
+    return `${value}`;
+  });
+
+  return `?${new URLSearchParams(
+    filtered as Array<[string, string]>
+  ).toString()}`;
 }

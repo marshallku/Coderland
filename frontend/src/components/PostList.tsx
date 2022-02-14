@@ -5,7 +5,7 @@ import { getGatherPostList, getPostList } from "../api";
 import Pagination from "./Pagination";
 import PostCardItem, { PostCardItemSkeleton } from "./PostCardItem";
 import PostListItem, { PostListItemSkeleton } from "./PostListItem";
-import parseQuery from "../utils/url";
+import { parseQuery } from "../utils/url";
 import "./PostList.css";
 import DisplayError from "./DisplayError";
 
