@@ -34,7 +34,7 @@ export default function PostCardItem({
               "card-item__status",
               isCompleted && "card-item__status--completed"
             )}
-          >{`모집${isCompleted ? "완료" : "중"}`}</span>
+          >{`${isCompleted ? "모집 완료" : "모집 중"}`}</span>
           <span className="card-item__category">
             {categoriesInKr[categories.indexOf(category)]}
           </span>

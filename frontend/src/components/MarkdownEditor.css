@@ -14,7 +14,7 @@
     0;
 }
 
-.markdown-editor__button.highlight {
+.markdown-editor__button--highlight {
   background: var(--multipurpose-pressed);
 }
 
@@ -67,7 +67,7 @@
     pointer-events: none;
   }
 
-  .markdown-editor__button.highlight {
+  .markdown-editor__button--highlight {
     background-color: var(--multipurpose);
   }
 }
