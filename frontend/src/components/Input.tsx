@@ -78,7 +78,7 @@ export function Input({
         )}
       >
         {label}
-        {required ? " *" : ""}
+        {!!required && " *"}
       </label>
     </div>
   );
@@ -147,7 +147,7 @@ export function Textarea({
         )}
       >
         {label}
-        {required ? " *" : ""}
+        {!!required && " *"}
       </label>
     </div>
   );

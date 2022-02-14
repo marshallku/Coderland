@@ -3,6 +3,7 @@ import MarkdownViewer from "./MarkdownViewer";
 import { Textarea } from "./Input";
 import { debounce } from "../utils/optimizer";
 import "./MarkdownEditor.css";
+import formatClassName from "../utils/formatClassName";
 
 export default function MarkdownEditor({
   id,
@@ -13,8 +14,6 @@ export default function MarkdownEditor({
 }: IMarkdownEditorProps) {
   const [mode, setMode] = useState<TEditorMode>("edit");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const highlight = (target: TEditorMode) =>
-    target === mode ? "highlight" : "";
 
   const Editor = (
     <Textarea
@@ -63,7 +62,10 @@ export default function MarkdownEditor({
         <ul className="markdown-editor__buttons">
           <li>
             <button
-              className={`markdown-editor__button ${highlight("edit")}`}
+              className={formatClassName(
+                "markdown-editor__button",
+                mode === "edit" && "markdown-editor__button--highlight"
+              )}
               onClick={() => setMode("edit")}
               type="button"
             >
@@ -72,7 +74,10 @@ export default function MarkdownEditor({
           </li>
           <li>
             <button
-              className={`markdown-editor__button ${highlight("view")}`}
+              className={formatClassName(
+                "markdown-editor__button",
+                mode === "edit" && "markdown-editor__button--highlight"
+              )}
               onClick={() => setMode("view")}
               type="button"
             >

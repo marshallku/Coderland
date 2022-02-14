@@ -122,7 +122,8 @@ export default function Details<
               </div>
               <div className="details-body__info">
                 <i className="icon-info_outline" />
-                상태: 모집 {`${response?.post.isCompleted ? "완료" : "중"}`}
+                상태:{" "}
+                {`${response?.post.isCompleted ? "모집 완료" : "모집 중"}`}
               </div>
               <div className="details-body__info">
                 <i className="icon-desktop_windows" />
