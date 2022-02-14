@@ -111,7 +111,6 @@ export default function Comments({ postId }: ICommentsProps) {
           <Comment
             postId={postId}
             key={comment._id}
-            parentId=""
             data={comment}
             setCommentList={setCommentList}
             focused={focused}
