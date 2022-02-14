@@ -11,7 +11,7 @@ interface IUniversalComment extends ICommentReply {
 
 interface ICommentProps {
   postId: string;
-  parentId: string;
+  parentId?: string;
   data: IUniversalComment;
   setCommentList: React.Dispatch<React.SetStateAction<IComment[]>>;
   focused: string;
