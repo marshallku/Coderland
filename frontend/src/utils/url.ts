@@ -1,29 +1,31 @@
-export function parseQuery(query: string) {
-  const obj: IParsedQuery = {};
-
-  query
-    .substring(1)
-    .split("&")
-    .map((x) => x.split("="))
-    .forEach(([key, value]) => {
-      obj[decodeURIComponent(key)] = decodeURIComponent(value);
-    });
-
-  return obj;
+export function parseQuery(query: string): IParsedQuery {
+  return Object.fromEntries(
+    query
+      .substring(1)
+      .split("&")
+      .map((x) => x.split("="))
+      .map(([key, value]) => [
+        decodeURIComponent(key),
+        decodeURIComponent(value),
+      ])
+  );
 }
 
 export function composeQuery(object: IQueryObject): string {
-  const filtered = Object.entries(object).filter(([, value]) => {
-    const typeOfValue = typeof value;
+  return `?${Object.entries(object)
+    .filter(([, value]) => {
+      const typeOfValue = typeof value;
 
-    if (!value || (typeOfValue !== "number" && typeOfValue !== "string")) {
-      return null;
-    }
+      if (typeOfValue === "string") {
+        return !!value;
+      }
 
-    return `${value}`;
-  });
+      if (typeOfValue === "number") {
+        return true;
+      }
 
-  return `?${new URLSearchParams(
-    filtered as Array<[string, string]>
-  ).toString()}`;
+      return false;
+    })
+    .map((x) => x.join("="))
+    .join("&")}`;
 }
