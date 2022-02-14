@@ -70,7 +70,20 @@ commentRouter.post(
     const { commentId } = req.body;
     const { user } = req;
     const commentService = new CommentService();
-    await commentService.updateLike(commentId, user.id);
+    await commentService.addLike(commentId, user.id);
+    res.status(200).json({ isOk: true });
+  })
+);
+
+commentRouter.delete(
+  "/like",
+  loginRequired,
+  checkGrade,
+  asyncHandler(async (req, res) => {
+    const { commentId } = req.body;
+    const { user } = req;
+    const commentService = new CommentService();
+    await commentService.deleteLike(commentId, user.id);
     res.status(200).json({ isOk: true });
   })
 );

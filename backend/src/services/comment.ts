@@ -59,7 +59,11 @@ export default class CommentService {
     }
   }
 
-  async updateLike(commentId: string, userId: string) {
-    await this.CommentModel.updateLike(commentId, userId);
+  async addLike(commentId: string, userId: string) {
+    await this.CommentModel.addLike(commentId, userId);
+  }
+
+  async deleteLike(commentId: string, userId: string) {
+    await this.CommentModel.deleteLike(commentId, userId);
   }
 }

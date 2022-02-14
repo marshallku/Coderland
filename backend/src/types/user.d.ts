@@ -51,7 +51,8 @@ export interface IUserModel extends Model<IUserDocument> {
 
   withdrawUser: (userId: string) => Promise<void>;
 
-  updateBookmark: (postId: string, userId: string) => Promise<void>;
+  addBookmark: (postId: string, userId: string) => Promise<void>;
+  deleteBookmark: (postId: string, userId: string) => Promise<void>;
 
   findAllBookmarks: (userId: string) => Promise<IUserDocument>;
 

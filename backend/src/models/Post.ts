@@ -247,20 +247,25 @@ PostSchema.statics.completePost = async (postId: string) => {
  * @param userId 좋아요 클릭한 유저 ID
  * @returns void
  */
-PostSchema.statics.updateLike = async (postId: string, userId: string) => {
-  // 먼저 찾아서, 유저가 좋아요 눌렀는지 확인하고,
-  // 눌렀으면 취소, 안눌렀으면 좋아요
+PostSchema.statics.addLike = async (postId: string, userId: string) => {
   const post = await Post.findById(postId);
-  if (post.likeUsers.length > 0 && post.likeUsers.includes(userId)) {
-    await Post.findByIdAndUpdate(postId, {
-      $pull: { likeUsers: userId },
-      $inc: { likes: -1 },
-    });
+  if (post.likeUsers.includes(userId)) {
     return;
   }
   await Post.findByIdAndUpdate(postId, {
     $push: { likeUsers: userId },
     $inc: { likes: 1 },
+  });
+};
+
+PostSchema.statics.deleteLike = async (postId: string, userId: string) => {
+  const post = await Post.findById(postId);
+  if (!post.likeUsers.includes(userId)) {
+    return;
+  }
+  await Post.findByIdAndUpdate(postId, {
+    $pull: { likeUsers: userId },
+    $inc: { likes: -1 },
   });
 };
 
@@ -270,18 +275,25 @@ PostSchema.statics.updateLike = async (postId: string, userId: string) => {
  * @param userId 북마크 지정한 유저 ID
  * @returns void
  */
-PostSchema.statics.updateBookmark = async (postId: string, userId: string) => {
+PostSchema.statics.addBookmark = async (postId: string, userId: string) => {
   const post = await Post.findById(postId);
-  if (post.bookmarkUsers.length > 0 && post.bookmarkUsers.includes(userId)) {
-    await Post.findByIdAndUpdate(postId, {
-      $pull: { bookmarkUsers: userId },
-      $inc: { bookmarks: -1 },
-    });
+  if (post.bookmarkUsers.includes(userId)) {
     return;
   }
   await Post.findByIdAndUpdate(postId, {
     $push: { bookmarkUsers: userId },
     $inc: { bookmarks: 1 },
+  });
+};
+
+PostSchema.statics.deleteBookmark = async (postId: string, userId: string) => {
+  const post = await Post.findById(postId);
+  if (!post.bookmarkUsers.includes(userId)) {
+    return;
+  }
+  await Post.findByIdAndUpdate(postId, {
+    $pull: { bookmarkUsers: userId },
+    $inc: { bookmarks: -1 },
   });
 };
 

@@ -61,5 +61,6 @@ export interface ICommentModel extends Model<ICommentDocument> {
     replyDto: Pick<IReplyDto, "commentId" | "replyId">
   ) => Promise<void>;
 
-  updateLike: (commentId: string, userId: string) => Promise<void>;
+  addLike: (commentId: string, userId: string) => Promise<void>;
+  deleteLike: (commentId: string, userId: string) => Promise<void>;
 }

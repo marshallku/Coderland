@@ -80,21 +80,38 @@ export default class PostService {
     await this.PostModel.completePost(postId);
   }
 
-  async updateLike(postId: string, userId: string) {
+  async addLike(postId: string, userId: string) {
     try {
-      await this.PostModel.updateLike(postId, userId);
+      await this.PostModel.addLike(postId, userId);
     } catch (error) {
       throw new Error("존재하지 않는 글입니다.");
     }
   }
 
-  async updateBookmark(postId: string, userId: string) {
+  async deleteLike(postId: string, userId: string) {
     try {
-      await this.PostModel.updateBookmark(postId, userId);
+      await this.PostModel.deleteLike(postId, userId);
     } catch (error) {
       throw new Error("존재하지 않는 글입니다.");
     }
-    await this.UserModel.updateBookmark(postId, userId);
+  }
+
+  async addBookmark(postId: string, userId: string) {
+    try {
+      await this.PostModel.addBookmark(postId, userId);
+    } catch (error) {
+      throw new Error("존재하지 않는 글입니다.");
+    }
+    await this.UserModel.addBookmark(postId, userId);
+  }
+
+  async deleteBookmark(postId: string, userId: string) {
+    try {
+      await this.PostModel.deleteBookmark(postId, userId);
+    } catch (error) {
+      throw new Error("존재하지 않는 글입니다.");
+    }
+    await this.UserModel.deleteBookmark(postId, userId);
   }
 
   async allowAppliedUser(postId: string, userId: string) {
