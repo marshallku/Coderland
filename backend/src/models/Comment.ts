@@ -214,21 +214,28 @@ CommentSchema.statics.deleteReply = async (replyDto) => {
  * @param userId 유저 정보
  * @returns void
  */
-CommentSchema.statics.updateLike = async (
-  commentId: string,
-  userId: string
-) => {
+CommentSchema.statics.addLike = async (commentId: string, userId: string) => {
   const comment = await Comment.findById(commentId);
-  if (comment.likeUsers.length > 0 && comment.likeUsers.includes(userId)) {
-    await Comment.findByIdAndUpdate(commentId, {
-      $pull: { likeUsers: userId },
-      $inc: { likes: -1 },
-    });
+  if (comment.likeUsers.includes(userId)) {
     return;
   }
   await Comment.findByIdAndUpdate(commentId, {
     $push: { likeUsers: userId },
     $inc: { likes: 1 },
+  });
+};
+
+CommentSchema.statics.deleteLike = async (
+  commentId: string,
+  userId: string
+) => {
+  const comment = await Comment.findById(commentId);
+  if (!comment.likeUsers.includes(userId)) {
+    return;
+  }
+  await Comment.findByIdAndUpdate(commentId, {
+    $pull: { likeUsers: userId },
+    $inc: { likes: -1 },
   });
 };
 

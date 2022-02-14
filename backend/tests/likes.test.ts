@@ -87,7 +87,7 @@ describe("좋아요 테스트", () => {
 
   it("좋아요 취소 클릭", async () => {
     const res = await request(server)
-      .post(`/api/posts/${postId}/like`)
+      .delete(`/api/posts/${postId}/like`)
       .set("authorization", token)
       .send();
 
@@ -140,7 +140,7 @@ describe("좋아요 테스트", () => {
 
   it("댓글 좋아요 취소", async () => {
     const res = await request(server)
-      .post(`/api/posts/${postId}/comments/like`)
+      .delete(`/api/posts/${postId}/comments/like`)
       .set("authorization", token)
       .send({ commentId });
 

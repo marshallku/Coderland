@@ -121,16 +121,23 @@ UserSchema.statics.getRefreshTokenByGoogleId = async ({ googleId }) => {
  * @param userId 유저 ID
  * @returns void
  */
-UserSchema.statics.updateBookmark = async (postId: string, userId: string) => {
+UserSchema.statics.addBookmark = async (postId: string, userId: string) => {
   const user = await User.findById(userId);
-  if (user.bookmarks.length > 0 && user.bookmarks.includes(postId)) {
-    await User.findByIdAndUpdate(userId, {
-      $pull: { bookmarks: postId },
-    });
+  if (user.bookmarks.includes(postId)) {
     return;
   }
   await User.findByIdAndUpdate(userId, {
     $push: { bookmarks: postId },
+  });
+};
+
+UserSchema.statics.deleteBookmark = async (postId: string, userId: string) => {
+  const user = await User.findById(userId);
+  if (!user.bookmarks.includes(postId)) {
+    return;
+  }
+  await User.findByIdAndUpdate(userId, {
+    $pull: { bookmarks: postId },
   });
 };
 

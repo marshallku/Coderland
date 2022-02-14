@@ -79,7 +79,7 @@ describe("북마크 테스트", () => {
 
   it("북마크 취소", async () => {
     const res = await request(server)
-      .post(`/api/posts/${postId}/bookmark`)
+      .delete(`/api/posts/${postId}/bookmark`)
       .set("authorization", token)
       .send();
 

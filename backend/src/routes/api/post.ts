@@ -145,7 +145,20 @@ export default (app: Router) => {
       const { user } = req;
       const { postId } = req.params;
       const postService = new PostService();
-      await postService.updateLike(postId, user.id);
+      await postService.addLike(postId, user.id);
+      res.status(200).json({ isOk: true });
+    })
+  );
+
+  route.delete(
+    "/:postId/like",
+    loginRequired,
+    checkGrade,
+    asyncHandler(async (req, res) => {
+      const { user } = req;
+      const { postId } = req.params;
+      const postService = new PostService();
+      await postService.deleteLike(postId, user.id);
       res.status(200).json({ isOk: true });
     })
   );
@@ -159,7 +172,20 @@ export default (app: Router) => {
       const { postId } = req.params;
       const { user } = req;
       const postService = new PostService();
-      await postService.updateBookmark(postId, user.id);
+      await postService.addBookmark(postId, user.id);
+      res.status(200).json({ isOk: true });
+    })
+  );
+
+  route.delete(
+    "/:postId/bookmark",
+    loginRequired,
+    checkGrade,
+    asyncHandler(async (req, res) => {
+      const { postId } = req.params;
+      const { user } = req;
+      const postService = new PostService();
+      await postService.deleteBookmark(postId, user.id);
       res.status(200).json({ isOk: true });
     })
   );
