@@ -37,6 +37,13 @@
   line-height: 2;
 }
 
+@media screen and (max-width: 859px) {
+  .markdown-editor__container--view > .input,
+  .markdown-editor__container--edit > .markdown-editor__preview {
+    display: none;
+  }
+}
+
 @media screen and (min-width: 860px) {
   .markdown-editor__container {
     display: flex;
