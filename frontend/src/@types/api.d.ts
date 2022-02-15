@@ -23,6 +23,11 @@ interface IUser {
   authKey?: string;
 }
 
+interface IAuthor {
+  _id?: string;
+  nickname: string;
+}
+
 interface IPost {
   _id: string;
   title: string;
@@ -31,7 +36,7 @@ interface IPost {
   views: number;
   bookmarks: number;
   likes: number;
-  author: string;
+  author: IAuthor;
   isAuthor?: boolean;
   commentCount: number;
   isBookmarked?: boolean;
@@ -49,7 +54,7 @@ interface IGatherPost {
   title: string;
   contents: string;
   subject: "gather";
-  author: string;
+  author: IAuthor;
   isAuthor?: boolean;
   bookmarks: number;
   likes: number;
@@ -74,7 +79,7 @@ interface IGatherPostInList extends Omit<IGatherPost, "contents"> {
 interface ICommentReply {
   _id: string;
   contents: string;
-  author: string | "anonymity";
+  author: IAuthor;
   isPostAuthor: boolean;
   createdAt: string;
   updatedAt: string;
@@ -83,7 +88,7 @@ interface ICommentReply {
 interface IComment {
   _id: string;
   contents: string;
-  author: string | "anonymity";
+  author: IAuthor;
   postId: string;
   likes: number;
   isPostAuthor: boolean;
