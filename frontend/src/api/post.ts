@@ -71,7 +71,7 @@ export function updatePost<T extends IPost | IGatherPost>({
   id: string;
   token: string;
 }): Promise<IPostModifyResponse | IFailResponse> {
-  return instance.post(`/posts/${id}`, {
+  return instance.put(`/posts/${id}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
