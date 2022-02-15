@@ -38,10 +38,7 @@ export default function MarkdownViewer({
 
             return !inline && match ? (
               <Prism
-                style={
-                  // TODO: theme 상태관리 추가해 리렌더링
-                  theme?.theme === "dark" ? vscDarkPlus : solarizedlight
-                }
+                style={theme?.theme === "dark" ? vscDarkPlus : solarizedlight}
                 language={match[1]}
                 PreTag="div"
               >
