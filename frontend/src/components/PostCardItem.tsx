@@ -42,7 +42,7 @@ export default function PostCardItem({
         <h2 className="card-item__title">{title}</h2>
         <p className="card-item__contents">{excerpt}</p>
         <div>
-          <span className="card-item__author">{author}</span>
+          <span className="card-item__author">{author.nickname}</span>
           <time dateTime={createdAt} className="card-item__created-at">
             {formatToReadableTime(createdAt)}
           </time>

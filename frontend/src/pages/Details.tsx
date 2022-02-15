@@ -93,7 +93,9 @@ export default function Details<
           {response?.post.title}
         </h1>
         <div className="details-header__contents">
-          <div className="details-header__author">{response?.post.author}</div>
+          <div className="details-header__author">
+            {response?.post.author.nickname}
+          </div>
           <time
             className="details-header__created"
             dateTime={response?.post.createdAt || ""}

@@ -157,7 +157,7 @@ export default function Comment({
         id={`comment-${data._id}`}
       >
         <div className="comment__author-wrap">
-          <span className="comment__author">{data.author}</span>
+          <span className="comment__author">{data.author.nickname}</span>
           {data.isPostAuthor && (
             <span className="comment__post-author">작성자</span>
           )}

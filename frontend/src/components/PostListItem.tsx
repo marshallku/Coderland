@@ -19,7 +19,7 @@ export default function PostListItem({
         <h2 className="list-item__title">{title}</h2>
         <p className="list-item__excerpt">{excerpt}</p>
         <header className="list-item__header">
-          <div className="list-item__author">{author}</div>
+          <div className="list-item__author">{author.nickname}</div>
           <div className="list-item__info">
             <time dateTime={createdAt}>{formatToReadableTime(createdAt)}</time>
           </div>
