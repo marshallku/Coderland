@@ -293,7 +293,9 @@ describe("답글 통합 테스트", () => {
     expect(res.body.comments[0].replies[0].isPostAuthor).toEqual(true); // 내 글 임
     expect(res.body.comments[0].replies[1].isPostAuthor).toEqual(false); // 내 글 아님
 
-    expect(res.body.comments[0].replies[0].author).not.toEqual("testuser2");
+    expect(res.body.comments[0].replies[0].author.nickname).not.toEqual(
+      "testuser2"
+    );
   });
 
   afterAll(async () => {
