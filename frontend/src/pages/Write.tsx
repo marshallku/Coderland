@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import { Input } from "../components/Input";
 import MarkdownEditor from "../components/MarkdownEditor";
@@ -7,9 +7,9 @@ import Select from "../components/Select";
 import { useAuth } from "../hooks/auth";
 import formatClassName from "../utils/formatClassName";
 import toast from "../utils/toast";
-import { createGatherPost, createPost } from "../api";
-import "./Add.css";
+import { createPost, updatePost } from "../api";
 import useApi from "../hooks/api";
+import "./Write.css";
 
 const MAX_TAGS_LENGTH = 5;
 
@@ -264,15 +264,18 @@ function TechStacksInput({
   );
 }
 
-export default function Add() {
+export default function Write() {
   const navigate = useNavigate();
   const [title, setTitle] = useState<string>("");
   const [area, setArea] = useState<string>("");
   const [tags, setTags] = useState<Array<string>>([]);
   const [contents, setContents] = useState<string>("");
+  const [currentPostId, setCurrentPostId] = useState("");
   const { subject = "chat", category = "study" } = useParams();
+  const location = useLocation();
   const auth = useAuth();
   const isGather = subject === "gather";
+  const isModifying = useMemo(() => !!location.state, []);
 
   const subjects: Array<TSubject> = [
     "review",
@@ -293,25 +296,16 @@ export default function Add() {
   const categories: Array<TGatherCategory> = ["study", "code", "team"];
   const categoriesInKr = ["스터디", "모각코", "프로젝트"];
 
-  const handleSubmit = async () => {
-    const token = auth?.user?.token;
-
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    const post = {
-      title,
-      contents,
-      subject: subject as TSubject,
-    };
-
+  const requestAddPost = async <T extends IPost | IGatherPost>(
+    post: Partial<T>,
+    token: string
+  ) => {
     if (isGather) {
       const apiResponse = await useApi(
-        createGatherPost(
+        createPost<IGatherPost>(
           {
             ...post,
+            subject: "gather",
             area,
             tags,
             icon: tags[0],
@@ -330,7 +324,7 @@ export default function Add() {
       return;
     }
 
-    const apiResponse = await useApi(createPost(post, token));
+    const apiResponse = await useApi(createPost<IPost>(post, token));
 
     if (!apiResponse) {
       toast("글 작성에 실패했습니다.");
@@ -339,6 +333,108 @@ export default function Add() {
 
     navigate(`/posts/${apiResponse.postId}`);
   };
+
+  const requestUpdatePost = async <T extends IPost | IGatherPost>(
+    post: Partial<T>,
+    token: string
+  ) => {
+    if (isGather) {
+      const apiResponse = await useApi(
+        updatePost<IGatherPost>({
+          id: currentPostId,
+          post: {
+            ...post,
+            subject: "gather",
+            area,
+            tags,
+            icon: tags[0],
+            category: category as TGatherCategory,
+          },
+          token,
+        })
+      );
+
+      if (!apiResponse) {
+        toast("글 작성에 실패했습니다.");
+        return;
+      }
+
+      navigate(`/gathers/${apiResponse.postId}`);
+      return;
+    }
+
+    const apiResponse = await useApi(
+      updatePost<IPost>({ id: currentPostId, post, token })
+    );
+
+    if (!apiResponse) {
+      toast("글 작성에 실패했습니다.");
+      return;
+    }
+
+    navigate(`/posts/${apiResponse.postId}`);
+  };
+
+  const handleSubmit = async () => {
+    const token = auth?.user?.token;
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    const post = {
+      title,
+      contents,
+      subject: subject as TSubject,
+    } as const;
+
+    if (isGather) {
+      const gatherPost = {
+        ...post,
+        subject: "gather",
+        area,
+        tags,
+        icon: tags[0],
+        category: category as TGatherCategory,
+      } as const;
+
+      if (isModifying) {
+        requestUpdatePost<IGatherPost>(gatherPost, token);
+        return;
+      }
+
+      requestAddPost<IGatherPost>(gatherPost, token);
+      return;
+    }
+
+    if (isModifying) {
+      requestUpdatePost<IPost>(post, token);
+      return;
+    }
+
+    requestAddPost<IPost>(post, token);
+  };
+
+  useEffect(() => {
+    // Modifying post
+    const state = location.state as IPost | IGatherPost;
+
+    if (!isModifying) {
+      return;
+    }
+
+    setTitle(state.title);
+    setContents(state.contents);
+    setCurrentPostId(state._id);
+
+    if (!("tags" in state)) {
+      return;
+    }
+
+    setTags(state.tags);
+    setArea(state.area);
+  }, []);
 
   return (
     <div role="form">
@@ -350,6 +446,7 @@ export default function Add() {
       >
         <Select
           id="subject"
+          readOnly={isModifying}
           list={subjects.map((x, i) => ({
             key: x,
             name: subjectsInKr[i],
@@ -357,8 +454,8 @@ export default function Add() {
           }))}
           cb={({ key }) =>
             key !== "gather"
-              ? navigate(`/add/${key}`)
-              : navigate(`/add/${key}/${category}`)
+              ? navigate(`/write/${key}`)
+              : navigate(`/write/${key}/${category}`)
           }
         />
         {isGather && (
@@ -369,7 +466,7 @@ export default function Add() {
               name: categoriesInKr[i],
               selected: x === category,
             }))}
-            cb={({ key }) => navigate(`/add/gather/${key}`)}
+            cb={({ key }) => navigate(`/write/gather/${key}`)}
           />
         )}
       </div>

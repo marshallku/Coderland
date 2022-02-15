@@ -32,6 +32,7 @@ interface IPost {
   bookmarks: number;
   likes: number;
   author: string;
+  isAuthor?: boolean;
   commentCount: number;
   isBookmarked?: boolean;
   isLiked?: boolean;
@@ -47,7 +48,9 @@ interface IGatherPost {
   _id: string;
   title: string;
   contents: string;
+  subject: "gather";
   author: string;
+  isAuthor?: boolean;
   bookmarks: number;
   likes: number;
   views: number;

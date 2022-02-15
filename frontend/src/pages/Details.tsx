@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import useApi from "../hooks/api";
 import { formatToReadableTime } from "../utils/time";
 import MarkdownViewer from "../components/MarkdownViewer";
@@ -105,13 +105,28 @@ export default function Details<
             {response?.post.views}
           </div>
         </div>
+        {!!response?.post.isAuthor && (
+          <div className="details-header__control">
+            <Link
+              to={`/write/${response.post.subject}${
+                "category" in response.post ? `/${response.post.category}` : ""
+              }`}
+              state={response.post}
+            >
+              <i className="icon-edit" />
+              수정
+            </Link>
+            {/* TODO: Confirm Modal 작업 후 삭제 로직 추가 */}
+            <button type="button">삭제</button>
+          </div>
+        )}
       </header>
       <div className="details-body">
         <article className="details-body__article">
           {response?.post && "tags" in response.post && (
             <>
               <div className="details-body__tags">
-                {response?.post.tags.map((tag) => (
+                {response.post.tags.map((tag) => (
                   <i
                     key={tag}
                     className={`icon-${tag}`}
@@ -122,16 +137,15 @@ export default function Details<
               </div>
               <div className="details-body__info">
                 <i className="icon-info_outline" />
-                상태:{" "}
-                {`${response?.post.isCompleted ? "모집 완료" : "모집 중"}`}
+                상태: {`${response.post.isCompleted ? "모집 완료" : "모집 중"}`}
               </div>
               <div className="details-body__info">
                 <i className="icon-desktop_windows" />
-                장소: {response?.post.area}
+                장소: {response.post.area}
               </div>
               <div className="details-body__info">
                 <i className="icon-person" />
-                인원: {response?.post.members.length}명
+                인원: {response.post.members.length}명
               </div>
             </>
           )}

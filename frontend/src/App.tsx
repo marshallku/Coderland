@@ -10,7 +10,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/Home";
 import Gather from "./pages/Gather";
 import Details from "./pages/Details";
-import Add from "./pages/Add";
+import Write from "./pages/Write";
 import NotFound from "./pages/NotFound";
 import User, { UserInfo, UserBookmarks } from "./pages/User";
 import Review from "./pages/Review";
@@ -42,8 +42,8 @@ export default function App() {
                 <Route path="/recruit" element={<Recruit />} />
                 <Route path="/chat" element={<Chat />} />
                 <Route element={<RequireAuth />}>
-                  <Route path="/add/:subject" element={<Add />}>
-                    <Route path=":category" element={<Add />} />
+                  <Route path="/write/:subject" element={<Write />}>
+                    <Route path=":category" element={<Write />} />
                   </Route>
                   <Route path="/user/*" element={<User />}>
                     <Route path="bookmarks" element={<UserBookmarks />} />

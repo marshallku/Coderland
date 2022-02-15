@@ -49,12 +49,8 @@ export function getPost<T = IPostResponse | IGatherPostResponse>(
   });
 }
 
-export function createPost(
-  post: {
-    title: string;
-    contents: string;
-    subject: TSubject;
-  },
+export function createPost<T extends IPost | IGatherPost>(
+  post: Partial<T>,
   token: string
 ): Promise<IPostModifyResponse | IFailResponse> {
   return instance.post("/posts", {
@@ -66,35 +62,15 @@ export function createPost(
   });
 }
 
-export function createGatherPost(
-  post: {
-    title: string;
-    contents: string;
-    category: TGatherCategory;
-    area: string;
-    icon: string;
-    tags: Array<string>;
-  },
-  token: string
-): Promise<IPostModifyResponse | IFailResponse> {
-  return instance.post("/posts", {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ subject: "gather", ...post }),
-  });
-}
-
-export function updatePost({
+export function updatePost<T extends IPost | IGatherPost>({
   post,
   id,
   token,
 }: {
-  post: IPost | IGatherPost;
+  post: Partial<T>;
   id: string;
   token: string;
-}): Promise<ISuccessResponse | IFailResponse> {
+}): Promise<IPostModifyResponse | IFailResponse> {
   return instance.post(`/posts/${id}`, {
     headers: {
       "Content-Type": "application/json",
