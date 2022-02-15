@@ -28,6 +28,7 @@ export default function App() {
         <BrowserRouter>
           <ScrollController />
           <GlobalNavigation />
+          <ScrollToTop />
           <div className="container">
             <main className="main-container">
               <Routes>
@@ -57,7 +58,6 @@ export default function App() {
               </Routes>
             </main>
           </div>
-          <ScrollToTop />
         </BrowserRouter>
       </AuthProvider>
     </ThemeProvider>
