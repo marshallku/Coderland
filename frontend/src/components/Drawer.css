@@ -1,130 +1,102 @@
-@media screen and (max-width: 1179px) {
-  #root {
-    margin-bottom: 180px;
-  }
+.drawer {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  max-width: calc(100% - 20px);
+  width: 300px;
+  height: 100%;
+  padding: 10px 0;
+  background-color: var(--drawer);
+  transform: translate3d(-300px, 0, 0);
+  overflow-y: auto;
+  overscroll-behavior: none;
+  transition: transform 0.25s ease-in-out;
+  z-index: 100;
+}
 
-  .drawer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    padding: 10px;
-    z-index: 100;
-    background-color: var(--background-transparency);
-    -webkit-backdrop-filter: blur(8px) saturate(180%);
-    backdrop-filter: blur(8px) saturate(180%);
-    border-top: 1px solid var(--gray-5);
-  }
+.drawer--revealed {
+  transform: translate3d(0, 0, 0);
+}
 
-  .drawer__title {
-    display: none;
-  }
+.drawer__title {
+  padding: 0 10px;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  line-height: 1.5;
+}
 
-  .drawer__navigation {
-    display: flex;
-    height: 60px;
-    justify-content: space-between;
-  }
+.drawer__navigation {
+  display: flex;
+  flex-direction: column;
+}
 
-  .drawer__link {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    flex: 1 1 0;
-    font-size: 10px;
-  }
+.drawer__link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  line-height: 2;
+  padding: 10px;
+}
 
-  .drawer__link > i {
-    font-size: 32px;
-    margin-bottom: 6px;
-    transform: translate3d(0, 8px, 0);
-    transition: transform 0.25s ease-in-out, color 0.25s ease-in-out;
-  }
+.drawer__link::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--random-width);
+  height: 100%;
+  pointer-events: none;
+  background-color: var(--primary);
+  border-radius: 0 2rem 2rem 0;
+  transform: translate3d(-100%, 0, 0);
+  transition: transform 0.25s ease-in-out;
+  z-index: -1;
+}
 
-  .drawer__link > span {
-    opacity: 0;
-    transition: opacity 0.25s ease-in-out;
-  }
+.drawer__link--highlight::before {
+  transform: translate3d(0, 0, 0);
+}
 
-  .drawer__link--highlight > i {
-    color: var(--primary);
-    transform: none;
-  }
+.drawer__link > i {
+  margin-right: 8px;
+  font-size: 0.8rem;
+  color: var(--primary);
+  transition: color 0.25s ease-in-out;
+}
 
-  .drawer__link--highlight > span {
-    opacity: 1;
-  }
+.drawer__link--highlight,
+.drawer__link--highlight > i {
+  color: var(--highlighted);
+}
+
+.drawer-closer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.25s ease-in-out;
+  pointer-events: none;
+  z-index: 90;
+}
+
+.drawer-closer--revealed {
+  opacity: 1;
+  pointer-events: all;
 }
 
 @media screen and (min-width: 1180px) {
   .drawer {
-    position: fixed;
-    top: 60px;
+    right: auto;
     left: 0;
-    max-width: calc(100% - 20px);
-    width: 300px;
-    height: 100%;
-    padding: 10px 0;
-    background-color: var(--drawer);
-    overflow-y: auto;
-    overscroll-behavior: none;
-    z-index: 100;
+    transform: none;
+    transition: none;
   }
 
-  .drawer--revealed {
-    transform: translate3d(0, 0, 0);
-  }
-
-  .drawer__title {
-    padding: 0 10px;
-    margin-bottom: 10px;
-    font-size: 1.5rem;
-    line-height: 1.5;
-  }
-
-  .drawer__navigation {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .drawer__link {
-    position: relative;
-    display: flex;
-    align-items: center;
-    font-size: 1rem;
-    line-height: 2;
-    padding: 10px;
-  }
-
-  .drawer__link::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: var(--random-width);
-    height: 100%;
-    pointer-events: none;
-    background-color: var(--primary);
-    border-radius: 0 2rem 2rem 0;
-    transform: translate3d(-100%, 0, 0);
-    transition: transform 0.25s ease-in-out;
-    z-index: -1;
-  }
-
-  .drawer__link--highlight::before {
-    transform: translate3d(0, 0, 0);
-  }
-
-  .drawer__link > i {
-    margin-right: 8px;
-    font-size: 0.8rem;
-    color: var(--primary);
-    transition: color 0.25s ease-in-out;
-  }
-
-  .drawer__link--highlight,
-  .drawer__link--highlight > i {
-    color: var(--highlighted);
+  .drawer-closer {
+    display: none;
   }
 }

@@ -1,16 +1,13 @@
 /* TODO: 크기 및 위치 조정 */
 .to-top {
   position: fixed;
-  bottom: 100px;
+  bottom: 20px;
   left: 20px;
-  width: 44px;
-  height: 44px;
-  line-height: 44px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
   overflow: hidden;
   opacity: 0;
-  background-color: var(--background-elevated);
-  border-radius: 50%;
-  box-shadow: var(--box-shadow-2);
   pointer-events: none;
   transition: opacity 0.25s ease-in-out;
   z-index: 5000;
@@ -27,12 +24,6 @@
   left: 0;
   fill: transparent;
   stroke: var(--primary);
-  stroke-width: 6px;
+  stroke-width: 3px;
   transform: rotate(-90deg);
-}
-
-@media screen and (min-width: 1180px) {
-  .to-top {
-    bottom: 20px;
-  }
 }
