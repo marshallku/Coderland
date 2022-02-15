@@ -131,7 +131,21 @@ export default (app: Router) => {
       const { postId } = req.params;
       const { userId } = req.body;
       const postServcie = new PostService();
-      await postServcie.allowAppliedUser(postId, userId);
+      await postServcie.addAppliedUser(postId, userId);
+      res.status(200).json({ isOk: true });
+    })
+  );
+
+  // 모집 글 신청자 취소
+  route.delete(
+    "/:postId/cast",
+    loginRequired,
+    checkGatherPost,
+    asyncHandler(async (req, res) => {
+      const { postId } = req.params;
+      const { userId } = req.body;
+      const postServcie = new PostService();
+      await postServcie.removeAppliedUser(postId, userId);
       res.status(200).json({ isOk: true });
     })
   );

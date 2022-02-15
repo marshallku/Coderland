@@ -114,13 +114,23 @@ export default class PostService {
     await this.UserModel.deleteBookmark(postId, userId);
   }
 
-  async allowAppliedUser(postId: string, userId: string) {
+  async addAppliedUser(postId: string, userId: string) {
     let user: IUserDocument;
     try {
       user = await User.findById(userId);
     } catch (error) {
       throw new Error("존재하지 않는 유저입니다.");
     }
-    await this.PostModel.allowAppliedUser(postId, user);
+    await this.PostModel.addAppliedUser(postId, user);
+  }
+
+  async removeAppliedUser(postId: string, userId: string) {
+    let user: IUserDocument;
+    try {
+      user = await User.findById(userId);
+    } catch (error) {
+      throw new Error("존재하지 않는 유저입니다.");
+    }
+    await this.PostModel.removeAppliedUser(postId, user);
   }
 }

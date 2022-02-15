@@ -222,6 +222,58 @@ describe("모임 게시글 기능 테스트", () => {
     expect(res.body.msg).toEqual("이미 등록된 인원입니다.");
   });
 
+  // 수락 취소 테스트
+  // 취소 조건
+  // 1. 작성자
+  // 2. 이미 팀으로 포함된 사람
+  // 3. 글 존재 여부
+  it("작성자가 신청자 취소", async () => {
+    await request(server)
+      .delete(`/api/posts/${postId}/cast`)
+      .set("authorization", token)
+      .send({
+        userId: applyUserId,
+      });
+
+    const res = await request(server).get(`/api/posts/${postId}`).send();
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.post.memberCount).toEqual(0);
+  });
+
+  it("Fail 없는 신청자 취소", async () => {
+    const res = await request(server)
+      .delete(`/api/posts/${postId}/cast`)
+      .set("authorization", token)
+      .send({
+        userId: applyUserId,
+      });
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.msg).toEqual("등록되지 않은 인원입니다.");
+  });
+
+  it("Fail 작성자 아닌 사람이 신청 취소", async () => {
+    // 신청자 수락
+    await request(server)
+      .post(`/api/posts/${postId}/cast`)
+      .set("authorization", token)
+      .send({
+        userId: applyUserId,
+      });
+
+    // 신청자가 신청 취소
+    const res = await request(server)
+      .delete(`/api/posts/${postId}/cast`)
+      .set("authorization", notAccessToken)
+      .send({
+        userId: applyUserId,
+      });
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.msg).toEqual("권한이 없어요...");
+  });
+
   it("모집 글 모집 완료", async () => {
     const res = await request(server)
       .patch(`/api/posts/${postId}`)
