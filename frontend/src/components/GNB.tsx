@@ -2,15 +2,33 @@ import { Link } from "react-router-dom";
 import favicon from "../../static/image/favicon.svg";
 import ThemeSwitch from "./ThemeSwitch";
 import Dropdown from "./Dropdown";
+import formatClassName from "../utils/formatClassName";
 import { useAuth } from "../hooks/auth";
 import "./GNB.css";
 
-export default function GlobalNavigationBar() {
+export default function GlobalNavigationBar({
+  drawerRevealed,
+  setDrawerRevealed,
+}: IDrawerStatusProps) {
   const auth = useAuth();
 
   return (
     <nav className="gnb">
       <div className="gnb__grow">
+        <button
+          type="button"
+          className={formatClassName(
+            "hbg",
+            "gnb__button",
+            drawerRevealed && "hbg--activated"
+          )}
+          aria-label="드로어 열기"
+          onClick={() => setDrawerRevealed(!drawerRevealed)}
+        >
+          <div className="hbg__line hbg__line--top" />
+          <div className="hbg__line hbg__line--mid" />
+          <div className="hbg__line hbg__line--bot" />
+        </button>
         <Link to="/" className="gnb__button">
           <img
             src={favicon}

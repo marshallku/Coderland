@@ -1,7 +1,7 @@
 .add-post {
   position: fixed;
-  bottom: 100px;
-  right: 20px;
+  bottom: 10px;
+  right: 10px;
   display: flex;
   padding: 10px;
   justify-content: center;
@@ -11,10 +11,4 @@
   background-color: var(--primary);
   border-radius: 50%;
   box-shadow: var(--box-shadow-2);
-}
-
-@media screen and (min-width: 1180px) {
-  .add-post {
-    bottom: 20px;
-  }
 }
