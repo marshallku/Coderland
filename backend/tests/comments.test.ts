@@ -256,7 +256,7 @@ describe("댓글 통합 테스트", () => {
 
     expect(res.statusCode).toEqual(200);
     expect(res.body.isOk).toEqual(true);
-    expect(res.body.comments[0].author).not.toEqual("testuser2");
+    expect(res.body.comments[0].author.nickname).not.toEqual("testuser2");
   });
 
   afterAll(async () => {
