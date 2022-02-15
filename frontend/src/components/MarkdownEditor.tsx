@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import MarkdownViewer from "./MarkdownViewer";
 import { Textarea } from "./Input";
 import { debounce } from "../utils/optimizer";
-import "./MarkdownEditor.css";
 import formatClassName from "../utils/formatClassName";
+import "./MarkdownEditor.css";
+
+const BREAK_POINT = 860;
 
 export default function MarkdownEditor({
   id,
@@ -13,40 +15,13 @@ export default function MarkdownEditor({
   setValue,
 }: IMarkdownEditorProps) {
   const [mode, setMode] = useState<TEditorMode>("edit");
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
-  const Editor = (
-    <Textarea
-      id={id || "markdown-content"}
-      className="markdown-editor__textarea"
-      name={name}
-      label={label || "내용을 입력해주세요. (마크다운 지원)"}
-      hideLabelOnFocus
-      value={value}
-      setValue={setValue}
-    />
+  const [isLarge, setIsLarge] = useState<boolean>(
+    BREAK_POINT <= window.innerWidth
   );
-
-  const Viewer = (
-    <MarkdownViewer className="markdown-editor__preview" value={value} />
-  );
-
-  const Content = useCallback(() => {
-    if (screenWidth >= 860) {
-      return (
-        <>
-          {Editor}
-          {Viewer}
-        </>
-      );
-    }
-
-    return mode === "edit" ? Editor : Viewer;
-  }, [value, screenWidth, mode]);
 
   useEffect(() => {
     const update = debounce(() => {
-      setScreenWidth(window.innerWidth);
+      setIsLarge(BREAK_POINT <= window.innerWidth);
     });
 
     window.addEventListener("resize", update);
@@ -86,7 +61,24 @@ export default function MarkdownEditor({
           </li>
         </ul>
       </nav>
-      <div className="markdown-editor__container">{Content()}</div>
+      <div
+        className={`markdown-editor__container markdown-editor__container--${mode}`}
+      >
+        <Textarea
+          id={id || "markdown-content"}
+          className="markdown-editor__textarea"
+          name={name}
+          label={label || "내용을 입력해주세요. (마크다운 지원)"}
+          hideLabelOnFocus
+          value={value}
+          setValue={setValue}
+        />
+        <MarkdownViewer
+          className="markdown-editor__preview"
+          value={value}
+          preventRender={!isLarge && mode !== "view"}
+        />
+      </div>
     </div>
   );
 }

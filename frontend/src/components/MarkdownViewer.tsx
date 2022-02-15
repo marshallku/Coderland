@@ -14,7 +14,16 @@ import "./MarkdownViewer.css";
 export default function MarkdownViewer({
   className,
   value,
+  preventRender,
 }: IMarkdownViewerProps) {
+  if (preventRender) {
+    return (
+      <div className={formatClassName("markdown-article", className)}>
+        마우스를 놓으면 렌더링 될 거에요! 👀
+      </div>
+    );
+  }
+
   const theme = useTheme();
   const sanitize = () =>
     rehypeSanitize({
