@@ -404,6 +404,7 @@ const tmpGatherList: Array<IGatherPostInList> = [
   {
     _id: "611b6748bfc2290fd11ec5a5",
     title: "모집 완료 안 된 글",
+    subject: "gather",
     excerpt: "도도새와 함께하는 사이드 프로젝트",
     author: "도도새",
     bookmarks: 20,
@@ -422,6 +423,7 @@ const tmpGatherList: Array<IGatherPostInList> = [
   {
     _id: "611e6748bff22900d11ec5a5",
     title: "모집은 안료됐으나 사람은 꽉 안 찬 글",
+    subject: "gather",
     excerpt: "체셔 고양이와 함께하는 타입스크립트 스터디",
     author: "체셔 고양이",
     bookmarks: 20,
@@ -479,6 +481,7 @@ export const dummyGatherResponse: Promise<IGatherPostResponse> = dummyAsync({
     _id: "611b6748bfc2290fd11ec5a5",
     title: "모집 완료 안 된 글",
     contents: dummyMarkDown,
+    subject: "gather",
     author: "도도새",
     views: 30,
     bookmarks: 20,

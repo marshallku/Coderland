@@ -7,5 +7,6 @@ interface ISelectItem {
 interface ISelectProps {
   id: string;
   list: Array<ISelectItem>;
+  readOnly?: boolean;
   cb?: (args: ISelectItem) => void;
 }
