@@ -76,5 +76,7 @@ export interface IPostModel extends Model<IPostDocument> {
   addBookmark: (postId: string, userId: string) => Promise<void>;
   deleteBookmark: (postId: string, userId: string) => Promise<void>;
 
-  allowAppliedUser: (postId: string, user: IUserDocument) => Promise<void>;
+  addAppliedUser: (postId: string, user: IUserDocument) => Promise<void>;
+
+  removeAppliedUser: (postId: string, user: IUserDocument) => Promise<void>;
 }

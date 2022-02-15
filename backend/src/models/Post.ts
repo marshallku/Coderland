@@ -302,12 +302,26 @@ PostSchema.statics.deleteBookmark = async (postId: string, userId: string) => {
  * @param postId 모임 포스트 ID
  * @param user 신청한 유저 정보
  */
-PostSchema.statics.allowAppliedUser = async (
+PostSchema.statics.addAppliedUser = async (
   postId: string,
   user: IUserDocument
 ) => {
   await Post.findByIdAndUpdate(postId, {
     $push: { members: user },
+  });
+};
+
+/**
+ * 모임 포스트 신청 취소
+ * @param postId 모임 포스트 ID
+ * @param user 신청한 유저 정보
+ */
+PostSchema.statics.removeAppliedUser = async (
+  postId: string,
+  user: IUserDocument
+) => {
+  await Post.findByIdAndUpdate(postId, {
+    $pull: { members: { googleId: user.googleId } },
   });
 };
 

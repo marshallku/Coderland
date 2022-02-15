@@ -26,9 +26,19 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     if (post.isCompleted) {
       return next(new Error("이미 마감된 모임입니다."));
     }
-    // 이미 등록된 유저 체크 & 그 유저가 존재하는지까지
-    if (post.members.some((member) => member.id === userId)) {
+    // 이미 등록된 유저인지 확인하는 로직은 후에
+    // post인 경우 이미 포함된 유저인지 확인해야함.\
+    if (
+      req.method === "POST" &&
+      post.members.some((member) => member.id === userId)
+    ) {
       return next(new Error("이미 등록된 인원입니다."));
+    }
+    if (
+      req.method === "DELETE" &&
+      !post.members.some((member) => member.id === userId)
+    ) {
+      return next(new Error("등록되지 않은 인원입니다."));
     }
   } catch (error) {
     return next(new Error("존재하지 않는 글입니다."));
