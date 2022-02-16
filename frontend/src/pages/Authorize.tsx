@@ -1,17 +1,50 @@
-import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import { Input } from "../components/Input";
 import { useAuth } from "../hooks/auth";
+import { authorizeUser, getUserAuthKey } from "../api/user";
 import copyToClipboard from "../utils/clipboard";
+import toast from "../utils/toast";
 import "./Authorize.css";
 
 export default function Authorize() {
+  const [authKey, setAuthKey] = useState("");
   const [gitlabName, setGitlabName] = useState("");
   const auth = useAuth();
   const user = auth?.user;
+  const navigate = useNavigate();
 
   if (!user) return <Navigate to="/login" />;
+
+  useEffect(() => {
+    const init = async () => {
+      const response = await getUserAuthKey(user.token);
+
+      if (response.isOk === false) {
+        toast("인증 키를 불러오는 데 실패했습니다");
+        return;
+      }
+
+      setAuthKey(response.authKey);
+    };
+    init();
+  }, []);
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    const response = await authorizeUser({
+      username: gitlabName,
+      token: user.token,
+    });
+
+    if (response.isOk === false) {
+      toast("GitLab 계정 인증에 실패했습니다");
+      return;
+    }
+
+    navigate("/user");
+  };
 
   return (
     <div className="authorize">
@@ -22,9 +55,9 @@ export default function Authorize() {
           <button
             type="button"
             className="authorize__button"
-            onClick={() => copyToClipboard(`${user.authKey}`)}
+            onClick={() => copyToClipboard(`${authKey}`)}
           >
-            {user.authKey}
+            <code>{authKey}</code>
           </button>
           입니다.
         </p>
@@ -46,12 +79,7 @@ export default function Authorize() {
           클릭해주세요!
         </p>
       </blockquote>
-      <form
-        className="authorize__form"
-        onSubmit={(event) => {
-          event.preventDefault();
-        }}
-      >
+      <form className="authorize__form" onSubmit={handleSubmit}>
         <Input
           id="gitlab-name"
           value={gitlabName}
