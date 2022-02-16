@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 function selectAuthorName(id: string, nicknameList: Array<string>) {
-  const index = parseInt(id.slice(0, 10), 16) % 16;
+  const index = parseInt(id, 16) % 16;
   return { nickname: `익명의 ${nicknameList[index]}` };
 }
 
@@ -34,7 +34,7 @@ export default function createAuthorName(
     "가짜 거북",
     "도마뱀",
   ];
-  const rotateIdx = parseInt(postId.slice(0, 10), 16) % 16;
+  const rotateIdx = parseInt(postId, 16) % 16;
   const nicknameList = rotateArray(anonymousNicknameList, rotateIdx);
   return anonymous
     ? selectAuthorName(author._id.toString(), nicknameList)
