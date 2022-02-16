@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { getMyInfo } from "../api/user";
 import parseCookie from "../utils/cookie";
 
@@ -8,7 +8,11 @@ function useAuthProvider() {
   const savedToken = localStorage.getItem("token");
   const [user, setUser] = useState<IUser | null>(null);
 
-  if (savedToken) {
+  useEffect(() => {
+    if (!savedToken) {
+      return;
+    }
+
     getMyInfo(savedToken).then((response) => {
       if (!response.isOk) {
         return;
@@ -16,7 +20,7 @@ function useAuthProvider() {
 
       setUser({ ...response.user, token: savedToken });
     });
-  }
+  }, []);
 
   return {
     signOut(cb?: () => unknown) {
@@ -37,7 +41,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   return <authContext.Provider value={auth}>{children}</authContext.Provider>;
 }
 
-function saveUser(token: string) {
+function saveToken(token: string) {
   if (!token) {
     return;
   }
@@ -54,5 +58,5 @@ export function tryLoginOnLoad() {
 
   const accessToken = parseCookie()["access-token"];
 
-  saveUser(accessToken);
+  saveToken(accessToken);
 }
