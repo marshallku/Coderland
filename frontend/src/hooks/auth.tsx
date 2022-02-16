@@ -5,23 +5,8 @@ import parseCookie from "../utils/cookie";
 const authContext = createContext<IAuth | null>(null);
 
 function useAuthProvider() {
-  // FIXME: 더미로 유저 추가해둠. 추후 null로 수정
   const savedToken = localStorage.getItem("token");
-  const [user, setUser] = useState<IUser | null>(
-    savedToken
-      ? {
-          googleId: "",
-          nickname: "",
-          name: "",
-          profile: "",
-          grade: 0,
-          track: "",
-          gitlab: "",
-          authKey: "",
-          token: savedToken,
-        }
-      : null
-  );
+  const [user, setUser] = useState<IUser | null>(null);
 
   if (savedToken) {
     getMyInfo(savedToken).then((response) => {
