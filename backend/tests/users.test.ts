@@ -153,7 +153,7 @@ describe("유저 레이서 인증 서비스", () => {
   beforeAll(async () => {
     const payload = { googleId: "1230419308012123" };
     refreshToken += jwt.sign({}, configs.jwtSecret, { expiresIn: "14d" });
-    const authKey = "uniquekeyisgeneratedbyuuid";
+    const authKey = "e94275d5-0871-4e70-aab8-305eb80f313d";
     await connection.collection("users").insertOne({
       googleId: "1230419308012123",
       nickname: "testuser",
