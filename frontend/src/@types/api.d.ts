@@ -20,6 +20,7 @@ interface IUser {
   track: string;
   gitlab: string;
   token: string;
+  _id: string;
 }
 
 interface IAuthor {
@@ -144,6 +145,9 @@ interface ICommentModifyResponse extends ISuccessResponse {
   commentId: string;
 }
 
+interface IGatherRequestResponse extends ISuccessResponse {
+  userId: string;
+}
 // Auth
 interface IAuthKeyResponse extends ISuccessResponse {
   authKey: string;

@@ -9,7 +9,12 @@ import "./Comments.css";
 
 const COMMENT_LIMIT = 10;
 
-export default function Comments({ postId }: ICommentsProps) {
+export default function Comments({
+  updatePost,
+  isAuthor,
+  members,
+  postId,
+}: ICommentsProps) {
   const [commentText, setCommentText] = useState("");
   const [commentList, setCommentList] = useState<IComment[]>([]);
   const [startIdx, setStartIdx] = useState(0);
@@ -109,6 +114,9 @@ export default function Comments({ postId }: ICommentsProps) {
       {commentList.slice(startIdx, commentList.length).map((comment) => (
         <>
           <Comment
+            updatePost={updatePost}
+            members={members}
+            isAuthor={isAuthor}
             postId={postId}
             key={comment._id}
             data={comment}
@@ -120,6 +128,9 @@ export default function Comments({ postId }: ICommentsProps) {
           {/* TODO: 답글 더보기 버튼 추가 */}
           {comment.replies.map((reply) => (
             <Comment
+              updatePost={updatePost}
+              members={members}
+              isAuthor={isAuthor}
               postId={postId}
               key={reply._id}
               parentId={comment._id}

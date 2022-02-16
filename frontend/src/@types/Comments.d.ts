@@ -1,7 +1,10 @@
 type TCommentMode = "read" | "edit" | "reply";
 
 interface ICommentsProps {
+  updatePost: () => void;
+  isAuthor?: boolean;
   postId: string;
+  members?: Array<IUser>;
 }
 
 interface IUniversalComment extends ICommentReply {
@@ -10,6 +13,9 @@ interface IUniversalComment extends ICommentReply {
 }
 
 interface ICommentProps {
+  updatePost: () => void;
+  members?: Array<IUser>;
+  isAuthor?: boolean;
   postId: string;
   parentId?: string;
   data: IUniversalComment;

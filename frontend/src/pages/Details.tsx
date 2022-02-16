@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import useApi from "../hooks/api";
 import { formatToReadableTime } from "../utils/time";
@@ -65,25 +65,29 @@ export default function Details<
     navigate("/login");
   }
 
-  useEffect(() => {
-    async function handleAsync() {
-      const apiResponse = await useApi(
-        getPost<T>(`${id}`, `${auth?.user?.token}`)
-      );
+  async function handleApi() {
+    const apiResponse = await useApi(
+      getPost<T>(`${id}`, `${auth?.user?.token}`)
+    );
 
-      if (!apiResponse) {
-        navigate("/");
-        return;
-      }
-
-      setResponse(apiResponse);
-      setBookmarked(!!apiResponse.post.isBookmarked);
-      setClapped(!!apiResponse.post.isLiked);
-      setNumBookmark(apiResponse.post.bookmarks);
-      setNumClap(apiResponse.post.likes);
+    if (!apiResponse) {
+      navigate("/");
+      return;
     }
 
-    handleAsync();
+    setResponse(apiResponse);
+    setBookmarked(!!apiResponse.post.isBookmarked);
+    setClapped(!!apiResponse.post.isLiked);
+    setNumBookmark(apiResponse.post.bookmarks);
+    setNumClap(apiResponse.post.likes);
+  }
+
+  const updatePost = useCallback(() => {
+    handleApi();
+  }, []);
+
+  useEffect(() => {
+    handleApi();
   }, []);
 
   return (
@@ -206,7 +210,14 @@ export default function Details<
           </button>
         </div>
       </div>
-      {response && <Comments postId={response.post._id} />}
+      {response && (
+        <Comments
+          updatePost={updatePost}
+          isAuthor={response.post.isAuthor}
+          members={"tags" in response.post ? response.post.members : undefined}
+          postId={response.post._id}
+        />
+      )}
     </>
   );
 }
