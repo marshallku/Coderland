@@ -10,11 +10,11 @@ function useAuthProvider() {
 
   if (savedToken) {
     getMyInfo(savedToken).then((response) => {
-      if ("isOk" in response) {
+      if (!response.isOk) {
         return;
       }
 
-      setUser({ ...response, token: savedToken });
+      setUser({ ...response.user, token: savedToken });
     });
   }
 

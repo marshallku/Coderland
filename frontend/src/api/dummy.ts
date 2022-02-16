@@ -39,6 +39,7 @@ const add = (a: number, b: number) => a + b;
 `;
 
 const tmpUser: IUser = {
+  _id: "tmp_id",
   googleId: "1230419308012123",
   nickname: "트럼프 병정",
   name: "홍길동",
@@ -50,6 +51,7 @@ const tmpUser: IUser = {
 };
 
 const tmpUser2: IUser = {
+  _id: "tmp_id",
   googleId: "1230419308012123",
   nickname: "3월의 토끼",
   name: "김태연",

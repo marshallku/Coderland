@@ -148,6 +148,10 @@ interface ICommentModifyResponse extends ISuccessResponse {
 interface IGatherRequestResponse extends ISuccessResponse {
   userId: string;
 }
+
+interface IUserResponse extends ISuccessResponse {
+  user: Omit<IUser, "token">;
+}
 // Auth
 interface IAuthKeyResponse extends ISuccessResponse {
   authKey: string;
