@@ -5,9 +5,16 @@ export default function purifyHtml(string: string): string {
     return "";
   }
   return sanitizeHtml(string, {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "iframe"]),
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+      "img",
+      "iframe",
+      "details",
+      "summary",
+      "del",
+      "ins",
+    ]),
     allowedAttributes: {
-      a: ["href", "name", "target", "loading"],
+      a: ["href", "name", "target"],
       img: ["src", "srcset", "alt", "title", "width", "height", "loading"],
       iframe: ["src", "width", "height", "title", "allow", "frameborder"],
     },
