@@ -2,7 +2,7 @@ import instance from "./instance";
 
 export function getMyInfo(
   token: string
-): Promise<Omit<IUser, "token"> | IFailResponse> {
+): Promise<IUserResponse | IFailResponse> {
   return instance.get("/users", {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -12,7 +12,7 @@ export function getMyInfo(
 
 export function updateMyInfo(
   user: IUser
-): Promise<Omit<IUser, "token"> | IFailResponse> {
+): Promise<IUserResponse | IFailResponse> {
   return instance.patch("/users", {
     headers: {
       "Content-Type": "application/json",
