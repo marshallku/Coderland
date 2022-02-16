@@ -1,6 +1,5 @@
 import ReactMarkdown from "react-markdown";
 import RehypeRaw from "rehype-raw";
-import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
 import { Prism } from "react-syntax-highlighter";
 import {
@@ -25,20 +24,12 @@ export default function MarkdownViewer({
   }
 
   const theme = useTheme();
-  const sanitize = () =>
-    rehypeSanitize({
-      ...defaultSchema,
-      attributes: {
-        ...defaultSchema.attributes,
-        code: [...(defaultSchema?.attributes?.code || []), ["className"]],
-      },
-    });
 
   return (
     <article className={formatClassName("markdown-article", className)}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
-        rehypePlugins={[RehypeRaw, sanitize]}
+        rehypePlugins={[RehypeRaw]}
         components={{
           h1: "h2",
           // eslint-disable-next-line react/no-unstable-nested-components
