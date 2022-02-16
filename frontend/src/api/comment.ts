@@ -125,3 +125,39 @@ export function deleteReply({
     body: JSON.stringify({ commentId, replyId }),
   });
 }
+
+export function createGatherRequest({
+  postId,
+  userId,
+  token,
+}: {
+  postId: string;
+  userId: string;
+  token: string;
+}): Promise<IGatherRequestResponse | IFailResponse> {
+  return instance.post(`/posts/${postId}/cast`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ userId }),
+  });
+}
+
+export function deleteGatherRequest({
+  postId,
+  userId,
+  token,
+}: {
+  postId: string;
+  userId: string;
+  token: string;
+}): Promise<IGatherRequestResponse | IFailResponse> {
+  return instance.delete(`/posts/${postId}/cast`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ userId }),
+  });
+}

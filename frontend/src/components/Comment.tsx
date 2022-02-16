@@ -13,9 +13,15 @@ import {
   updateComment,
   deleteReply,
   updateReply,
+  createGatherRequest,
+  deleteGatherRequest,
 } from "../api";
+import useApi from "../hooks/api";
 
 export default function Comment({
+  updatePost,
+  members,
+  isAuthor,
   postId,
   parentId,
   data,
@@ -28,6 +34,9 @@ export default function Comment({
   const [replyText, setReplyText] = useState("");
   const [likesCount, setLikesCount] = useState(data.likes || 0);
   const [isLiked, setIsLiked] = useState(false);
+  const isMember =
+    members && members.find((member) => member._id === data.author._id);
+
   const auth = useAuth();
   const navigate = useNavigate();
 
@@ -150,6 +159,36 @@ export default function Comment({
     setMode(mode === "reply" ? "read" : "reply");
   };
 
+  const handleGatherRequest = async () => {
+    const token = auth?.user?.token;
+    const userId = data.author._id;
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    if (!userId) {
+      toast("모임요청을 실패했습니다.");
+      return;
+    }
+
+    await useApi(
+      isMember
+        ? deleteGatherRequest({
+            postId,
+            userId,
+            token,
+          })
+        : createGatherRequest({
+            postId,
+            userId,
+            token,
+          })
+    );
+    updatePost();
+  };
+
   return (
     <>
       <div
@@ -229,6 +268,14 @@ export default function Comment({
                   </button>
                 </>
               )}
+              {isAuthor &&
+                !data.isPostAuthor &&
+                members &&
+                data.contents.includes("신청") && (
+                  <button onClick={handleGatherRequest} type="button">
+                    {isMember ? "내보내기" : "수락"}
+                  </button>
+                )}
             </div>
           </>
         )}
