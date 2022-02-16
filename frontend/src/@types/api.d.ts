@@ -12,6 +12,7 @@ declare type TSubject =
 declare type TGatherCategory = "gather" | "study" | "code" | "team";
 
 interface IUser {
+  _id: string;
   googleId: string;
   nickname: string;
   name: string;
@@ -20,7 +21,6 @@ interface IUser {
   track: string;
   gitlab: string;
   token: string;
-  _id: string;
 }
 
 interface IAuthor {
