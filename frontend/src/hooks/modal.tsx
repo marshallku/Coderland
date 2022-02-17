@@ -7,12 +7,12 @@ function useModalProvider() {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState<IModalContent>({
     text: "",
-    callback: () => {},
+    cb: () => {},
   });
 
-  const openModal = ({ text, callback }: IModalContent) => {
+  const openModal = (text: string, cb: () => void) => {
     setShowModal(true);
-    setModalContent({ text, callback });
+    setModalContent({ text, cb });
   };
 
   const closeModal = () => setShowModal(false);

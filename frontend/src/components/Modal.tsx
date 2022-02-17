@@ -19,7 +19,7 @@ export default function Modal({
             <Button
               value="확인"
               onClick={() => {
-                modalContent.callback();
+                modalContent.cb();
                 closeModal();
               }}
             />
