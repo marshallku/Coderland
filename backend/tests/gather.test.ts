@@ -1,7 +1,6 @@
 import request from "supertest";
 import "regenerator-runtime";
 import db from "mongoose";
-import { IUserDocument } from "../src/types/user";
 import server from "../src/app";
 import { createToken } from "../src/utils/jwt";
 import configs from "../src/config";
@@ -19,30 +18,22 @@ describe("모임 게시글 기능 테스트", () => {
     await connection.collection("users").insertOne({
       googleId: "130471033098230",
       nickname: "testuuu",
-      name: "family givn2",
-      profile: "profile poto url2",
       grade: 1,
     });
-    const user = <IUserDocument>await connection.collection("users").findOne({
-      googleId: "130471033098230",
-    });
-    token += createToken(user);
+
+    token += createToken({ googleId: "130471033098230" });
 
     await connection.collection("users").insertOne({
       googleId: "10374183748917238",
       nickname: "te2434stuuu",
-      name: "family givn2",
-      profile: "profile poto url2",
       grade: 1,
     });
 
-    const notAccessUser = <IUserDocument>(
-      await connection.collection("users").findOne({
-        googleId: "10374183748917238",
-      })
-    );
-    notAccessToken += createToken(notAccessUser);
-    applyUserId = notAccessUser._id;
+    notAccessToken += createToken({ googleId: "10374183748917238" });
+    const notAccessUser = await connection
+      .collection("users")
+      .findOne({ googleId: "10374183748917238" });
+    applyUserId = notAccessUser._id.toString();
   });
 
   it("모임 게시글 생성 테스트", async () => {
@@ -443,14 +434,10 @@ describe("모든 모집 글 리스트 조회 테스트", () => {
     await connection.collection("users").insertOne({
       googleId: "0809032903902923",
       nickname: "testuuu",
-      name: "family givn2",
-      profile: "profile poto url2",
       grade: 1,
     });
-    const user = <IUserDocument>await connection.collection("users").findOne({
-      googleId: "0809032903902923",
-    });
-    token += createToken(user);
+
+    token += createToken({ googleId: "0809032903902923" });
   });
 
   it("모든 모집 글 리스트 조회 테스트", async () => {

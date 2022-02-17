@@ -29,6 +29,10 @@ export const UserSchema = new mongoose.Schema<IUserDocument>(
       type: Number,
       default: 0,
     },
+    hasNewNotification: {
+      type: Boolean,
+      default: false,
+    },
     authKey: {
       type: String,
       default: () => v4(),
@@ -204,6 +208,18 @@ UserSchema.statics.updateGrade = async (userId: string) => {
   await User.findByIdAndUpdate(userId, {
     grade: 1,
     authKey: "already auth",
+  });
+};
+
+/**
+ * 새로운 알림 등록
+ */
+UserSchema.statics.updateNotification = async (
+  userId: string,
+  hasNewNotification: boolean
+) => {
+  await User.findByIdAndUpdate(userId, {
+    hasNewNotification,
   });
 };
 

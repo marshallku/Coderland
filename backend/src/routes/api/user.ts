@@ -2,6 +2,7 @@ import { Router } from "express";
 import { asyncHandler } from "../../utils";
 import { loginRequired } from "../../passport/guards";
 import UserService from "../../services/user";
+import NotificationService from "../../services/notification";
 
 export default (app: Router) => {
   const route = Router();
@@ -75,6 +76,20 @@ export default (app: Router) => {
       const userService = new UserService();
       await userService.checkUserAuthKey(user.id, username);
       res.status(200).json({ isOk: true });
+    })
+  );
+
+  // 유저 알림 리스트 조회
+  route.get(
+    "/notification",
+    loginRequired,
+    asyncHandler(async (req, res) => {
+      const { user } = req;
+      const notificationService = new NotificationService();
+      const notification = await notificationService.findAllNotification(
+        user.id
+      );
+      res.status(200).json({ isOk: true, notification });
     })
   );
 

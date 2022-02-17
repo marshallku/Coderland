@@ -1,0 +1,59 @@
+import { INotificationModel } from "notification";
+import { IPostModel } from "post";
+import { IUserModel } from "user";
+import { Notification, Post, User } from "../models";
+import config from "../config";
+
+function makeLink(postId: string, commentId: string): string {
+  return `${config.domain}/posts/${postId}#comment-${commentId}`;
+}
+
+export default class NotificationService {
+  private NotificationModel: INotificationModel;
+
+  private PostModel: IPostModel;
+
+  private UserModel: IUserModel;
+
+  constructor() {
+    this.NotificationModel = Notification;
+    this.PostModel = Post;
+    this.UserModel = User;
+  }
+
+  /**
+   * 댓글 혹은 답글 등록시 알림 등록
+   * @param postId 알림 등록된 포스트
+   * @param commentId 생성된 댓글 혹은 답글이 달린 댓글
+   */
+  async addNotification(
+    loginUserId: string,
+    postId: string,
+    commentId: string
+  ) {
+    const post = await this.PostModel.findPostById(postId);
+    const userId = post.author.id;
+
+    // 자신의 글일 경우 알림 등록 하지 않음.
+    if (userId === loginUserId) {
+      return;
+    }
+
+    const { title } = post;
+    const to = makeLink(postId, commentId);
+    await this.NotificationModel.addNotification(userId, to, title);
+    await this.UserModel.updateNotification(userId, true);
+  }
+
+  /**
+   * 유저 알림 목록 조회, 확인된 알림 읽음 처리, 오래된 알림 제거
+   * @param userId 유저 정보
+   * @returns 알림 리스트
+   */
+  async findAllNotification(userId: string) {
+    const notification = this.NotificationModel.findAllNotification(userId);
+    await this.NotificationModel.updateNotification(userId);
+    await this.UserModel.updateNotification(userId, false);
+    return notification;
+  }
+}

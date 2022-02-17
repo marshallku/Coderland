@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { asyncHandler } from "../../utils";
 import CommentService from "../../services/comment";
+import NotificationService from "../../services/notification";
 import { loginRequired, loginCheck } from "../../passport/guards";
 import { checkCommentPermission, checkGrade } from "../middlewares";
 
@@ -17,6 +18,10 @@ commentRouter.post(
     const { contents } = req.body;
     const commentService = new CommentService(postId);
     const commentId = await commentService.createComment(user, contents);
+
+    const notificationServcie = new NotificationService();
+    await notificationServcie.addNotification(user.id, postId, commentId);
+
     res.status(201).json({ isOk: true, commentId });
   })
 );

@@ -4,7 +4,7 @@ import configs from "../config";
 
 const { jwtSecret } = configs;
 
-export const createToken = (user: IUserDocument) => {
+export const createToken = (user: Partial<IUserDocument>) => {
   const payload = { googleId: user.googleId };
   const signOpts: SignOptions = {
     expiresIn: "1h",
