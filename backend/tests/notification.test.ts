@@ -14,6 +14,7 @@ describe("댓글 알림 서비스 기능 테스트", () => {
   let subUserToken = "Bearer ";
 
   let postId: string;
+  let commentId: string;
 
   beforeAll(async () => {
     // 유저 생성
@@ -49,10 +50,12 @@ describe("댓글 알림 서비스 기능 테스트", () => {
   });
 
   it("다른 유저가 댓글 생성 시 유저 필드에 표시", async () => {
-    await request(server)
+    const res = await request(server)
       .post(`/api/posts/${postId}/comments`)
       .set("authorization", subUserToken)
       .send({ contents: "contents" });
+
+    commentId = res.body.commentId;
 
     const user = await connection
       .collection("users")
@@ -93,12 +96,51 @@ describe("댓글 알림 서비스 기능 테스트", () => {
     expect(Object.keys(res.body.notification[0])).toEqual(
       expect.arrayContaining(["title", "to", "isNewNotification"])
     );
+    expect(res.body.notification[0].flag).toEqual("comment");
   });
 
   it("알림 확인 후 유저 필드 수정", async () => {
     const user = await connection
       .collection("users")
       .findOne({ googleId: "1230707070702022" });
+
+    expect(user.hasNewNotification).toEqual(false);
+  });
+
+  // 답글 알림 테스트
+  it("답글 생성 후 댓글 작성자 알림 확인", async () => {
+    // 답글 생성
+    await request(server)
+      .post(`/api/posts/${postId}/replies`)
+      .set("authorization", userToken)
+      .send({ commentId, contents: "connnntents" });
+
+    // 댓글 유저
+    const user = await connection
+      .collection("users")
+      .findOne({ googleId: "1230707070123123" });
+
+    expect(user.hasNewNotification).toEqual(true);
+  });
+
+  it("답글에 대한 알림 리스트 확인", async () => {
+    const res = await request(server)
+      .get("/api/users/notification")
+      .set("authorization", subUserToken)
+      .send();
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.notification.length).toEqual(1);
+    expect(Object.keys(res.body.notification[0])).toEqual(
+      expect.arrayContaining(["title", "to", "isNewNotification"])
+    );
+    expect(res.body.notification[0].flag).toEqual("reply");
+  });
+
+  it("답글 알림 확인 후 유저 필드 수정", async () => {
+    const user = await connection
+      .collection("users")
+      .findOne({ googleId: "1230707070123123" });
 
     expect(user.hasNewNotification).toEqual(false);
   });
