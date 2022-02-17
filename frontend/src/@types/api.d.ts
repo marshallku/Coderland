@@ -91,7 +91,9 @@ interface IComment {
   author: IAuthor;
   postId: string;
   likes: number;
+  isLiked: boolean;
   isPostAuthor: boolean;
+  isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
   replies: Array<ICommentReply>;

@@ -126,6 +126,42 @@ export function deleteReply({
   });
 }
 
+export function addCommentClap({
+  postId,
+  commentId,
+  token,
+}: {
+  postId: string;
+  commentId: string;
+  token: string;
+}): Promise<ISuccessResponse | IFailResponse> {
+  return instance.post(`/posts/${postId}/comments/like`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ commentId }),
+  });
+}
+
+export function removeCommentClap({
+  postId,
+  commentId,
+  token,
+}: {
+  postId: string;
+  commentId: string;
+  token: string;
+}): Promise<ISuccessResponse | IFailResponse> {
+  return instance.delete(`/posts/${postId}/comments/like`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ commentId }),
+  });
+}
+
 export function createGatherRequest({
   postId,
   userId,

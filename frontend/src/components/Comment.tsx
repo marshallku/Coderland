@@ -4,19 +4,21 @@ import { useAuth } from "../hooks/auth";
 import toast from "../utils/toast";
 import { formatToReadableTime } from "../utils/time";
 import formatClassName from "../utils/formatClassName";
-import CommentLikeBtn from "./CommentLikeBtn";
+import Clap from "./Clap";
+import useApi from "../hooks/api";
+import { useModal } from "../hooks/modal";
 import "./Comment.css";
 import {
   createReply,
   deleteComment,
-  getCommentList,
   updateComment,
   deleteReply,
   updateReply,
+  addCommentClap,
+  removeCommentClap,
   createGatherRequest,
   deleteGatherRequest,
 } from "../api";
-import useApi from "../hooks/api";
 
 export default function Comment({
   updatePost,
@@ -25,38 +27,32 @@ export default function Comment({
   postId,
   parentId,
   data,
-  setCommentList,
-  focused,
-  setFocused,
+  updateCommentList,
+  focusedId,
+  setFocusedId,
 }: ICommentProps) {
   const [mode, setMode] = useState<TCommentMode>("read");
   const [editedText, setEditedText] = useState(data.contents);
   const [replyText, setReplyText] = useState("");
-  const [likesCount, setLikesCount] = useState(data.likes || 0);
-  const [isLiked, setIsLiked] = useState(false);
-  const isMember =
-    members && members.find((member) => member._id === data.author._id);
+  const [clapped, setClapped] = useState(!!data.isLiked);
+  const [numClap, setNumClap] = useState(data.likes || 0);
 
   const auth = useAuth();
   const navigate = useNavigate();
+  const modal = useModal();
 
-  const updateCommentList = async () => {
-    const response = await getCommentList({ postId });
-
-    if (response.isOk === false) {
-      toast("댓글을 불러오는 데 실패했습니다");
-      return;
-    }
-
-    setCommentList(response.comments);
-  };
+  const isMember =
+    members && members.find((member) => member._id === data.author._id);
+  const isCommentAuthor = auth?.user?._id === data.author._id;
 
   const handleEditSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const token = auth?.user?.token;
 
     if (!token) {
-      navigate("/login");
+      modal?.openModal("로그인이 필요한 기능입니다. 로그인하시겠습니까?", () =>
+        navigate("/login")
+      );
       return;
     }
 
@@ -93,7 +89,9 @@ export default function Comment({
     const token = auth?.user?.token;
 
     if (!token) {
-      navigate("/login");
+      modal?.openModal("로그인이 필요한 기능입니다. 로그인하시겠습니까?", () =>
+        navigate("/login")
+      );
       return;
     }
 
@@ -123,7 +121,9 @@ export default function Comment({
     const token = auth?.user?.token;
 
     if (!token) {
-      navigate("/login");
+      modal?.openModal("로그인이 필요한 기능입니다. 로그인하시겠습니까?", () =>
+        navigate("/login")
+      );
       return;
     }
 
@@ -150,13 +150,34 @@ export default function Comment({
   };
 
   const handleEditClick = () => {
-    setFocused(data._id);
+    setFocusedId(data._id);
     setMode(mode === "edit" ? "read" : "edit");
   };
 
   const handleReplyClick = () => {
-    setFocused(data._id);
+    setFocusedId(data._id);
     setMode(mode === "reply" ? "read" : "reply");
+  };
+
+  const handleLikeClick = async () => {
+    const token = auth?.user?.token;
+
+    if (!token) {
+      modal?.openModal("로그인이 필요한 기능입니다. 로그인하시겠습니까?", () =>
+        navigate("/login")
+      );
+      return;
+    }
+
+    if (clapped) {
+      removeCommentClap({ postId, commentId: data._id, token });
+      setNumClap((prev) => prev - 1);
+    } else {
+      addCommentClap({ postId, commentId: data._id, token });
+      setNumClap((prev) => prev + 1);
+    }
+
+    setClapped((prev) => !prev);
   };
 
   const handleGatherRequest = async () => {
@@ -164,7 +185,9 @@ export default function Comment({
     const userId = data.author._id;
 
     if (!token) {
-      navigate("/login");
+      modal?.openModal("로그인이 필요한 기능입니다. 로그인하시겠습니까?", () =>
+        navigate("/login")
+      );
       return;
     }
 
@@ -201,27 +224,40 @@ export default function Comment({
             <span className="comment__post-author">작성자</span>
           )}
 
-          <button
-            className="comment__edit-button"
-            type="button"
-            onClick={handleEditClick}
-          >
-            <i className="icon-create" />
-            수정
-          </button>
-          <button
-            className="comment__delete-button"
-            type="button"
-            onClick={handleDeleteClick}
-          >
-            <i className="icon-clear" />
-            삭제
-          </button>
+          {isCommentAuthor && (
+            <>
+              <button
+                className="comment__edit-button"
+                type="button"
+                onClick={handleEditClick}
+              >
+                <i className="icon-create" />
+                수정
+              </button>
+              <button
+                className="comment__delete-button"
+                type="button"
+                onClick={() =>
+                  modal?.openModal("댓글을 삭제하시겠습니까?", () =>
+                    handleDeleteClick()
+                  )
+                }
+              >
+                <i className="icon-clear" />
+                삭제
+              </button>
+            </>
+          )}
         </div>
 
-        {mode === "edit" && focused === data._id ? (
+        {mode === "edit" && focusedId === data._id ? (
           <form
-            onSubmit={handleEditSubmit}
+            onSubmit={(event) => {
+              event.preventDefault();
+              modal?.openModal("댓글을 수정하시겠습니까?", () =>
+                handleEditSubmit(event)
+              );
+            }}
             className="comment-form comment-form--edit"
           >
             <input
@@ -245,19 +281,28 @@ export default function Comment({
           </form>
         ) : (
           <>
-            <p className="comment__text">{data.contents}</p>
+            <p
+              className={formatClassName(
+                "comment__text",
+                data.isDeleted && "comment__text--deleted"
+              )}
+            >
+              {data.isDeleted ? "삭제된 댓글입니다." : data.contents}
+            </p>
             <div className="comment__info">
               <span className="comment__date">
                 {formatToReadableTime(data.createdAt)}
               </span>
               {!parentId && (
                 <>
-                  <CommentLikeBtn
-                    likesCount={likesCount}
-                    setLikesCount={setLikesCount}
-                    isLiked={isLiked}
-                    setIsLiked={setIsLiked}
-                  />
+                  <button
+                    type="button"
+                    className="comment__like-button"
+                    onClick={handleLikeClick}
+                  >
+                    <Clap activated={clapped} />
+                    {!numClap ? "좋아요" : numClap}
+                  </button>
                   <button
                     className="comment__reply-button"
                     type="button"
@@ -281,7 +326,7 @@ export default function Comment({
         )}
       </div>
 
-      {mode === "reply" && focused === data._id && (
+      {mode === "reply" && focusedId === data._id && (
         <form
           onSubmit={handleReplySubmit}
           className="comment-form comment-form--reply"
@@ -291,7 +336,14 @@ export default function Comment({
             onChange={(event) => setReplyText(event.target.value)}
             type="text"
             className="comment-form__input"
-            placeholder="답글을 입력하세요."
+            placeholder="답글을 남겨주세요."
+            onClick={() =>
+              !auth?.user?.token &&
+              modal?.openModal(
+                "로그인이 필요한 기능입니다. 로그인하시겠습니까?",
+                () => navigate("/login")
+              )
+            }
           />
           <div className="comment-form__button-wrap">
             <button type="submit" className="comment-form__button">

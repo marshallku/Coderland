@@ -9,19 +9,21 @@ interface ICommentsProps {
 
 interface IUniversalComment extends ICommentReply {
   likes?: number;
+  isLiked?: boolean;
+  isDeleted?: boolean;
   replies?: Array<ICommentReply>;
 }
 
 interface ICommentProps {
   updatePost: () => void;
+  updateCommentList: () => void;
   members?: Array<IUser>;
   isAuthor?: boolean;
   postId: string;
   parentId?: string;
   data: IUniversalComment;
-  setCommentList: React.Dispatch<React.SetStateAction<IComment[]>>;
-  focused: string;
-  setFocused: React.Dispatch<React.SetStateAction<string>>;
+  focusedId: string;
+  setFocusedId: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface ILikeProps {
