@@ -47,6 +47,12 @@
   margin-right: 4px;
 }
 
+.comment__like-button > svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  margin-right: 4px;
+}
+
 .comment-form--reply {
   padding: 12px 20px;
   border-bottom: 1px solid var(--gray-5);
@@ -55,4 +61,9 @@
 .comment__post-author {
   margin-left: 12px;
   color: var(--red-base);
+}
+
+.comment__text--deleted {
+  font-style: italic;
+  color: var(--gray-2);
 }
