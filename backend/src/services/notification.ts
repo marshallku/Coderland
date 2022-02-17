@@ -3,10 +3,9 @@ import { IPostModel } from "post";
 import { ICommentModel } from "comment";
 import { IUserModel } from "user";
 import { Comment, Notification, Post, User } from "../models";
-import config from "../config";
 
 function makeLink(postId: string, commentId: string): string {
-  return `${config.domain}/posts/${postId}#comment-${commentId}`;
+  return `/posts/${postId}#comment-${commentId}`;
 }
 
 export default class NotificationService {
