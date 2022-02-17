@@ -15,8 +15,8 @@ export function UserInfo() {
 
   const [editMode, setEditMode] = useState(false);
   const [name, setName] = useState("");
-  const { nickname, track, gitlab } = user;
-  const isAuthorized = !!user.gitlab;
+  const { nickname, track, gitlab, grade } = user;
+  const isAuthorized = grade > 0;
 
   useEffect(() => {
     setName(user.name);
