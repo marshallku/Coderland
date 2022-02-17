@@ -16,6 +16,10 @@ export default async function useApi<T extends ISuccessResponse>(
     return;
   }
 
+  if (data.hasNewNotification) {
+    window.setHasNewNotification?.(true);
+  }
+
   // eslint-disable-next-line consistent-return
   return data;
 }

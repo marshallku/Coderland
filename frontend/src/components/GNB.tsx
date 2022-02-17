@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import favicon from "../../static/image/favicon.svg";
 import ThemeSwitch from "./ThemeSwitch";
@@ -11,6 +12,11 @@ export default function GlobalNavigationBar({
   setDrawerRevealed,
 }: IDrawerStatusProps) {
   const auth = useAuth();
+  const [hasNewNotification, setHasNewNotification] = useState<boolean>(false);
+
+  useEffect(() => {
+    window.setHasNewNotification = setHasNewNotification;
+  }, []);
 
   return (
     <nav className="gnb">
@@ -43,7 +49,20 @@ export default function GlobalNavigationBar({
         <ThemeSwitch />
         <Dropdown
           ButtonChildren={
-            <i role="img" aria-label="알림" className="icon-notifications" />
+            <>
+              <i
+                role="img"
+                aria-label={formatClassName(
+                  "알림",
+                  hasNewNotification && "(새 알림 존재)"
+                )}
+                className={formatClassName(
+                  "icon-notifications",
+                  hasNewNotification && "new-notification"
+                )}
+              />
+              {hasNewNotification && <div className="gnb__circle" />}
+            </>
           }
           ContentChildren={
             <>

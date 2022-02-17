@@ -30,6 +30,7 @@ html.dark .gnb {
 }
 
 .gnb__button {
+  position: relative;
   display: flex;
   width: 40px;
   height: 40px;
@@ -43,6 +44,16 @@ html.dark .gnb {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.gnb__circle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 10px;
+  height: 10px;
+  background-color: var(--primary);
+  border-radius: 50%;
 }
 
 .gnb__logo {
