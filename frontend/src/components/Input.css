@@ -22,6 +22,7 @@
   transform: translate3d(1.05rem, 0.7rem, 0);
   color: var(--gray-2);
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.25s ease-in-out;
 }
 
@@ -44,6 +45,29 @@
 
 textarea.input__input {
   resize: none;
-  min-height: 6rem;
+  min-height: max(100%, 9rem);
   overflow: hidden;
+}
+
+/*
+  중요도 위해 아래처럼 사용함
+  수정 금지
+*/
+.input--image-uploadable > .input__input--image-uploadable {
+  padding-bottom: 3rem;
+}
+
+.input__upload {
+  position: absolute;
+  left: 0.7em;
+  bottom: 0.3rem;
+  display: inline-flex;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0.2rem;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--multipurpose-pressed);
+  border-radius: 50%;
+  font-size: 1.2rem;
 }

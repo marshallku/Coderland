@@ -1,4 +1,4 @@
-export const MS_TO_SECOND = 1000;
+export const SECOND_TO_MS = 1000;
 export const MINUTE_TO_SECOND = 60;
 export const HOUR_TO_SECOND = MINUTE_TO_SECOND * 60;
 export const DAY_TO_SECOND = HOUR_TO_SECOND * 24;
@@ -15,7 +15,7 @@ export function formatToReadableTime(dateString: string): string {
   if (Number.isNaN(date)) return "어떤 오후";
 
   const { floor } = Math;
-  const diffToSeconds = (now - date) / MS_TO_SECOND;
+  const diffToSeconds = (now - date) / SECOND_TO_MS;
   const diffToDay = floor(diffToSeconds / DAY_TO_SECOND);
   const lessThanDay = diffToSeconds < DAY_TO_SECOND;
 

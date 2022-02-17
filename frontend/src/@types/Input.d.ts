@@ -1,6 +1,7 @@
 interface IInputBoxProps {
   hideLabelOnFocus?: boolean;
   label?: string;
+
   setValue?: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -10,4 +11,7 @@ interface IInputProps
 
 interface ITextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-    IInputBoxProps {}
+    IInputBoxProps {
+  value?: string;
+  imageUploadable?: boolean;
+}

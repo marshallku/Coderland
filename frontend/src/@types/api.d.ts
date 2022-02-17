@@ -156,3 +156,7 @@ interface IUserResponse extends ISuccessResponse {
 interface IAuthKeyResponse extends ISuccessResponse {
   authKey: string;
 }
+
+interface IImageResponse extends ISuccessResponse {
+  fileName: string;
+}
