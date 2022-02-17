@@ -1,11 +1,11 @@
 interface IModalContent {
   text: string;
-  callback: () => void;
+  cb: () => void;
 }
 
 interface IModal {
   modalContent: IModalContent;
   showModal: boolean;
-  openModal: (content: IModalContent) => void;
+  openModal: (text: string, cb: () => void) => void;
   closeModal: () => void;
 }
