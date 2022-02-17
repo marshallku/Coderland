@@ -12,12 +12,15 @@ export default (
 ) => {
   const parsed = replies.map((reply) => {
     const { author, ...rest } = reply;
-
+    const parsedAuthor = {
+      _id: author._id,
+      nickname: author.nickname,
+    };
     return {
       ...rest,
       isPostAuthor:
         isPostAuthor && commentAuthor._id.toString() === author._id.toString(),
-      author: createAuthorName(anonymous, author, postId),
+      author: createAuthorName(anonymous, parsedAuthor, postId),
     };
   });
   return parsed;
