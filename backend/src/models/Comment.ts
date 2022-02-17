@@ -149,7 +149,6 @@ CommentSchema.statics.deleteComment = async (commentId) => {
   if (comment.replies.length > 0) {
     // 답글이 있으면 삭제하지 않고 변경
     await comment.updateOne({
-      contents: "작성자에 의해 삭제된 댓글입니다.",
       isDeleted: true,
       likes: 0,
       likeUsers: [],

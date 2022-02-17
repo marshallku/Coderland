@@ -303,9 +303,7 @@ describe("답글 있는 댓글 삭제 테스트", () => {
       .get(`/api/posts/${postId}/comments`)
       .send();
     // expect(res2.body.comments[0].author).toEqual(null);
-    expect(res2.body.comments[0].contents).toEqual(
-      "작성자에 의해 삭제된 댓글입니다."
-    );
+    expect(res2.body.comments[0].contents).toEqual("");
     expect(res2.body.comments[0].isDeleted).toEqual(true);
     expect(res2.body.comments[0].replies.length).toEqual(1);
   });
