@@ -1,16 +1,6 @@
-.home__banner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 300px;
-  background-color: var(--body);
-  border-radius: var(--border-radius);
-  color: var(--gray-6);
-  margin-bottom: 20px;
-}
-
 .home__grid {
   display: flex;
+  margin-top: 60px;
   flex-wrap: wrap;
 }
 
