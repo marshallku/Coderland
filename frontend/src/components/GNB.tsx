@@ -5,6 +5,8 @@ import ThemeSwitch from "./ThemeSwitch";
 import Dropdown from "./Dropdown";
 import formatClassName from "../utils/formatClassName";
 import { useAuth } from "../hooks/auth";
+import useApi from "../hooks/api";
+import getNotification from "../api/notification";
 import "./GNB.css";
 
 export default function GlobalNavigationBar({
@@ -13,6 +15,7 @@ export default function GlobalNavigationBar({
 }: IDrawerStatusProps) {
   const auth = useAuth();
   const [hasNewNotification, setHasNewNotification] = useState<boolean>(false);
+  const [notifications, setNotifications] = useState<Array<INotification>>([]);
 
   useEffect(() => {
     window.setHasNewNotification = setHasNewNotification;
@@ -66,30 +69,67 @@ export default function GlobalNavigationBar({
           }
           ContentChildren={
             <>
-              <h4>알림 목록</h4>
-              {/* TODO: 알림 목록 구현 */}
-              <ul>
-                <li>알림</li>
+              <h2 className="dropdown-content__title">
+                새 소식{" "}
+                {notifications.filter((x) => x.isNewNotification).length}개
+              </h2>
+              <ul className="dropdown-content__container notification-list">
+                {notifications.length === 0 ? (
+                  <article>Nothing</article>
+                ) : (
+                  notifications.map((item) => (
+                    <article
+                      className={formatClassName(
+                        "notification",
+                        item.isNewNotification && "notification--new"
+                      )}
+                    >
+                      <Link to={item.to}>
+                        <span className="highlight">{item.title}</span>에 새
+                        댓글이 등록되었습니다.
+                      </Link>
+                    </article>
+                  ))
+                )}
               </ul>
             </>
           }
+          onClick={async () => {
+            const token = auth?.user?.token;
+
+            if (!token) {
+              return;
+            }
+
+            const response = await useApi(getNotification(token));
+
+            if (!response) {
+              return;
+            }
+
+            setNotifications(response.notification);
+          }}
         />
         {auth?.user ? (
           <Dropdown
             ButtonChildren={<img src={favicon} alt="유저 프로필" />}
             ContentChildren={
               <>
-                {/* TODO: 유저 정보 추가 */}
-                <img
-                  src={auth?.user ? auth.user.profile : favicon}
-                  alt="유저 프로필"
-                />
-                <div>
+                <figure className="dropdown-profile">
+                  <img
+                    src={auth?.user ? auth.user.profile : favicon}
+                    alt="유저 프로필"
+                  />
+                  <figcaption>{auth.user.nickname}</figcaption>
+                </figure>
+                <nav className="dropdown-nav">
                   <div>
                     <Link to="/user">정보 수정</Link>
                   </div>
-                  <div>로그아웃</div>
-                </div>
+                  <div>
+                    <button type="button">로그아웃</button>
+                  </div>
+                </nav>
               </>
             }
           />
