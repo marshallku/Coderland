@@ -5,6 +5,7 @@ import "./Dropdown.css";
 export default function Dropdown({
   ButtonChildren,
   ContentChildren,
+  onClick,
 }: IDropdownProps) {
   const [opened, setOpened] = useState(false);
   const buttonRef = useRef(null);
@@ -27,6 +28,7 @@ export default function Dropdown({
 
   const openContent = () => {
     setOpened(true);
+    onClick?.();
     window.addEventListener("click", hideContent);
   };
 
