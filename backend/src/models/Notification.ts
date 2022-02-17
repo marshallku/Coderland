@@ -24,6 +24,10 @@ export const NotificationSchema = new mongoose.Schema<INotificationDocument>(
     createdAt: {
       type: Number,
     },
+    flag: {
+      type: String,
+      required: true,
+    },
   },
   {
     versionKey: false,
@@ -36,7 +40,8 @@ export const NotificationSchema = new mongoose.Schema<INotificationDocument>(
 NotificationSchema.statics.addNotification = async (
   userId: string,
   to: string,
-  title: string
+  title: string,
+  flag: "comment" | "reply"
 ) => {
   const createdAt = Date.now();
   await Notification.create({
@@ -44,6 +49,7 @@ NotificationSchema.statics.addNotification = async (
     to,
     title,
     createdAt,
+    flag,
   });
 };
 

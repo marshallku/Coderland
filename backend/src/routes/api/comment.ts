@@ -20,7 +20,11 @@ commentRouter.post(
     const commentId = await commentService.createComment(user, contents);
 
     const notificationServcie = new NotificationService();
-    await notificationServcie.addNotification(user.id, postId, commentId);
+    await notificationServcie.addCommentNotification(
+      user.id,
+      postId,
+      commentId
+    );
 
     res.status(201).json({ isOk: true, commentId });
   })

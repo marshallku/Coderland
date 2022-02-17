@@ -1,5 +1,6 @@
 import { Router } from "express";
 import ReplyService from "../../services/reply";
+import NotificationService from "../../services/notification";
 
 import { asyncHandler } from "../../utils";
 import { loginRequired } from "../../passport/guards";
@@ -14,9 +15,13 @@ replyRouter.post(
   checkGrade,
   asyncHandler(async (req, res) => {
     const { user } = req;
+    const { postId } = req.params;
     const { commentId, contents } = req.body;
     const replyService = new ReplyService();
     await replyService.createReply(commentId, user, contents);
+
+    const notificationService = new NotificationService();
+    await notificationService.addReplyNotification(user.id, postId, commentId);
     res.status(201).json({ isOk: true });
   })
 );
