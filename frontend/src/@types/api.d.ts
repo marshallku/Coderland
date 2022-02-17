@@ -102,9 +102,16 @@ interface IPagination {
   lastPage: number;
 }
 
+interface INotification {
+  title: string;
+  isNewNotification: boolean;
+  to: string;
+}
+
 // Api Base
 interface ISuccessResponse {
   isOk: true;
+  hasNewNotification?: boolean;
 }
 
 interface IFailResponse {
@@ -163,4 +170,8 @@ interface IImageResponse extends ISuccessResponse {
 
 interface ICarouselResponse extends ISuccessResponse {
   carousel: Array<ICarouselItem>;
+}
+
+interface INotificationResponse extends ISuccessResponse {
+  notification: Array<INotification>;
 }
