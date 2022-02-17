@@ -1,7 +1,6 @@
 import request from "supertest";
 import "regenerator-runtime";
 import db from "mongoose";
-import { IUserDocument } from "../src/types/user";
 import server from "../src/app";
 import configs from "../src/config";
 import { createToken } from "../src/utils/jwt";
@@ -19,32 +18,18 @@ describe("댓글 통합 테스트", () => {
     await connection.collection("users").insertOne({
       googleId: "01010203040404",
       nickname: "testuser2",
-      name: "family given2",
-      profile: "profile photo url2",
       grade: 1,
     });
 
-    const user = <IUserDocument>await connection.collection("users").findOne({
-      googleId: "01010203040404",
-    });
-
-    token += createToken(user);
+    token += createToken({ googleId: "01010203040404" });
 
     await connection.collection("users").insertOne({
       googleId: "1734981374981123",
       nickname: "testuser2",
-      name: "family given2",
-      profile: "profile photo url2",
       grade: 1,
     });
 
-    const notOwner = <IUserDocument>(
-      await connection.collection("users").findOne({
-        googleId: "1734981374981123",
-      })
-    );
-
-    notAccessToken += createToken(notOwner);
+    notAccessToken += createToken({ googleId: "1734981374981123" });
   });
 
   it("일반 포스트 생성", async () => {
@@ -278,16 +263,10 @@ describe("답글 있는 댓글 삭제 테스트", () => {
     await connection.collection("users").insertOne({
       googleId: "01010203040404",
       nickname: "testuser2",
-      name: "family given2",
-      profile: "profile photo url2",
       grade: 1,
     });
 
-    const user = <IUserDocument>await connection.collection("users").findOne({
-      googleId: "01010203040404",
-    });
-
-    token += createToken(user);
+    token += createToken({ googleId: "01010203040404" });
   });
 
   it("답글 있는 댓글 삭제", async () => {

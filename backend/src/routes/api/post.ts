@@ -7,7 +7,6 @@ import { checkPermission, checkGatherPost, checkGrade } from "../middlewares";
 
 import commentRouter from "./comment";
 import replyRouter from "./reply";
-
 import config from "../../config";
 
 export default (app: Router) => {
@@ -32,10 +31,13 @@ export default (app: Router) => {
         currentPage,
         perPage
       );
+      const { user } = req;
+      const hasNewNotification = user ? user.hasNewNotification : false;
       res.status(200).json({
         isOk: true,
         posts,
         pagination,
+        hasNewNotification,
       });
     })
   );
@@ -50,9 +52,11 @@ export default (app: Router) => {
       const { postId } = req.params;
       const postService = new PostService();
       const post = await postService.findPostById(postId, userId);
+      const hasNewNotification = user ? user.hasNewNotification : false;
       res.status(200).json({
         isOk: true,
         post,
+        hasNewNotification,
       });
     })
   );

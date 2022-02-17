@@ -1,7 +1,6 @@
 import request from "supertest";
 import "regenerator-runtime";
 import db from "mongoose";
-import { IUserDocument } from "../src/types/user";
 import server from "../src/app";
 import configs from "../src/config";
 import { createToken } from "../src/utils/jwt";
@@ -22,46 +21,24 @@ describe("일반 포스트 기능 테스트", () => {
     await connection.collection("users").insertOne({
       googleId: "1230707070702022",
       nickname: "testuser2",
-      name: "family given2",
-      profile: "profile photo url2",
       grade: 1,
     });
 
     await connection.collection("users").insertOne({
       googleId: "1230809419304811",
       nickname: "testuser233",
-      name: "family given2",
-      profile: "profile photo url2",
       grade: 1,
     });
 
     await connection.collection("users").insertOne({
       googleId: "12309128390004041",
       nickname: "notracer",
-      name: "family given2",
-      profile: "profile photo url2",
       grade: 0,
     });
 
-    const user = <IUserDocument>await connection.collection("users").findOne({
-      googleId: "1230707070702022",
-    });
-
-    const notOwnerUser = <IUserDocument>(
-      await connection.collection("users").findOne({
-        googleId: "1230809419304811",
-      })
-    );
-
-    const notRacer = <IUserDocument>(
-      await connection.collection("users").findOne({
-        googleId: "12309128390004041",
-      })
-    );
-
-    token += createToken(user);
-    notOwnerToken += createToken(notOwnerUser);
-    notRacerToken += createToken(notRacer);
+    token += createToken({ googleId: "1230707070702022" });
+    notOwnerToken += createToken({ googleId: "1230809419304811" });
+    notRacerToken += createToken({ googleId: "12309128390004041" });
   });
 
   it("일반 포스트 생성 테스트", async () => {
