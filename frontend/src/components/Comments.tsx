@@ -30,7 +30,11 @@ export default function Comments({
   const modal = useModal();
 
   const updateCommentList = async () => {
-    const response = await getCommentList({ postId });
+    const token = auth?.user?.token;
+
+    const response = token
+      ? await getCommentList({ postId, token })
+      : await getCommentList({ postId });
 
     if (response.isOk === false) {
       toast("댓글을 불러오는 데 실패했습니다");

@@ -2,10 +2,16 @@ import instance from "./instance";
 
 export function getCommentList({
   postId,
+  token,
 }: {
   postId: string;
+  token?: string;
 }): Promise<ICommentListResponse | IFailResponse> {
-  return instance.get(`/posts/${postId}/comments`);
+  return instance.get(`/posts/${postId}/comments`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 }
 
 export function createComment({
