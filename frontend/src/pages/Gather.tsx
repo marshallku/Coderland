@@ -21,6 +21,8 @@ export default function Gather() {
     return "gather";
   };
 
+  const subject = getLocation();
+
   return (
     <>
       <h1 className="main-title main-title--post-list">팀원 모집</h1>
@@ -33,7 +35,7 @@ export default function Gather() {
         ]}
         align="center"
       />
-      <PostList subject={getLocation()} />
+      <PostList key={subject} subject={subject} />
       <div>
         <AddPostButton to="gather" />
       </div>
