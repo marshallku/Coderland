@@ -160,3 +160,7 @@ interface IAuthKeyResponse extends ISuccessResponse {
 interface IImageResponse extends ISuccessResponse {
   fileName: string;
 }
+
+interface ICarouselResponse extends ISuccessResponse {
+  carousel: Array<ICarouselItem>;
+}

@@ -1,5 +1,9 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import getCarouselData from "../api/home";
+import Carousel from "../components/Carousel";
 import PostList from "../components/PostList";
+import useApi from "../hooks/api";
 import formatClassName from "../utils/formatClassName";
 import "./Home.css";
 
@@ -36,9 +40,33 @@ function HomePostList({ subject, isLarge }: IHomePostListProps) {
 }
 
 export default function Home() {
+  const [carouselData, setCarouselData] = useState<Array<ICarouselItem>>([
+    {
+      title: "로딩 중...",
+      to: "/",
+      // Base64 Encoded Transparent Image
+      image:
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+    },
+  ]);
+
+  useEffect(() => {
+    async function getData() {
+      const response = await useApi(getCarouselData());
+
+      if (!response) {
+        return;
+      }
+
+      setCarouselData(response.carousel);
+    }
+
+    getData();
+  }, []);
+
   return (
     <div className="home">
-      <div className="home__banner">배너 들어갈 공간</div>
+      <Carousel data={carouselData} />
       <div className="home__grid">
         <HomePostList subject="gather" isLarge />
         <HomePostList subject="review" />
