@@ -72,6 +72,7 @@ export default function MarkdownEditor({
           hideLabelOnFocus
           value={value}
           setValue={setValue}
+          imageUploadable
         />
         <MarkdownViewer
           className="markdown-editor__preview"
