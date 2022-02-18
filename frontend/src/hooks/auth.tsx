@@ -55,11 +55,12 @@ function saveToken(token: string) {
 export function tryLoginOnLoad() {
   const { token } = window;
 
-  if (!token || !document.cookie) {
+  if (token || !document.cookie) {
     return;
   }
 
   const accessToken = parseCookie()["access-token"];
 
   saveToken(accessToken);
+  window.token = accessToken;
 }

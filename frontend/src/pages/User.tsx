@@ -28,13 +28,7 @@ export function UserInfo() {
   }
 
   const [editing, setEditing] = useState(false);
-  const {
-    name,
-    nickname: _nickname,
-    track: _track,
-    github: _github,
-    grade,
-  } = user;
+  const { nickname: _nickname, track: _track, github: _github, grade } = user;
   const [nickname, setNickname] = useState(_nickname);
   const [track, setTrack] = useState(_track);
   const [github, setGithub] = useState(_github);
@@ -68,9 +62,6 @@ export function UserInfo() {
           </blockquote>
         </div>
       )}
-      <div className="user-info__content user-info__content--readonly">
-        <Input id="name" label="이름" value={name} readOnly />
-      </div>
       <div className="user-info__content">
         <Input
           id="nickname"
@@ -191,7 +182,7 @@ export function UserBookmarks() {
 
 export default function User() {
   return (
-    <div>
+    <div className="user">
       <Navigation
         list={[
           { title: "기본정보", to: "" },
