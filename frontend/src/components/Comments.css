@@ -61,5 +61,5 @@
 .comment__view-more--reply {
   margin-top: 0;
   border-top: none;
-  background-color: var(--multipurpose);
+  background-color: var(--background-elevated);
 }

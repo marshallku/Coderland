@@ -131,10 +131,7 @@ export default function Comments({
       )}
 
       {commentList
-        .slice(
-          isExpanded ? 0 : commentList.length - COMMENT_LIMIT,
-          commentList.length
-        )
+        .slice(isExpanded ? 0 : -COMMENT_LIMIT)
         .map((comment, index) => (
           <>
             <Comment
@@ -161,12 +158,7 @@ export default function Comments({
               )}
 
             {comment.replies
-              .slice(
-                expandedIndexes.includes(index)
-                  ? 0
-                  : comment.replies.length - REPLY_LIMIT,
-                comment.replies.length
-              )
+              .slice(expandedIndexes.includes(index) ? 0 : -REPLY_LIMIT)
               .map((reply) => (
                 <Comment
                   key={reply._id}
