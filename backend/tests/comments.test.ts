@@ -1,16 +1,17 @@
 import request from "supertest";
 import "regenerator-runtime";
 import db from "mongoose";
+import { sign } from "cookie-signature";
 import server from "../src/app";
-import configs from "../src/config";
+import config from "../src/config";
 import { createToken } from "../src/utils/jwt";
 
 describe("댓글 통합 테스트", () => {
   const connection = db.createConnection(
-    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+    `mongodb://${config.mongoHost}:${config.mongoPort}/coderland`
   );
-  let token = "Bearer ";
-  let notAccessToken = "Bearer ";
+  let token = "";
+  let notAccessToken = "";
   let postId: string;
   let commentId: string;
 
@@ -22,6 +23,7 @@ describe("댓글 통합 테스트", () => {
     });
 
     token += createToken({ googleId: "01010203040404" });
+    token = `s:${sign(token, config.COOKIE_SECRET)}`;
 
     await connection.collection("users").insertOne({
       googleId: "1734981374981123",
@@ -30,6 +32,7 @@ describe("댓글 통합 테스트", () => {
     });
 
     notAccessToken += createToken({ googleId: "1734981374981123" });
+    notAccessToken = `s:${sign(notAccessToken, config.COOKIE_SECRET)}`;
   });
 
   it("일반 포스트 생성", async () => {
@@ -42,7 +45,7 @@ describe("댓글 통합 테스트", () => {
     // when
     const res = await request(server)
       .post("/api/posts")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ title, contents, subject, category });
 
     // then
@@ -60,7 +63,7 @@ describe("댓글 통합 테스트", () => {
 
     const res = await request(server)
       .post(`/api/posts/${postId}/comments`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ contents });
 
     expect(res.statusCode).toEqual(201);
@@ -83,7 +86,7 @@ describe("댓글 통합 테스트", () => {
 
     const res = await request(server)
       .post("/api/posts/sadlkjflkasd/comments")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ contents });
 
     expect(res.statusCode).toEqual(403);
@@ -94,7 +97,7 @@ describe("댓글 통합 테스트", () => {
   it("일반 포스트 코멘트 리스트 테스트", async () => {
     const res = await request(server)
       .get(`/api/posts/${postId}/comments`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send();
     expect(res.statusCode).toEqual(200);
     expect(res.body.isOk).toEqual(true);
@@ -110,7 +113,7 @@ describe("댓글 통합 테스트", () => {
 
     const res = await request(server)
       .put(`/api/posts/${postId}/comments`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ contents, commentId });
 
     expect(res.statusCode).toEqual(200);
@@ -140,7 +143,7 @@ describe("댓글 통합 테스트", () => {
 
     const res = await request(server)
       .put(`/api/posts/${postId}/comments`)
-      .set("authorization", notAccessToken)
+      .set("Cookie", [`access-token=${notAccessToken}`])
       .send({ contents, commentId });
 
     expect(res.statusCode).toEqual(403);
@@ -161,7 +164,7 @@ describe("댓글 통합 테스트", () => {
   it("Fail 일반 포스트 댓글 삭제 권한 문제", async () => {
     const res = await request(server)
       .delete(`/api/posts/${postId}/comments`)
-      .set("authorization", notAccessToken)
+      .set("Cookie", [`access-token=${notAccessToken}`])
       .send({ commentId });
 
     expect(res.statusCode).toEqual(403);
@@ -172,7 +175,7 @@ describe("댓글 통합 테스트", () => {
   it("Fail 일반 포스트 댓글 삭제 없는 댓글", async () => {
     const res = await request(server)
       .delete(`/api/posts/${postId}/comments`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ commentId: "alskdjfklsjd" });
 
     expect(res.statusCode).toEqual(403);
@@ -183,7 +186,7 @@ describe("댓글 통합 테스트", () => {
   it("일반 포스트 댓글 삭제", async () => {
     const res = await request(server)
       .delete(`/api/posts/${postId}/comments`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ commentId });
 
     expect(res.statusCode).toEqual(200);
@@ -210,7 +213,7 @@ describe("댓글 통합 테스트", () => {
     // when
     const res = await request(server)
       .post("/api/posts")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ title, contents, subject, category });
 
     // then
@@ -228,7 +231,7 @@ describe("댓글 통합 테스트", () => {
 
     const res = await request(server)
       .post(`/api/posts/${anonymousPostId}/comments`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ contents });
 
     expect(res.statusCode).toEqual(201);
@@ -254,9 +257,9 @@ describe("댓글 통합 테스트", () => {
 
 describe("답글 있는 댓글 삭제 테스트", () => {
   const connection = db.createConnection(
-    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+    `mongodb://${config.mongoHost}:${config.mongoPort}/coderland`
   );
-  let token = "Bearer ";
+  let token = "";
   let postId: string;
   let commentId: string;
 
@@ -268,6 +271,7 @@ describe("답글 있는 댓글 삭제 테스트", () => {
     });
 
     token += createToken({ googleId: "01010203040404" });
+    token = `s:${sign(token, config.COOKIE_SECRET)}`;
   });
 
   it("답글 있는 댓글 삭제", async () => {
@@ -278,26 +282,26 @@ describe("답글 있는 댓글 삭제 테스트", () => {
     const category = "none";
     const res = await request(server)
       .post("/api/posts")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ title, contents, subject, category });
     postId = res.body.postId;
 
     // 댓글 생성
     const res1 = await request(server)
       .post(`/api/posts/${postId}/comments`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ contents: "comment contents" });
     commentId = res1.body.commentId;
 
     // 답글 생성
     await request(server)
       .post(`/api/posts/${postId}/replies`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ commentId, contents });
 
     await request(server)
       .delete(`/api/posts/${postId}/comments`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ commentId });
 
     const res2 = await request(server)
