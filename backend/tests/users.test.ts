@@ -1,9 +1,10 @@
 import request from "supertest";
 import "regenerator-runtime";
 import db from "mongoose";
-import jwt, { SignOptions, decode } from "jsonwebtoken";
+import { sign } from "cookie-signature";
+import jwt, { SignOptions } from "jsonwebtoken";
 import server from "../src/app";
-import configs from "../src/config";
+import config from "../src/config";
 
 describe("구글 기능 테스트", () => {
   it("구글 로그인 페이지 리다이렉트 테스트", async () => {
@@ -17,17 +18,17 @@ describe("구글 기능 테스트", () => {
 });
 
 describe("유저 기능 테스트", () => {
-  let token = "Bearer ";
+  let token = "";
   const connection = db.createConnection(
-    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+    `mongodb://${config.mongoHost}:${config.mongoPort}/coderland`
   );
-  let expiredToken = "Bearer ";
+  let expiredToken = "";
   let refreshToken = "";
   let expiredRefreshToken = "";
 
   beforeAll(async () => {
     const payload = { googleId: "1230419308012123" };
-    refreshToken += jwt.sign({}, configs.jwtSecret, { expiresIn: "14d" });
+    refreshToken += jwt.sign({}, config.jwtSecret, { expiresIn: "14d" });
 
     await connection.collection("users").insertOne({
       googleId: "1230419308012123",
@@ -42,20 +43,27 @@ describe("유저 기능 테스트", () => {
     const signOpts: SignOptions = {
       expiresIn: "1h",
     };
-    token += jwt.sign(payload, configs.jwtSecret, signOpts);
-    expiredToken += jwt.sign(payload, configs.jwtSecret, { expiresIn: 0 });
+    token += jwt.sign(payload, config.jwtSecret, signOpts);
+    expiredToken += jwt.sign(payload, config.jwtSecret, { expiresIn: 0 });
 
-    expiredRefreshToken = jwt.sign({}, configs.jwtSecret, {
+    expiredRefreshToken = jwt.sign({}, config.jwtSecret, {
       expiresIn: 0,
     });
+
+    token = `s:${sign(token, config.COOKIE_SECRET)}`;
+    expiredToken = `s:${sign(expiredToken, config.COOKIE_SECRET)}`;
+    expiredRefreshToken = `s:${sign(
+      expiredRefreshToken,
+      config.COOKIE_SECRET
+    )}`;
+    refreshToken = `s:${sign(refreshToken, config.COOKIE_SECRET)}`;
   });
 
   it("유저 정보 가져오기", async () => {
     const res = await request(server)
       .get("/api/users")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send();
-
     expect(res.statusCode).toEqual(200);
     expect(res.body.isOk).toEqual(true);
     expect(res.body.user.nickname).toEqual("testuser");
@@ -64,14 +72,11 @@ describe("유저 기능 테스트", () => {
   it("토큰 리프레시", async () => {
     const res = await request(server)
       .get("/api/users")
-      .set("authorization", expiredToken)
-      .set("refresh-token", refreshToken)
+      .set("Cookie", [
+        `access-token=${expiredToken}`,
+        `refresh-token=${refreshToken}`,
+      ])
       .send();
-
-    expect(
-      Object(decode(res.header["set-cookie"][0].split(";")[0].split("=")[1]))
-        .exp
-    ).toBeGreaterThan(Object(decode(expiredToken.split(" ")[1])).exp);
     expect(res.statusCode).toEqual(200);
     expect(res.body.isOk).toEqual(true);
   });
@@ -79,8 +84,10 @@ describe("유저 기능 테스트", () => {
   it("토큰 리프레시도 만료", async () => {
     const res = await request(server)
       .get("/api/users")
-      .set("authorization", expiredToken)
-      .set("refresh-token", expiredRefreshToken)
+      .set("Cookie", [
+        `access-token=${expiredToken}`,
+        `refresh-token=${expiredRefreshToken}`,
+      ])
       .send();
 
     expect(res.statusCode).toEqual(403);
@@ -99,7 +106,7 @@ describe("유저 기능 테스트", () => {
   it("존재하지 않는 회원 정보로 다가가기", async () => {
     const res = await request(server)
       .get("/api/users")
-      .set("authorization", "notexiststokenfaketoken")
+      .set("Cookie", ["access-token=asldkjalksdjlkasd"])
       .send();
 
     expect(res.statusCode).toEqual(403);
@@ -110,7 +117,7 @@ describe("유저 기능 테스트", () => {
   it("유저 정보 수정하기", async () => {
     const res = await request(server)
       .patch("/api/users")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ nickname: "update nickname" });
 
     expect(res.statusCode).toEqual(200);
@@ -118,7 +125,7 @@ describe("유저 기능 테스트", () => {
 
     const res1 = await request(server)
       .get("/api/users")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send();
 
     expect(res1.statusCode).toEqual(200);
@@ -128,7 +135,7 @@ describe("유저 기능 테스트", () => {
   it("Fail 없는 유저 정보 수정하기", async () => {
     const res = await request(server)
       .patch("/api/users")
-      .set("authorization", "lksjdfkljsdlfksldkfj")
+      .set("Cookie", ["access-token=laksjdfkljsdlkf"])
       .send({ nickname: "update nickname" });
 
     expect(res.statusCode).toEqual(403);
@@ -144,16 +151,16 @@ describe("유저 기능 테스트", () => {
 });
 
 describe("유저 레이서 인증 서비스", () => {
-  let token = "Bearer ";
+  let token = "";
   const connection = db.createConnection(
-    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+    `mongodb://${config.mongoHost}:${config.mongoPort}/coderland`
   );
   let refreshToken = "";
   let authKey: string;
 
   beforeAll(async () => {
     const payload = { googleId: "1230419308012123" };
-    refreshToken += jwt.sign({}, configs.jwtSecret, { expiresIn: "14d" });
+    refreshToken += jwt.sign({}, config.jwtSecret, { expiresIn: "14d" });
     const authKey = "e94275d5-0871-4e70-aab8-305eb80f313d";
     await connection.collection("users").insertOne({
       googleId: "1230419308012123",
@@ -168,13 +175,14 @@ describe("유저 레이서 인증 서비스", () => {
     const signOpts: SignOptions = {
       expiresIn: "1h",
     };
-    token += jwt.sign(payload, configs.jwtSecret, signOpts);
+    token += jwt.sign(payload, config.jwtSecret, signOpts);
+    token = `s:${sign(token, config.COOKIE_SECRET)}`;
   });
 
   it("유저 인증 페이지 접근, 인증키 발급", async () => {
     const res = await request(server)
       .get("/api/users/auth")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ authKey });
 
     expect(res.statusCode).toEqual(200);
@@ -191,7 +199,7 @@ describe("유저 레이서 인증 서비스", () => {
     const username = "atatsdfkdkd";
     const res = await request(server)
       .post("/api/users/auth")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ username });
 
     expect(res.statusCode).toEqual(403);
@@ -207,7 +215,7 @@ describe("유저 레이서 인증 서비스", () => {
     const username = "marshallku";
     const res = await request(server)
       .post("/api/users/auth")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ username });
 
     expect(res.statusCode).toEqual(403);
@@ -223,7 +231,7 @@ describe("유저 레이서 인증 서비스", () => {
     const username = "wjdtp93";
     const res = await request(server)
       .post("/api/users/auth")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ username });
 
     expect(res.statusCode).toEqual(200);
@@ -243,16 +251,16 @@ describe("유저 레이서 인증 서비스", () => {
 });
 
 describe("회원 탈퇴 기능", () => {
-  let token = "Bearer ";
+  let token = "";
   const connection = db.createConnection(
-    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+    `mongodb://${config.mongoHost}:${config.mongoPort}/coderland`
   );
   let refreshToken = "";
   let postId: string;
 
   beforeAll(async () => {
     const payload = { googleId: "1230419308012123" };
-    refreshToken += jwt.sign({}, configs.jwtSecret, { expiresIn: "14d" });
+    refreshToken += jwt.sign({}, config.jwtSecret, { expiresIn: "14d" });
     const authKey = "uniquekeyisgeneratedbyuuid";
     await connection.collection("users").insertOne({
       googleId: "1230419308012123",
@@ -267,7 +275,8 @@ describe("회원 탈퇴 기능", () => {
     const signOpts: SignOptions = {
       expiresIn: "1h",
     };
-    token += jwt.sign(payload, configs.jwtSecret, signOpts);
+    token += jwt.sign(payload, config.jwtSecret, signOpts);
+    token = `s:${sign(token, config.COOKIE_SECRET)}`;
   });
 
   it("포스트 생성", async () => {
@@ -280,7 +289,7 @@ describe("회원 탈퇴 기능", () => {
     // when
     const res = await request(server)
       .post("/api/posts")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({ title, contents, subject, category });
 
     // then
@@ -296,7 +305,7 @@ describe("회원 탈퇴 기능", () => {
   it("회원 탈퇴", async () => {
     const res = await request(server)
       .delete("/api/users")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send();
 
     expect(res.statusCode).toEqual(200);

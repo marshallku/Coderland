@@ -1,17 +1,18 @@
 import request from "supertest";
 import "regenerator-runtime";
 import db from "mongoose";
+import { sign } from "cookie-signature";
 import server from "../src/app";
 import { createToken } from "../src/utils/jwt";
-import configs from "../src/config";
+import config from "../src/config";
 
 describe("모임 게시글 기능 테스트", () => {
   const connection = db.createConnection(
-    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+    `mongodb://${config.mongoHost}:${config.mongoPort}/coderland`
   );
-  let token = "Bearer ";
+  let token = "";
   let postId: string;
-  let notAccessToken = "Bearer ";
+  let notAccessToken = "";
   let applyUserId: string;
 
   beforeAll(async () => {
@@ -34,6 +35,9 @@ describe("모임 게시글 기능 테스트", () => {
       .collection("users")
       .findOne({ googleId: "10374183748917238" });
     applyUserId = notAccessUser._id.toString();
+
+    token = `s:${sign(token, config.COOKIE_SECRET)}`;
+    notAccessToken = `s:${sign(notAccessToken, config.COOKIE_SECRET)}`;
   });
 
   it("모임 게시글 생성 테스트", async () => {
@@ -47,7 +51,7 @@ describe("모임 게시글 기능 테스트", () => {
 
     const res = await request(server)
       .post("/api/posts")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({
         title,
         contents,
@@ -144,7 +148,7 @@ describe("모임 게시글 기능 테스트", () => {
 
     const res = await request(server)
       .put(`/api/posts/${postId}`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({
         title,
         contents,
@@ -177,7 +181,7 @@ describe("모임 게시글 기능 테스트", () => {
   it("Fail 권한 없이 모집 글 신청 수락", async () => {
     const res = await request(server)
       .post(`/api/posts/${postId}/cast`)
-      .set("authorization", notAccessToken)
+      .set("Cookie", [`access-token=${notAccessToken}`])
       .send({
         userId: applyUserId,
       });
@@ -189,7 +193,7 @@ describe("모임 게시글 기능 테스트", () => {
   it("모집 글 신청 수락", async () => {
     const res = await request(server)
       .post(`/api/posts/${postId}/cast`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({
         userId: applyUserId,
       });
@@ -204,7 +208,7 @@ describe("모임 게시글 기능 테스트", () => {
   it("Fail 이미 수락한 유저 모집 글 신청 수락", async () => {
     const res = await request(server)
       .post(`/api/posts/${postId}/cast`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({
         userId: applyUserId,
       });
@@ -221,7 +225,7 @@ describe("모임 게시글 기능 테스트", () => {
   it("작성자가 신청자 취소", async () => {
     await request(server)
       .delete(`/api/posts/${postId}/cast`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({
         userId: applyUserId,
       });
@@ -235,7 +239,7 @@ describe("모임 게시글 기능 테스트", () => {
   it("Fail 없는 신청자 취소", async () => {
     const res = await request(server)
       .delete(`/api/posts/${postId}/cast`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({
         userId: applyUserId,
       });
@@ -248,7 +252,7 @@ describe("모임 게시글 기능 테스트", () => {
     // 신청자 수락
     await request(server)
       .post(`/api/posts/${postId}/cast`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({
         userId: applyUserId,
       });
@@ -256,7 +260,7 @@ describe("모임 게시글 기능 테스트", () => {
     // 신청자가 신청 취소
     const res = await request(server)
       .delete(`/api/posts/${postId}/cast`)
-      .set("authorization", notAccessToken)
+      .set("Cookie", [`access-token=${notAccessToken}`])
       .send({
         userId: applyUserId,
       });
@@ -268,7 +272,7 @@ describe("모임 게시글 기능 테스트", () => {
   it("모집 글 모집 완료", async () => {
     const res = await request(server)
       .patch(`/api/posts/${postId}`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send();
 
     expect(res.statusCode).toEqual(200);
@@ -280,7 +284,7 @@ describe("모임 게시글 기능 테스트", () => {
   it("Fail 완료된 모집 글 신청 수락", async () => {
     const res = await request(server)
       .post(`/api/posts/${postId}/cast`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({
         userId: applyUserId,
       });
@@ -292,7 +296,7 @@ describe("모임 게시글 기능 테스트", () => {
   it("Fail 권한 없이 모집 글 모집 완료", async () => {
     const res = await request(server)
       .patch(`/api/posts/${postId}`)
-      .set("authorization", notAccessToken)
+      .set("Cookie", [`access-token=${notAccessToken}`])
       .send();
 
     expect(res.statusCode).toEqual(403);
@@ -310,7 +314,7 @@ describe("모임 게시글 기능 테스트", () => {
 
     const res = await request(server)
       .put("/api/posts/sdlfkjsadfioqef")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({
         title,
         contents,
@@ -335,7 +339,7 @@ describe("모임 게시글 기능 테스트", () => {
 
     const res = await request(server)
       .put(`/api/posts/${postId}`)
-      .set("authorization", notAccessToken)
+      .set("Cookie", [`access-token=${notAccessToken}`])
       .send({
         title,
         contents,
@@ -375,7 +379,7 @@ describe("모임 게시글 기능 테스트", () => {
   it("Fail 권한 없이 모집 글 삭제 기능 테스트", async () => {
     const res = await request(server)
       .delete(`/api/posts/${postId}`)
-      .set("authorization", notAccessToken)
+      .set("Cookie", [`access-token=${notAccessToken}`])
       .send();
 
     expect(res.statusCode).toEqual(403);
@@ -386,7 +390,7 @@ describe("모임 게시글 기능 테스트", () => {
   it("Fail 없는 모집 글 삭제 기능 테스트", async () => {
     const res = await request(server)
       .delete("/api/posts/sldkfjqpeqwdas")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send();
 
     expect(res.statusCode).toEqual(403);
@@ -405,7 +409,7 @@ describe("모임 게시글 기능 테스트", () => {
   it("모집 글 삭제 기능 테스트", async () => {
     const res = await request(server)
       .delete(`/api/posts/${postId}`)
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send();
 
     expect(res.statusCode).toEqual(200);
@@ -426,9 +430,9 @@ describe("모임 게시글 기능 테스트", () => {
 
 describe("모든 모집 글 리스트 조회 테스트", () => {
   const connection = db.createConnection(
-    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
+    `mongodb://${config.mongoHost}:${config.mongoPort}/coderland`
   );
-  let token = "Bearer ";
+  let token = "";
 
   beforeAll(async () => {
     await connection.collection("users").insertOne({
@@ -438,12 +442,13 @@ describe("모든 모집 글 리스트 조회 테스트", () => {
     });
 
     token += createToken({ googleId: "0809032903902923" });
+    token = `s:${sign(token, config.COOKIE_SECRET)}`;
   });
 
   it("모든 모집 글 리스트 조회 테스트", async () => {
     await request(server)
       .post("/api/posts")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({
         title: "titlelkj",
         contents: "sdkfjlksdjf",
@@ -455,7 +460,7 @@ describe("모든 모집 글 리스트 조회 테스트", () => {
 
     await request(server)
       .post("/api/posts")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({
         title: "titlasdfsdfelkj",
         contents: "sdkfjasdfsdaflksdjf",
@@ -467,7 +472,7 @@ describe("모든 모집 글 리스트 조회 테스트", () => {
 
     await request(server)
       .post("/api/posts")
-      .set("authorization", token)
+      .set("Cookie", [`access-token=${token}`])
       .send({
         title: "titlwerqerelkj",
         contents: "sdkfjlksdjf",

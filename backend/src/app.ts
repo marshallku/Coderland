@@ -2,10 +2,11 @@ import express, { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import pino from "pino";
+import cookieParser from "cookie-parser";
 import asyncHandler from "./utils/async-handler";
 import route from "./routes/index";
 import passportInit from "./passport/index";
-import configs from "./config";
+import config from "./config";
 
 const app = express();
 
@@ -17,7 +18,7 @@ const logger = pino({
 
 passportInit();
 
-const { mongoHost, mongoPort, mongoDBName, port } = configs;
+const { mongoHost, mongoPort, mongoDBName, port, COOKIE_SECRET } = config;
 
 mongoose.connect(
   `mongodb://${mongoHost}:${mongoPort}/${mongoDBName}`,
@@ -35,6 +36,7 @@ mongoose.connect(
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser(COOKIE_SECRET));
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({ isOk: true });

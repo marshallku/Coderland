@@ -93,5 +93,16 @@ export default (app: Router) => {
     })
   );
 
+  // 유저 로그아웃
+  route.get(
+    "/logout",
+    loginRequired,
+    asyncHandler(async (req, res) => {
+      res.clearCookie("access-token");
+      res.clearCookie("refresh-token");
+      res.status(200).json({ isOk: true });
+    })
+  );
+
   app.use("/users", route);
 };

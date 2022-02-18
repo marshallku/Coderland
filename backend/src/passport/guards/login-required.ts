@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { decode, TokenExpiredError, verify, sign } from "jsonwebtoken";
 import passport from "passport";
-import { ExtractJwt } from "passport-jwt";
 import config from "../../config";
 import { User } from "../../models";
+import { accessTokenExtractor, refreshTokenExtractor } from "../../utils";
 
 /**
  * 로그인이 필요한 서비스에서 토큰을 검증해
@@ -24,12 +24,11 @@ export default (req: Request, res: Response, next: NextFunction) => {
       if (!payload) {
         // 액세스 토큰이 만료된 경우
         if (info instanceof TokenExpiredError) {
-          const accessToken = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+          const accessToken = accessTokenExtractor(req);
           const { googleId } = Object(decode(accessToken));
 
           // 유저가 가지고 있는 리프레시 토큰 확인 만료 시 로그인 필요
-          const refreshTokenInRequest =
-            ExtractJwt.fromHeader("refresh-token")(req);
+          const refreshTokenInRequest = refreshTokenExtractor(req);
           try {
             verify(refreshTokenInRequest, config.jwtSecret);
           } catch (error) {
@@ -48,6 +47,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
             });
             res.cookie("access-token", newToken, {
               httpOnly: true,
+              secure: true,
+              signed: true,
               maxAge: config.COOKIE_MAX_AGE,
             });
             return next();

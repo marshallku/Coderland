@@ -1,5 +1,6 @@
 import request from "supertest";
 import db from "mongoose";
+import { sign } from "cookie-signature";
 import "regenerator-runtime";
 import server from "../src/app";
 import config from "../src/config";
@@ -10,8 +11,8 @@ describe("댓글 알림 서비스 기능 테스트", () => {
     `mongodb://${config.mongoHost}:${config.mongoPort}/${config.mongoDBName}`
   );
 
-  let userToken = "Bearer ";
-  let subUserToken = "Bearer ";
+  let userToken = "";
+  let subUserToken = "";
 
   let postId: string;
   let commentId: string;
@@ -34,13 +35,16 @@ describe("댓글 알림 서비스 기능 테스트", () => {
       hasNewNotification: false,
     });
     subUserToken += createToken({ googleId: "1230707070123123" });
-    // 테스트 포스트 생성
+
+    userToken = `s:${sign(userToken, config.COOKIE_SECRET)}`;
+    subUserToken = `s:${sign(subUserToken, config.COOKIE_SECRET)}`;
   });
 
+  // 테스트 포스트 생성
   it("테스트 포스트 생성", async () => {
     const res = await request(server)
       .post("/api/posts")
-      .set("authorization", userToken)
+      .set("Cookie", [`access-token=${userToken}`])
       .send({
         title: "title",
         contents: "contents",
@@ -52,7 +56,7 @@ describe("댓글 알림 서비스 기능 테스트", () => {
   it("다른 유저가 댓글 생성 시 유저 필드에 표시", async () => {
     const res = await request(server)
       .post(`/api/posts/${postId}/comments`)
-      .set("authorization", subUserToken)
+      .set("Cookie", [`access-token=${subUserToken}`])
       .send({ contents: "contents" });
 
     commentId = res.body.commentId;
@@ -67,7 +71,7 @@ describe("댓글 알림 서비스 기능 테스트", () => {
   it("알림 있는 포스트 조회 시 알림 여부 확인", async () => {
     const res = await request(server)
       .get(`/api/posts/${postId}`)
-      .set("authorization", userToken)
+      .set("Cookie", [`access-token=${userToken}`])
       .send();
     expect(res.body.hasNewNotification).toEqual(true);
   });
@@ -75,7 +79,7 @@ describe("댓글 알림 서비스 기능 테스트", () => {
   it("알림 없는 포스트 조회 시 알림 여부 확인", async () => {
     const res = await request(server)
       .get(`/api/posts/${postId}`)
-      .set("authorization", subUserToken)
+      .set("Cookie", [`access-token=${subUserToken}`])
       .send();
     expect(res.body.hasNewNotification).toEqual(false);
   });
@@ -88,7 +92,7 @@ describe("댓글 알림 서비스 기능 테스트", () => {
   it("유저 알림 확인", async () => {
     const res = await request(server)
       .get("/api/users/notification")
-      .set("authorization", userToken)
+      .set("Cookie", [`access-token=${userToken}`])
       .send();
 
     expect(res.statusCode).toEqual(200);
@@ -112,7 +116,7 @@ describe("댓글 알림 서비스 기능 테스트", () => {
     // 답글 생성
     await request(server)
       .post(`/api/posts/${postId}/replies`)
-      .set("authorization", userToken)
+      .set("Cookie", [`access-token=${userToken}`])
       .send({ commentId, contents: "connnntents" });
 
     // 댓글 유저
@@ -126,7 +130,7 @@ describe("댓글 알림 서비스 기능 테스트", () => {
   it("답글에 대한 알림 리스트 확인", async () => {
     const res = await request(server)
       .get("/api/users/notification")
-      .set("authorization", subUserToken)
+      .set("Cookie", [`access-token=${subUserToken}`])
       .send();
 
     expect(res.statusCode).toEqual(200);
