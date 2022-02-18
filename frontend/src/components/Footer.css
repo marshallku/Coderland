@@ -1,0 +1,21 @@
+.footer {
+  padding: 30px 70px 60px;
+}
+
+.footer__info {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--gray-3);
+}
+
+.footer__github-link {
+  font-size: 1.5rem;
+}
+
+.footer__github-link:hover {
+  color: var(--gray-2);
+}
+
+.footer__copyright {
+  margin-top: 12px;
+}
