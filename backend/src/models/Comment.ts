@@ -150,9 +150,6 @@ CommentSchema.statics.deleteComment = async (commentId) => {
     // 답글이 있으면 삭제하지 않고 변경
     await comment.updateOne({
       isDeleted: true,
-      likes: 0,
-      likeUsers: [],
-      isPostAuthor: false,
     });
     return false;
   }
