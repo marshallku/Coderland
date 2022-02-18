@@ -1,10 +1,13 @@
 /* eslint-disable no-underscore-dangle */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, Navigate, Outlet } from "react-router-dom";
+import { updateMyInfo } from "../api";
 import Button from "../components/Button";
 import { Input } from "../components/Input";
 import Navigation from "../components/Navigation";
+import useApi from "../hooks/api";
 import { useAuth } from "../hooks/auth";
+import formatClassName from "../utils/formatClassName";
 import "./User.css";
 
 export function UserInfo() {
@@ -13,23 +16,38 @@ export function UserInfo() {
 
   if (!user) return <Navigate to="/login" />;
 
-  const [editMode, setEditMode] = useState(false);
-  const [name, setName] = useState("");
-  const { nickname, track, gitlab, grade } = user;
+  const [editing, setEditing] = useState(false);
+  const {
+    name,
+    nickname: _nickname,
+    track: _track,
+    github: _github,
+    grade,
+  } = user;
+  const [nickname, setNickname] = useState(_nickname);
+  const [track, setTrack] = useState(_track);
+  const [github, setGithub] = useState(_github);
   const isAuthorized = grade > 0;
 
-  useEffect(() => {
-    setName(user.name);
-  }, [editMode]);
-
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // TODO: 데이터 수정(event.target..value)
-    setEditMode(false);
-  }
+
+    const response = await useApi(
+      updateMyInfo({ nickname, track, github }, user.token)
+    );
+
+    if (!response) {
+      return;
+    }
+
+    setEditing(false);
+  };
 
   return (
-    <form className="user-info" onSubmit={handleSubmit}>
+    <form
+      className={formatClassName("user-info", editing && "user-info--editing")}
+      onSubmit={handleSubmit}
+    >
       <div className="user-info__image">
         <img src={user.profile} alt={`${user.name}님의 이미지`} />
       </div>
@@ -41,42 +59,56 @@ export function UserInfo() {
           </blockquote>
         </div>
       )}
-      <div className="user-info__content">
-        <Input id="nickname" label="닉네임" name="nickname" value={nickname} />
+      <div className="user-info__content user-info__content--readonly">
+        <Input id="name" label="이름" value={name} readOnly />
       </div>
-      {/* TODO: 수정 가능한 요소 하이라이팅 방법 생각 */}
       <div className="user-info__content">
         <Input
-          id="name"
-          label={`이름${editMode ? " (수정 가능)" : ""}`}
-          value={name}
-          setValue={setName}
-          readOnly={!editMode}
+          id="nickname"
+          label="닉네임"
+          name="nickname"
+          value={nickname}
+          autoComplete="off"
+          autoCapitalize="off"
+          setValue={setNickname}
+          readOnly={!editing}
         />
       </div>
       {isAuthorized && (
         <>
           <div className="user-info__content">
-            <Input id="track" label="트랙" value={track} />
+            <Input
+              id="track"
+              label="트랙"
+              value={track}
+              autoComplete="off"
+              autoCapitalize="off"
+              setValue={setTrack}
+              readOnly={!editing}
+            />
           </div>
           <div className="user-info__content">
             <Input
-              id="gitlab"
-              label="GitLab 주소"
-              name="gitlab"
-              value={gitlab}
+              id="github"
+              label="Github 주소"
+              name="github"
+              autoComplete="off"
+              autoCapitalize="off"
+              value={github}
+              setValue={setGithub}
+              readOnly={!editing}
             />
           </div>
         </>
       )}
       <div className="user-info__content user-info__buttons">
-        {editMode ? (
+        {editing ? (
           <>
             <Button
               type="button"
               buttonStyle="warning"
               onClick={() => {
-                setEditMode(false);
+                setEditing(false);
               }}
               value="취소하기"
             />
@@ -86,7 +118,7 @@ export function UserInfo() {
           <Button
             type="button"
             onClick={() => {
-              setEditMode(true);
+              setEditing(true);
             }}
             value="수정하기"
           />

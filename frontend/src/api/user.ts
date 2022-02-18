@@ -11,14 +11,15 @@ export function getMyInfo(
 }
 
 export function updateMyInfo(
-  user: IUser
+  userInfo: Pick<IUser, "nickname" | "track" | "github">,
+  token: string
 ): Promise<IUserResponse | IFailResponse> {
   return instance.patch("/users", {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${user.token}`,
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(user),
+    body: JSON.stringify(userInfo),
   });
 }
 
