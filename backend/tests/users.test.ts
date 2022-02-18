@@ -32,7 +32,6 @@ describe("유저 기능 테스트", () => {
     await connection.collection("users").insertOne({
       googleId: "1230419308012123",
       nickname: "testuser",
-      name: "family given",
       profile: "profile photo url",
       grade: 1,
       refreshToken,
@@ -158,7 +157,6 @@ describe("유저 레이서 인증 서비스", () => {
     await connection.collection("users").insertOne({
       googleId: "1230419308012123",
       nickname: "testuser",
-      name: "family given",
       profile: "profile photo url",
       grade: 0,
       authKey,
@@ -257,7 +255,6 @@ describe("회원 탈퇴 기능", () => {
     await connection.collection("users").insertOne({
       googleId: "1230419308012123",
       nickname: "testuser",
-      name: "family given",
       profile: "profile photo url",
       grade: 1,
       authKey,
@@ -306,7 +303,6 @@ describe("회원 탈퇴 기능", () => {
       .findOne({ googleId: "withdrawal" });
 
     expect(user.nickname).toEqual("사라진 체셔 고양이");
-    expect(user.name).toEqual("사라진 체셔 고양이");
     expect(user.grade).toEqual(-1);
     expect(user.profile).toEqual("Not access");
     expect(user.track).toEqual("Not access");

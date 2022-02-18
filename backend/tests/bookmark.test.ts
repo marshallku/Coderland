@@ -67,7 +67,7 @@ describe("북마크 테스트", () => {
       .send();
 
     expect(res2.statusCode).toEqual(200);
-    expect(res2.body.bookmarks.length).toEqual(1);
+    expect(res2.body.posts.length).toEqual(1);
   });
 
   it("북마크 취소", async () => {
@@ -89,7 +89,7 @@ describe("북마크 테스트", () => {
       .set("authorization", token)
       .send();
     expect(res2.statusCode).toEqual(200);
-    expect(res2.body.bookmarks.length).toEqual(0);
+    expect(res2.body.posts.length).toEqual(0);
   });
 
   afterAll(async () => {
@@ -161,7 +161,7 @@ describe("북마크 테스트 포스트 먼저 삭제", () => {
       .send();
 
     expect(res2.statusCode).toEqual(200);
-    expect(res2.body.bookmarks.length).toEqual(1);
+    expect(res2.body.posts.length).toEqual(1);
   });
 
   it("Fail 없는 글 북마크 등록", async () => {
@@ -186,7 +186,7 @@ describe("북마크 테스트 포스트 먼저 삭제", () => {
       .send();
 
     expect(res.statusCode).toEqual(200);
-    expect(res.body.bookmarks.length).toEqual(0);
+    expect(res.body.posts.length).toEqual(0);
   });
 
   afterAll(async () => {

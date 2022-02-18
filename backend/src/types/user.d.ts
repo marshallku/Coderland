@@ -17,7 +17,6 @@ interface IGoogleUser {
 export interface IUser {
   googleId: string;
   nickname: string;
-  name: string;
   profile: string;
   provider: string;
   bookmarks: PopulatedDoc<IPostDocument>[];
