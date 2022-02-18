@@ -94,14 +94,15 @@ describe("댓글 통합 테스트", () => {
   it("일반 포스트 코멘트 리스트 테스트", async () => {
     const res = await request(server)
       .get(`/api/posts/${postId}/comments`)
+      .set("authorization", token)
       .send();
-
     expect(res.statusCode).toEqual(200);
     expect(res.body.isOk).toEqual(true);
     expect(Object.keys(res.body)).toEqual(
       expect.arrayContaining(["isOk", "comments"])
     );
     expect(res.body.comments[0].isPostAuthor).toEqual(true);
+    expect(res.body.comments[0].isAuthor).toEqual(true);
   });
 
   it("댓글 수정 테스트", async () => {

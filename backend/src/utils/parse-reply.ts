@@ -8,7 +8,8 @@ export default (
   anonymous: boolean,
   commentAuthor: Partial<IUserDocument>,
   isPostAuthor: boolean,
-  postId: string
+  postId: string,
+  userId: string
 ) => {
   const parsed = replies.map((reply) => {
     const { author, ...rest } = reply;
@@ -20,6 +21,7 @@ export default (
       ...rest,
       isPostAuthor:
         isPostAuthor && commentAuthor._id.toString() === author._id.toString(),
+      isAuthor: `${author._id}` === `${userId}`,
       author: createAuthorName(anonymous, parsedAuthor, postId),
     };
   });

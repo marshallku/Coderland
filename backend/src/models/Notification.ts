@@ -57,9 +57,9 @@ NotificationSchema.statics.addNotification = async (
  * find all notification
  */
 NotificationSchema.statics.findAllNotification = async (userId: string) => {
-  const notification = await Notification.find({ userId }).select(
-    "-userId -createdAt"
-  );
+  const notification = await Notification.find({ userId })
+    .select("-userId -createdAt")
+    .sort("-createdAt");
   return notification;
 };
 
