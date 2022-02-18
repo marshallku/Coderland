@@ -1,9 +1,13 @@
-import { Strategy, StrategyOptions, VerifyCallback } from "passport-jwt";
+import {
+  ExtractJwt,
+  Strategy,
+  StrategyOptions,
+  VerifyCallback,
+} from "passport-jwt";
 import config from "../../config";
-import { accessTokenExtractor } from "../../utils";
 
 const jwtOpts: StrategyOptions = {
-  jwtFromRequest: accessTokenExtractor,
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: config.jwtSecret,
 };
 

@@ -1,20 +1,19 @@
 import request from "supertest";
 import "regenerator-runtime";
 import db from "mongoose";
-import { sign } from "cookie-signature";
 import server from "../src/app";
-import config from "../src/config";
+import configs from "../src/config";
 import { createToken } from "../src/utils/jwt";
 
 jest.setTimeout(10000);
 
 describe("일반 포스트 기능 테스트", () => {
   const connection = db.createConnection(
-    `mongodb://${config.mongoHost}:${config.mongoPort}/coderland`
+    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
   );
-  let token = "";
-  let notOwnerToken = "";
-  let notRacerToken = "";
+  let token = "Bearer ";
+  let notOwnerToken = "Bearer ";
+  let notRacerToken = "Bearer ";
   let postId: string;
   let anonymousPostId: string;
 
@@ -40,10 +39,6 @@ describe("일반 포스트 기능 테스트", () => {
     token += createToken({ googleId: "1230707070702022" });
     notOwnerToken += createToken({ googleId: "1230809419304811" });
     notRacerToken += createToken({ googleId: "12309128390004041" });
-
-    token = `s:${sign(token, config.COOKIE_SECRET)}`;
-    notOwnerToken = `s:${sign(notOwnerToken, config.COOKIE_SECRET)}`;
-    notRacerToken = `s:${sign(notRacerToken, config.COOKIE_SECRET)}`;
   });
 
   it("일반 포스트 생성 테스트", async () => {
@@ -58,7 +53,7 @@ describe("일반 포스트 기능 테스트", () => {
     // when
     const res = await request(server)
       .post("/api/posts")
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({ title, contents, subject, category });
     // then
     expect(res.statusCode).toEqual(201);
@@ -80,7 +75,7 @@ describe("일반 포스트 기능 테스트", () => {
     // when
     const res = await request(server)
       .post("/api/posts")
-      .set("Cookie", [`access-token=${notRacerToken}`])
+      .set("authorization", notRacerToken)
       .send({ title, contents, subject, category });
 
     expect(res.statusCode).toEqual(403);
@@ -117,7 +112,7 @@ describe("일반 포스트 기능 테스트", () => {
     // when
     const res = await request(server)
       .get(`/api/posts/${postId}`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send();
 
     // then
@@ -193,7 +188,7 @@ describe("일반 포스트 기능 테스트", () => {
     // when
     const res = await request(server)
       .put(`/api/posts/${postId}`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({
         title,
         contents,
@@ -221,7 +216,7 @@ describe("일반 포스트 기능 테스트", () => {
     // when
     const res = await request(server)
       .put(`/api/posts/${postId}`)
-      .set("Cookie", [`access-token=${notOwnerToken}`])
+      .set("authorization", notOwnerToken)
       .send({
         title,
         contents,
@@ -236,7 +231,7 @@ describe("일반 포스트 기능 테스트", () => {
   it("Fail 포스트 삭제 로직 권한 없음", async () => {
     const res = await request(server)
       .delete(`/api/posts/${postId}`)
-      .set("Cookie", [`access-token=${notOwnerToken}`])
+      .set("authorization", notOwnerToken)
       .send();
 
     expect(res.statusCode).toEqual(403);
@@ -247,7 +242,7 @@ describe("일반 포스트 기능 테스트", () => {
   it("포스트 삭제 로직", async () => {
     const res = await request(server)
       .delete(`/api/posts/${postId}`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send();
 
     expect(res.statusCode).toEqual(200);
@@ -271,7 +266,7 @@ describe("일반 포스트 기능 테스트", () => {
     // when
     const res = await request(server)
       .post("/api/posts")
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({ title, contents, subject, category });
 
     // then
@@ -321,7 +316,7 @@ describe("일반 포스트 기능 테스트", () => {
 
     const res = await request(server)
       .put(`/api/posts/${anonymousPostId}`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({
         title,
         contents,
