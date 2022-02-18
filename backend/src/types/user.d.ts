@@ -26,7 +26,7 @@ export interface IUser {
   authKey: string;
   hasNewNotifyings: boolean;
   track?: string;
-  gitlab?: string;
+  github?: string;
   refreshToken?: string;
 }
 
@@ -49,7 +49,10 @@ export interface IUserModel extends Model<IUserDocument> {
     googleId: string,
   }) => Promise<Partial<IUserDocument>>;
 
-  updateUser: (userId: string, nickname: string) => Promise<void>;
+  updateUser: (
+    userId: string,
+    userDto: Partial<IUserDocument>
+  ) => Promise<void>;
 
   withdrawUser: (userId: string) => Promise<void>;
 

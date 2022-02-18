@@ -29,15 +29,15 @@ export default (app: Router) => {
     })
   );
 
-  // 유저 닉네임 변경
+  // 유저 닉네임, 트랙, 깃헙주소 변경
   route.patch(
     "/",
     loginRequired,
     asyncHandler(async (req, res) => {
       const { user } = req;
-      const { nickname } = req.body;
+      const { nickname, track, github } = req.body;
       const userService = new UserService();
-      await userService.updateUser(user.id, nickname);
+      await userService.updateUser(user.id, { nickname, track, github });
       res.status(200).json({ isOk: true });
     })
   );
