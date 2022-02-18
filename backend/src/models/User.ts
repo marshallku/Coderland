@@ -12,10 +12,6 @@ export const UserSchema = new mongoose.Schema<IUserDocument>(
       type: String,
       required: true,
     },
-    name: {
-      type: String,
-      required: true,
-    },
     profile: {
       type: String,
       required: true,
@@ -70,7 +66,6 @@ UserSchema.statics.findOrCreate = async (
   const newUser = await User.create({
     googleId: decoded.googleId,
     nickname: user.displayName,
-    name: `${user.name.familyName} ${user.name.givenName}`,
     profile: user.photos[0].value,
   });
 
@@ -184,7 +179,6 @@ UserSchema.statics.withdrawUser = async (userId: string) => {
   await User.findByIdAndUpdate(userId, {
     googleId: "withdrawal",
     nickname: "사라진 체셔 고양이",
-    name: "사라진 체셔 고양이",
     grade: -1,
     profile: "Not access",
     provider: "Not access",
