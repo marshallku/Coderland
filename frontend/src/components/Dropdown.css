@@ -36,7 +36,7 @@
 }
 
 .dropdown-content__title {
-  padding: 10px 0;
+  padding: 10px 10px;
   border-bottom: 1px solid var(--gray-5);
 }
 
@@ -91,6 +91,13 @@
 
 .notification--new {
   background-color: var(--highlight);
+}
+
+.notification--empty {
+  color: var(--gray-2);
+  height: 3rem;
+  line-height: 3rem;
+  text-align: center;
 }
 
 .notification > a {
