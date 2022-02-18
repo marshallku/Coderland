@@ -27,6 +27,9 @@ function useAuthProvider() {
       setUser(null);
       cb?.();
     },
+    update(newUser: IUser) {
+      setUser(newUser);
+    },
     user,
   };
 }
