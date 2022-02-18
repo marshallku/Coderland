@@ -19,7 +19,7 @@ interface IUser {
   profile: string;
   grade: 0;
   track: string;
-  gitlab: string;
+  github: string;
   token: string;
 }
 
