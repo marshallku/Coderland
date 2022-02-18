@@ -1,6 +1,15 @@
 import { LeanDocument } from "mongoose";
 import { IPostDocument } from "post";
+import { IUserDocument } from "user";
 import { createAuthorName } from "./index";
+
+function parsedMembers(members: LeanDocument<IUserDocument>[]) {
+  return members.map(({ _id, nickname, profile }) => ({
+    _id,
+    nickname,
+    profile,
+  }));
+}
 
 export default function parsePostBySubject(
   subject: string,
@@ -26,7 +35,7 @@ export default function parsePostBySubject(
       ...rest,
       tags,
       memberCount: members.length,
-      members,
+      members: parsedMembers(members),
       isCompleted,
       area,
       category,
