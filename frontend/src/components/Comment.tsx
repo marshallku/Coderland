@@ -42,8 +42,7 @@ export default function Comment({
   const modal = useModal();
 
   const isMember =
-    members && members.find((member) => member._id === data.author._id);
-  const isCommentAuthor = auth?.user?._id === data.author._id;
+    members && members.find((member) => member._id === data.author?._id);
 
   const handleEditSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -182,7 +181,7 @@ export default function Comment({
 
   const handleGatherRequest = async () => {
     const token = auth?.user?.token;
-    const userId = data.author._id;
+    const userId = data.author?._id;
 
     if (!token) {
       modal?.openModal("로그인이 필요한 기능입니다. 로그인하시겠습니까?", () =>
@@ -221,12 +220,12 @@ export default function Comment({
         {!data.isDeleted ? (
           <>
             <div className="comment__author-wrap">
-              <span className="comment__author">{data.author.nickname}</span>
+              <span className="comment__author">{data.author?.nickname}</span>
               {data.isPostAuthor && (
                 <span className="comment__post-author">작성자</span>
               )}
 
-              {isCommentAuthor && (
+              {data.isAuthor && (
                 <>
                   <button
                     className="comment__edit-button"
@@ -286,7 +285,7 @@ export default function Comment({
                 <p className="comment__text">{data.contents}</p>
                 <div className="comment__info">
                   <span className="comment__date">
-                    {formatToReadableTime(data.createdAt)}
+                    {formatToReadableTime(data.createdAt || "")}
                   </span>
                   {!parentId && (
                     <>
