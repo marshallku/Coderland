@@ -79,23 +79,25 @@ interface IGatherPostInList extends Omit<IGatherPost, "contents"> {
 interface ICommentReply {
   _id: string;
   contents: string;
-  author: IAuthor;
+  author?: IAuthor;
   isPostAuthor: boolean;
-  createdAt: string;
-  updatedAt: string;
+  isAuthor?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface IComment {
   _id: string;
   contents: string;
-  author: IAuthor;
-  postId: string;
-  likes: number;
-  isLiked: boolean;
+  author?: IAuthor;
+  postId?: string;
+  likes?: number;
+  isLiked?: boolean;
   isPostAuthor: boolean;
+  isAuthor?: boolean;
   isDeleted: boolean;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
   replies: Array<ICommentReply>;
 }
 
