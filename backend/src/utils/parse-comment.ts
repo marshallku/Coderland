@@ -18,7 +18,14 @@ export default (comment: ICommentDocument, userId: string, postId: string) => {
       _id,
       isDeleted,
       contents: "",
-      replies: parseReply(replies, anonymous, author, isPostAuthor, postId),
+      replies: parseReply(
+        replies,
+        anonymous,
+        author,
+        isPostAuthor,
+        postId,
+        userId
+      ),
     };
   }
   return {
@@ -28,7 +35,15 @@ export default (comment: ICommentDocument, userId: string, postId: string) => {
     isPostAuthor,
     contents,
     isLiked: likeUsers.includes(userId),
-    replies: parseReply(replies, anonymous, author, isPostAuthor, postId),
+    isAuthor: `${author._id}` === `${userId}`,
+    replies: parseReply(
+      replies,
+      anonymous,
+      author,
+      isPostAuthor,
+      postId,
+      userId
+    ),
     author: createAuthorName(anonymous, author, postId),
   };
 };
