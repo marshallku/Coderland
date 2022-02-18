@@ -21,6 +21,7 @@ import Recruit from "./pages/Recruit";
 import Chat from "./pages/Chat";
 import Authorize from "./pages/Authorize";
 import Login from "./pages/Login";
+import Footer from "./components/Footer";
 
 export default function App() {
   return (
@@ -59,6 +60,7 @@ export default function App() {
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
+              <Footer />
             </div>
           </BrowserRouter>
         </AuthProvider>
