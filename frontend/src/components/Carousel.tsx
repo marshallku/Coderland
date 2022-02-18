@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import formatClassName from "../utils/formatClassName";
+import { isFromSameOrigin } from "../utils/url";
 import "./Carousel.css";
 
 const MINIMAL_MOVED = 50;
@@ -12,9 +13,6 @@ export default function Carousel({ data }: ICarouselProps) {
   const [touchMoved, setTouchMoved] = useState<number>(0);
   const [isMoving, setIsMoving] = useState<boolean>(false);
   const container = useRef<HTMLDivElement>(null);
-
-  const isFromSameOrigin = (uri: string) =>
-    uri.startsWith(window.location.origin) || uri.startsWith("/");
 
   const slide = (direction: TDirection) => {
     if (index === 0 && direction === "prev") {
@@ -159,6 +157,20 @@ export default function Carousel({ data }: ICarouselProps) {
           </div>
         ))}
       </div>
+      <button
+        type="button"
+        className="carousel__button carousel__button--prev icon-west"
+        disabled={index === 0}
+        onClick={() => slide("prev")}
+        aria-label="이전"
+      />
+      <button
+        type="button"
+        className="carousel__button carousel__button--next icon-east"
+        disabled={index === data.length - 1}
+        onClick={() => slide("next")}
+        aria-label="다음"
+      />
     </div>
   );
 }

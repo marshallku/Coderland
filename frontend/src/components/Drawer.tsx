@@ -54,7 +54,6 @@ export default function Drawer({
           drawerRevealed && "drawer--revealed"
         )}
       >
-        <h2 className="drawer__title">코더랜드</h2>
         <nav className="drawer__navigation">
           <DrawerLink cb={hideDrawer} icon="home" title="홈" to="/" />
           <DrawerLink

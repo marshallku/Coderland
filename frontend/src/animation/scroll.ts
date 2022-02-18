@@ -23,26 +23,58 @@ export function scrollTo(
     if (now < 1) {
       window.requestAnimationFrame(animation);
       window.scrollTo(0, from + (to - from) * progress);
-    } else {
-      const { scrollY } = window;
+      return;
+    }
 
-      if (typeof target !== "number") {
-        const { offsetTop } = target;
+    if (typeof target === "number") {
+      window.scrollTo(0, to);
+      document.documentElement.classList.remove("scrolling");
+      return;
+    }
 
-        if (scrollY < offsetTop - 100 || scrollY > offsetTop + 100) {
-          window.scrollTo(0, to);
-          document.documentElement.classList.remove("scrolling");
+    const { scrollY } = window;
+    const { offsetTop } = target;
 
-          if (recursive <= 3) {
-            scrollTo(target, duration, recursive + 1);
-          }
-        }
-        document.documentElement.classList.remove("scrolling");
-      } else {
-        window.scrollTo(0, to);
-        document.documentElement.classList.remove("scrolling");
+    if (scrollY < offsetTop - 100 || scrollY > offsetTop + 100) {
+      window.scrollTo(0, to);
+      document.documentElement.classList.remove("scrolling");
+
+      if (recursive <= 3) {
+        scrollTo(target, duration, recursive + 1);
       }
     }
+
+    document.documentElement.classList.remove("scrolling");
+  };
+
+  animation();
+}
+
+export function scrollHorizontal(
+  target: HTMLElement | null,
+  from: number,
+  to: number,
+  duration = 500
+) {
+  if (target === null) {
+    return;
+  }
+
+  const transition = (x: number): number => Math.sqrt(1 - (x - 1) ** 2);
+  const startTime = performance.now();
+
+  const animation = () => {
+    const now = (performance.now() - startTime) / duration;
+    const progress = transition(now);
+
+    if (now < 1) {
+      window.requestAnimationFrame(animation);
+      target.scrollTo(from + (to - from) * progress, 0);
+      return;
+    }
+
+    target.scrollTo(to, 0);
+    document.documentElement.classList.remove("scrolling");
   };
 
   animation();
@@ -73,11 +105,12 @@ export function scrollToAsync(
       if (now < 1) {
         window.requestAnimationFrame(animation);
         window.scrollTo(0, from + (target - from) * progress);
-      } else {
-        window.scrollTo(0, target);
-        document.documentElement.classList.remove("scrolling");
-        resolve();
+        return;
       }
+
+      window.scrollTo(0, target);
+      document.documentElement.classList.remove("scrolling");
+      resolve();
     };
 
     animation();
