@@ -4,6 +4,7 @@ import { Textarea } from "./Input";
 import { debounce } from "../utils/optimizer";
 import formatClassName from "../utils/formatClassName";
 import "./MarkdownEditor.css";
+import parseSpecialCharacters from "../utils/parseSpecialCharacters";
 
 const BREAK_POINT = 860;
 
@@ -18,6 +19,7 @@ export default function MarkdownEditor({
   const [isLarge, setIsLarge] = useState<boolean>(
     BREAK_POINT <= window.innerWidth
   );
+  const parsed = parseSpecialCharacters(value ?? "");
 
   useEffect(() => {
     const update = debounce(() => {
@@ -70,13 +72,13 @@ export default function MarkdownEditor({
           name={name}
           label={label || "내용을 입력해주세요. (마크다운 지원)"}
           hideLabelOnFocus
-          value={value}
+          value={parsed}
           setValue={setValue}
           imageUploadable
         />
         <MarkdownViewer
           className="markdown-editor__preview"
-          value={value}
+          value={parsed}
           preventRender={!isLarge && mode !== "view"}
         />
       </div>
