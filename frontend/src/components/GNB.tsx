@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo-256.png";
 import ThemeSwitch from "./ThemeSwitch";
 import Dropdown from "./Dropdown";
 import formatClassName from "../utils/formatClassName";
@@ -129,20 +129,22 @@ export default function GlobalNavigationBar({
                   <figcaption>{auth.user.nickname}</figcaption>
                 </figure>
                 <nav className="dropdown-nav">
-                  <div>
-                    <Link to="/user">정보 수정</Link>
-                  </div>
-                  <div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        localStorage.removeItem("token");
-                        window.location.reload();
-                      }}
-                    >
-                      로그아웃
-                    </button>
-                  </div>
+                  <Link to="/user" className="dropdown-nav__item">
+                    <i className="icon-settings" />
+                    정보 수정
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      localStorage.removeItem("token");
+                      document.cookie = "";
+                      window.location.reload();
+                    }}
+                    className="dropdown-nav__item"
+                  >
+                    <i className="icon-lock_open" />
+                    로그아웃
+                  </button>
                 </nav>
               </>
             }

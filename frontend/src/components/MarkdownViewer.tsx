@@ -113,6 +113,7 @@ export default function MarkdownViewer({
                     height={height}
                     title={title}
                     allow={allow}
+                    allowFullScreen
                   />
                 </div>
               </div>

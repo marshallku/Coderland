@@ -107,12 +107,35 @@
 
 /* User Info */
 .dropdown-profile {
-  text-align: center;
-}
-
-.dropdown-profile > figcaption {
+  display: flex;
   margin: 10px 0 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid var(--gray-5);
+  align-items: center;
+  font-weight: 700;
+}
+
+.dropdown-profile > img {
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+/* Navigation */
+.dropdown-nav__item {
+  display: block;
+  width: 100%;
+  padding: 10px 0;
   text-align: left;
+}
+
+.dropdown-nav__item:hover {
+  background-color: var(--multipurpose);
+}
+
+.dropdown-nav__item > i {
+  display: inline-block;
+  margin-right: 8px;
 }

@@ -272,8 +272,12 @@ export default function Details<
               인원: {response.post.members.length}명
             </div>
           </div>
-          <h3 className="gather-info__title">현재 팀원</h3>
-          <MemberList data={response.post.members} />
+          {response.post.members.length > 0 && (
+            <>
+              <h3 className="gather-info__title">현재 팀원</h3>
+              <MemberList data={response.post.members} />
+            </>
+          )}
         </header>
       )}
       <div className="details-body">
