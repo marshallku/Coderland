@@ -7,6 +7,8 @@ import { authorizeUser, getUserAuthKey } from "../api/user";
 import copyToClipboard from "../utils/clipboard";
 import toast from "../utils/toast";
 import "./Authorize.css";
+import useApi from "../hooks/api";
+import { getMyInfo } from "../api";
 
 export default function Authorize() {
   const [authKey, setAuthKey] = useState("");
@@ -33,14 +35,23 @@ export default function Authorize() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const response = await authorizeUser({
-      username: gitlabName,
-    });
+    const response = await useApi(
+      authorizeUser({
+        username: gitlabName,
+      })
+    );
 
-    if (response.isOk === false) {
-      toast("GitLab 계정 인증에 실패했습니다");
+    if (!response) {
       return;
     }
+
+    const newUserApiRequest = await useApi(getMyInfo());
+
+    if (!newUserApiRequest) {
+      return;
+    }
+
+    auth.update(newUserApiRequest.user);
 
     navigate("/user");
   };

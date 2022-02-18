@@ -38,10 +38,19 @@ export function getGatherPostList({
   return instance.get(`/posts${query}`);
 }
 
-export function getPost<T = IPostResponse | IGatherPostResponse>(
+export function getPost<T extends IPostResponse | IGatherPostResponse>(
   id: string
 ): Promise<T | IFailResponse> {
   return instance.get(`/posts/${id}`);
+}
+
+export function getBookmarkedPost({
+  page = 1,
+}): Promise<IPostListResponse | IFailResponse> {
+  const query = composeQuery({
+    page,
+  });
+  return instance.get(`/users/bookmark${query}`);
 }
 
 export function createPost<T extends IPost | IGatherPost>(

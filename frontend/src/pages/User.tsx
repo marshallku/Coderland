@@ -1,15 +1,21 @@
-/* eslint-disable no-underscore-dangle */
-import { useState } from "react";
-import { Link, Navigate, Outlet } from "react-router-dom";
-import { updateMyInfo } from "../api";
+import { useCallback, useEffect, useState } from "react";
+import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
+import { getBookmarkedPost, updateMyInfo } from "../api";
 import Button from "../components/Button";
+import DisplayError from "../components/DisplayError";
 import { Input } from "../components/Input";
 import Loader from "../components/Loader";
 import Navigation from "../components/Navigation";
 import useApi from "../hooks/api";
 import { useAuth } from "../hooks/auth";
 import formatClassName from "../utils/formatClassName";
+import { parseQuery } from "../utils/url";
+
+import { SKELETONS_LENGTH } from "../components/PostList";
+
 import "./User.css";
+import PostListItem, { PostListItemSkeleton } from "../components/PostListItem";
+import Pagination from "../components/Pagination";
 
 export function UserInfo() {
   const auth = useAuth();
@@ -132,9 +138,55 @@ export function UserInfo() {
 }
 
 export function UserBookmarks() {
-  // TODO: 작업한 컴포넌트 활용해 렌더링
-  // TODO: 일반 글과 모집 글 분류 방식 고민
-  return <div className="user-info">북마크한 글</div>;
+  const location = useLocation();
+  const { page } = parseQuery(location.search);
+  const [response, setResponse] = useState<IPostListResponse>();
+  const [currentPage, setCurrentPage] = useState<number>(page ? +page || 1 : 1);
+  const ListOfElements = useCallback(() => {
+    if (response) {
+      if (response.posts.length === 0) {
+        return <DisplayError message="아직 아무런 글이 없어요" />;
+      }
+
+      return (response.posts as Array<IPostInList>).map(PostListItem);
+    }
+
+    const tmpArray = Array.from({ length: SKELETONS_LENGTH });
+
+    // eslint-disable-next-line react/no-array-index-key
+    return tmpArray.map((_, i) => <PostListItemSkeleton key={i} />);
+  }, [response]);
+
+  const paginate = useCallback((pageNumber: number) => {
+    location.search = `?page=${pageNumber}`;
+  }, []);
+
+  useEffect(() => {
+    async function getPostList() {
+      const apiResponse = await useApi(
+        getBookmarkedPost({ page: currentPage })
+      );
+
+      setResponse(apiResponse);
+    }
+
+    getPostList();
+  }, [currentPage]);
+
+  useEffect(() => {
+    const { page: current } = parseQuery(location.search);
+
+    setCurrentPage(current ? +current || 1 : 1);
+  }, [location.search]);
+
+  return (
+    <>
+      <div className="post-list post-list--list">{ListOfElements()}</div>
+      {response && (
+        <Pagination paginate={paginate} data={response.pagination} />
+      )}
+    </>
+  );
 }
 
 export default function User() {

@@ -9,8 +9,8 @@ import { parseQuery } from "../utils/url";
 import DisplayError from "./DisplayError";
 import "./PostList.css";
 
-const USES_CARD_DESIGN = ["gather", "study", "code", "team"];
-const SKELETONS_LENGTH = 8;
+export const USES_CARD_DESIGN = ["gather", "study", "code", "team"];
+export const SKELETONS_LENGTH = 8;
 
 export default function PostList({
   subject,
