@@ -1,20 +1,19 @@
 import request from "supertest";
 import "regenerator-runtime";
 import db from "mongoose";
-import { sign } from "cookie-signature";
 import server from "../src/app";
-import config from "../src/config";
+import configs from "../src/config";
 import { createToken } from "../src/utils/jwt";
 
 describe("답글 통합 테스트", () => {
   const connection = db.createConnection(
-    `mongodb://${config.mongoHost}:${config.mongoPort}/coderland`
+    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
   );
-  let token = "";
+  let token = "Bearer ";
   let postId: string;
   let commentId: string;
   let replyId: string;
-  let notAccessToken = "";
+  let notAccessToken = "Bearer ";
 
   beforeAll(async () => {
     await connection.collection("users").insertOne({
@@ -32,9 +31,6 @@ describe("답글 통합 테스트", () => {
     });
 
     notAccessToken += createToken({ googleId: "1734981374981123" });
-
-    token = `s:${sign(token, config.COOKIE_SECRET)}`;
-    notAccessToken = `s:${sign(notAccessToken, config.COOKIE_SECRET)}`;
   });
 
   it("일반 포스트 생성", async () => {
@@ -47,7 +43,7 @@ describe("답글 통합 테스트", () => {
     // when
     const res = await request(server)
       .post("/api/posts")
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({ title, contents, subject, category });
 
     // then
@@ -65,7 +61,7 @@ describe("답글 통합 테스트", () => {
 
     const res = await request(server)
       .post(`/api/posts/${postId}/comments`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({ contents });
 
     expect(res.statusCode).toEqual(201);
@@ -82,7 +78,7 @@ describe("답글 통합 테스트", () => {
 
     const res = await request(server)
       .post(`/api/posts/${postId}/replies`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({ postId, commentId, contents });
 
     expect(res.statusCode).toEqual(201);
@@ -111,7 +107,7 @@ describe("답글 통합 테스트", () => {
 
     const res = await request(server)
       .put(`/api/posts/${postId}/replies`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({ commentId, replyId, contents });
 
     expect(res.statusCode).toEqual(200);
@@ -140,7 +136,7 @@ describe("답글 통합 테스트", () => {
 
     const res = await request(server)
       .put(`/api/posts/${postId}/replies`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({ commentId, replyId: "sldkfjlkaaldkj", contents });
 
     expect(res.statusCode).toEqual(403);
@@ -153,7 +149,7 @@ describe("답글 통합 테스트", () => {
 
     const res = await request(server)
       .put(`/api/posts/${postId}/replies`)
-      .set("Cookie", [`access-token=${notAccessToken}`])
+      .set("authorization", notAccessToken)
       .send({ commentId, replyId, contents });
 
     expect(res.statusCode).toEqual(403);
@@ -164,7 +160,7 @@ describe("답글 통합 테스트", () => {
   it("Fail 권한 없이 답글 삭제 테스트", async () => {
     const res = await request(server)
       .delete(`/api/posts/${postId}/replies`)
-      .set("Cookie", [`access-token=${notAccessToken}`])
+      .set("authorization", notAccessToken)
       .send({ commentId, replyId });
 
     expect(res.statusCode).toEqual(403);
@@ -175,7 +171,7 @@ describe("답글 통합 테스트", () => {
   it("Fail 없는 답글 삭제 테스트", async () => {
     const res = await request(server)
       .delete(`/api/posts/${postId}/replies`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({ commentId, replyId: "asdlfkjkl" });
 
     expect(res.statusCode).toEqual(403);
@@ -186,7 +182,7 @@ describe("답글 통합 테스트", () => {
   it("답글 삭제 테스트", async () => {
     const res = await request(server)
       .delete(`/api/posts/${postId}/replies`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({ commentId, replyId });
 
     expect(res.statusCode).toEqual(200);
@@ -211,7 +207,7 @@ describe("답글 통합 테스트", () => {
     // when
     const res = await request(server)
       .post("/api/posts")
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({ title, contents, subject, category });
 
     // then
@@ -229,7 +225,7 @@ describe("답글 통합 테스트", () => {
 
     const res = await request(server)
       .post(`/api/posts/${postId}/comments`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({ contents });
 
     expect(res.statusCode).toEqual(201);
@@ -246,7 +242,7 @@ describe("답글 통합 테스트", () => {
 
     const res = await request(server)
       .post(`/api/posts/${postId}/replies`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({ postId, commentId, contents });
 
     expect(res.statusCode).toEqual(201);
@@ -257,7 +253,7 @@ describe("답글 통합 테스트", () => {
 
     const res = await request(server)
       .post(`/api/posts/${postId}/replies`)
-      .set("Cookie", [`access-token=${notAccessToken}`])
+      .set("authorization", notAccessToken)
       .send({ postId, commentId, contents });
 
     expect(res.statusCode).toEqual(201);

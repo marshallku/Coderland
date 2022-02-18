@@ -20,15 +20,9 @@ export default (app: Router) => {
       const authService = new AuthService();
       const [accessToken, refreshToken] = await authService.login(user);
       res.cookie("access-token", accessToken, {
-        httpOnly: true,
-        secure: true,
-        signed: true,
         maxAge: config.COOKIE_MAX_AGE,
       });
       res.cookie("refresh-token", refreshToken, {
-        httpOnly: true,
-        secure: true,
-        signed: true,
         maxAge: config.COOKIE_MAX_AGE,
       });
       res.redirect("/");

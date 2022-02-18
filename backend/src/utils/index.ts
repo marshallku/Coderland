@@ -5,10 +5,6 @@ import createAuthorName from "./create-author-name";
 import purifyHtml from "./purify-html";
 import createExcerpt from "./create-excerpt";
 import parseComment from "./parse-comment";
-import {
-  accessTokenExtractor,
-  refreshTokenExtractor,
-} from "./cookie-extractor";
 
 export {
   asyncHandler,
@@ -18,6 +14,4 @@ export {
   createAuthorName,
   purifyHtml,
   createExcerpt,
-  accessTokenExtractor,
-  refreshTokenExtractor,
 };

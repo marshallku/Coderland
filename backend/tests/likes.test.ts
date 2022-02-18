@@ -1,16 +1,15 @@
 import request from "supertest";
 import "regenerator-runtime";
 import db from "mongoose";
-import { sign } from "cookie-signature";
 import server from "../src/app";
-import config from "../src/config";
+import configs from "../src/config";
 import { createToken } from "../src/utils/jwt";
 
 describe("좋아요 테스트", () => {
   const connection = db.createConnection(
-    `mongodb://${config.mongoHost}:${config.mongoPort}/coderland`
+    `mongodb://${configs.mongoHost}:${configs.mongoPort}/coderland`
   );
-  let token = "";
+  let token = "Bearer ";
   let postId: string;
   let commentId: string;
 
@@ -22,7 +21,6 @@ describe("좋아요 테스트", () => {
     });
 
     token += createToken({ googleId: "1230707070702022" });
-    token = `s:${sign(token, config.COOKIE_SECRET)}`;
   });
 
   it("일반 포스트 생성", async () => {
@@ -35,7 +33,7 @@ describe("좋아요 테스트", () => {
     // when
     const res = await request(server)
       .post("/api/posts")
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({ title, contents, subject, category });
 
     // then
@@ -51,14 +49,14 @@ describe("좋아요 테스트", () => {
   it("좋아요 클릭", async () => {
     const res = await request(server)
       .post(`/api/posts/${postId}/like`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send();
 
     expect(res.statusCode).toEqual(200);
 
     const res1 = await request(server)
       .get(`/api/posts/${postId}`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send();
     expect(res1.body.post.likes).toEqual(1);
     expect(res1.body.post.isLiked).toEqual(true);
@@ -67,7 +65,7 @@ describe("좋아요 테스트", () => {
   it("Fail 없는 글 좋아요 클릭", async () => {
     const res = await request(server)
       .post("/api/posts/notexistslksdjflk/like")
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send();
 
     expect(res.statusCode).toEqual(403);
@@ -84,14 +82,14 @@ describe("좋아요 테스트", () => {
   it("좋아요 취소 클릭", async () => {
     const res = await request(server)
       .delete(`/api/posts/${postId}/like`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send();
 
     expect(res.statusCode).toEqual(200);
 
     const res1 = await request(server)
       .get(`/api/posts/${postId}`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send();
     expect(res1.body.post.likes).toEqual(0);
     expect(res1.body.post.isLiked).toEqual(false);
@@ -100,7 +98,7 @@ describe("좋아요 테스트", () => {
   it("댓글 생성", async () => {
     const res = await request(server)
       .post(`/api/posts/${postId}/comments`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({ contents: "contents" });
 
     expect(res.statusCode).toEqual(201);
@@ -111,7 +109,7 @@ describe("좋아요 테스트", () => {
   it("댓글 좋아요", async () => {
     const res = await request(server)
       .post(`/api/posts/${postId}/comments/like`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({ commentId });
 
     expect(res.statusCode).toEqual(200);
@@ -126,7 +124,7 @@ describe("좋아요 테스트", () => {
 
     const res2 = await request(server)
       .get(`/api/posts/${postId}/comments`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send();
 
     expect(res2.statusCode).toEqual(200);
@@ -137,7 +135,7 @@ describe("좋아요 테스트", () => {
   it("댓글 좋아요 취소", async () => {
     const res = await request(server)
       .delete(`/api/posts/${postId}/comments/like`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send({ commentId });
 
     expect(res.statusCode).toEqual(200);
@@ -152,7 +150,7 @@ describe("좋아요 테스트", () => {
 
     const res2 = await request(server)
       .get(`/api/posts/${postId}/comments`)
-      .set("Cookie", [`access-token=${token}`])
+      .set("authorization", token)
       .send();
 
     expect(res2.statusCode).toEqual(200);
