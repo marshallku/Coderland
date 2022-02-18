@@ -1,0 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400&family=Roboto:wght@500&display=swap");
+
+.login-button {
+  display: flex;
+  align-items: center;
+  font-family: "Roboto", sans-serif;
+  margin: 100px auto;
+  color: #ffffff;
+  background-color: #4285f4;
+  border-radius: 4px;
+  box-shadow: var(--box-shadow-1);
+}
+
+.login-button__text {
+  padding: 0 8px;
+}
