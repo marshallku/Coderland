@@ -218,111 +218,112 @@ export default function Comment({
         className={formatClassName("comment", parentId && "comment--reply")}
         id={`comment-${data._id}`}
       >
-        <div className="comment__author-wrap">
-          <span className="comment__author">{data.author.nickname}</span>
-          {data.isPostAuthor && (
-            <span className="comment__post-author">작성자</span>
-          )}
-
-          {isCommentAuthor && (
-            <>
-              <button
-                className="comment__edit-button"
-                type="button"
-                onClick={handleEditClick}
-              >
-                <i className="icon-create" />
-                수정
-              </button>
-              <button
-                className="comment__delete-button"
-                type="button"
-                onClick={() =>
-                  modal?.openModal("댓글을 삭제하시겠습니까?", () =>
-                    handleDeleteClick()
-                  )
-                }
-              >
-                <i className="icon-clear" />
-                삭제
-              </button>
-            </>
-          )}
-        </div>
-
-        {mode === "edit" && focusedId === data._id ? (
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              modal?.openModal("댓글을 수정하시겠습니까?", () =>
-                handleEditSubmit(event)
-              );
-            }}
-            className="comment-form comment-form--edit"
-          >
-            <input
-              value={editedText}
-              onChange={(event) => setEditedText(event.target.value)}
-              type="text"
-              className="comment-form__input"
-            />
-            <div className="comment-form__button-wrap">
-              <button type="submit" className="comment-form__button">
-                수정
-              </button>
-              <button
-                type="button"
-                onClick={() => setMode("read")}
-                className="comment-form__button comment-form__button--cancel"
-              >
-                취소
-              </button>
-            </div>
-          </form>
-        ) : (
+        {!data.isDeleted ? (
           <>
-            <p
-              className={formatClassName(
-                "comment__text",
-                data.isDeleted && "comment__text--deleted"
+            <div className="comment__author-wrap">
+              <span className="comment__author">{data.author.nickname}</span>
+              {data.isPostAuthor && (
+                <span className="comment__post-author">작성자</span>
               )}
-            >
-              {data.isDeleted ? "삭제된 댓글입니다." : data.contents}
-            </p>
-            <div className="comment__info">
-              <span className="comment__date">
-                {formatToReadableTime(data.createdAt)}
-              </span>
-              {!parentId && (
+
+              {isCommentAuthor && (
                 <>
                   <button
+                    className="comment__edit-button"
                     type="button"
-                    className="comment__like-button"
-                    onClick={handleLikeClick}
+                    onClick={handleEditClick}
                   >
-                    <Clap activated={clapped} />
-                    {!numClap ? "좋아요" : numClap}
+                    <i className="icon-create" />
+                    수정
                   </button>
                   <button
-                    className="comment__reply-button"
+                    className="comment__delete-button"
                     type="button"
-                    onClick={handleReplyClick}
+                    onClick={() =>
+                      modal?.openModal("댓글을 삭제하시겠습니까?", () =>
+                        handleDeleteClick()
+                      )
+                    }
                   >
-                    <i className="icon-chat" />
-                    답글
+                    <i className="icon-clear" />
+                    삭제
                   </button>
                 </>
               )}
-              {isAuthor &&
-                !data.isPostAuthor &&
-                members &&
-                data.contents.includes("신청") && (
-                  <button onClick={handleGatherRequest} type="button">
-                    {isMember ? "내보내기" : "수락"}
-                  </button>
-                )}
             </div>
+
+            {mode === "edit" && focusedId === data._id ? (
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  modal?.openModal("댓글을 수정하시겠습니까?", () =>
+                    handleEditSubmit(event)
+                  );
+                }}
+                className="comment-form comment-form--edit"
+              >
+                <input
+                  value={editedText}
+                  onChange={(event) => setEditedText(event.target.value)}
+                  type="text"
+                  className="comment-form__input"
+                />
+                <div className="comment-form__button-wrap">
+                  <button type="submit" className="comment-form__button">
+                    수정
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMode("read")}
+                    className="comment-form__button comment-form__button--cancel"
+                  >
+                    취소
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <>
+                <p className="comment__text">{data.contents}</p>
+                <div className="comment__info">
+                  <span className="comment__date">
+                    {formatToReadableTime(data.createdAt)}
+                  </span>
+                  {!parentId && (
+                    <>
+                      <button
+                        type="button"
+                        className="comment__like-button"
+                        onClick={handleLikeClick}
+                      >
+                        <Clap activated={clapped} />
+                        {!numClap ? "좋아요" : numClap}
+                      </button>
+                      <button
+                        className="comment__reply-button"
+                        type="button"
+                        onClick={handleReplyClick}
+                      >
+                        <i className="icon-chat" />
+                        답글
+                      </button>
+                    </>
+                  )}
+                  {isAuthor &&
+                    !data.isPostAuthor &&
+                    members &&
+                    data.contents.includes("신청") && (
+                      <button onClick={handleGatherRequest} type="button">
+                        {isMember ? "내보내기" : "수락"}
+                      </button>
+                    )}
+                </div>
+              </>
+            )}
           </>
+        ) : (
+          <p className="comment__text comment__text--deleted">
+            삭제된 댓글입니다.
+          </p>
         )}
       </div>
 

@@ -12,7 +12,7 @@
 
 .comment--reply {
   padding: 12px 20px 12px 40px;
-  background-color: var(--multipurpose);
+  background-color: var(--background-elevated);
 }
 
 .comment__author-wrap,
@@ -64,6 +64,5 @@
 }
 
 .comment__text--deleted {
-  font-style: italic;
-  color: var(--gray-2);
+  color: var(--gray-3);
 }
