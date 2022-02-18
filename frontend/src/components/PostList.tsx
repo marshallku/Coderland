@@ -6,8 +6,8 @@ import Pagination from "./Pagination";
 import PostCardItem, { PostCardItemSkeleton } from "./PostCardItem";
 import PostListItem, { PostListItemSkeleton } from "./PostListItem";
 import { parseQuery } from "../utils/url";
-import "./PostList.css";
 import DisplayError from "./DisplayError";
+import "./PostList.css";
 
 const USES_CARD_DESIGN = ["gather", "study", "code", "team"];
 const SKELETONS_LENGTH = 8;
@@ -17,8 +17,8 @@ export default function PostList({
   limit,
   preventPaginate,
 }: IPostListProps) {
-  const { search } = useLocation();
-  const { page } = parseQuery(search);
+  const location = useLocation();
+  const { page } = parseQuery(location.search);
   const [response, setResponse] = useState<
     IPostListResponse | IGatherPostListResponse
   >();
@@ -37,7 +37,7 @@ export default function PostList({
       return (response.posts as Array<IPostInList>).map(PostListItem);
     }
 
-    const tmpArray = Array.from({ length: SKELETONS_LENGTH });
+    const tmpArray = Array.from({ length: limit || SKELETONS_LENGTH });
 
     if (usesCardDesign) {
       // eslint-disable-next-line react/no-array-index-key
@@ -49,7 +49,7 @@ export default function PostList({
   }, [response]);
 
   const paginate = useCallback((pageNumber: number) => {
-    setCurrentPage(pageNumber);
+    location.search = `?page=${pageNumber}`;
   }, []);
 
   useEffect(() => {
@@ -74,6 +74,12 @@ export default function PostList({
 
     getCardOrListPosts();
   }, [currentPage]);
+
+  useEffect(() => {
+    const { page: current } = parseQuery(location.search);
+
+    setCurrentPage(current ? +current || 1 : 1);
+  }, [location.search]);
 
   return (
     <>

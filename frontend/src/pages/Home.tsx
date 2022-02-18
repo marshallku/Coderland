@@ -34,7 +34,7 @@ function HomePostList({ subject, isLarge }: IHomePostListProps) {
           <i className="icon-east" />
         </Link>
       </header>
-      <PostList subject={subject} limit={3} preventPaginate />
+      <PostList subject={subject} limit={4} preventPaginate />
     </section>
   );
 }

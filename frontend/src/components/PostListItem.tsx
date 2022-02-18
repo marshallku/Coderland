@@ -52,7 +52,10 @@ export default function PostListItem({
 export function PostListItemSkeleton() {
   return (
     <article className="list-item list-item--skeleton">
-      <div className="list-item__link" />
+      <div className="list-item__link">
+        <div className="list-item__title list-skeleton" />
+        <div className="list-item__excerpt list-skeleton" />
+      </div>
     </article>
   );
 }

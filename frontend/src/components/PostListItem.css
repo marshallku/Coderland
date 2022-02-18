@@ -96,20 +96,27 @@ svg.list-item__info-icon {
 .list-item--skeleton {
   position: relative;
   color: transparent;
+}
+
+.list-skeleton {
   overflow: hidden;
 }
 
-.list-item--skeleton > .list-item__link {
-  height: calc(1.7rem + 41px);
+.list-item__title.list-skeleton {
+  height: 2.25rem;
 }
 
-.list-item--skeleton::after {
+.list-item__excerpt.list-skeleton {
+  height: 1.5rem;
+}
+
+.list-skeleton::after {
   content: "";
   position: absolute;
   top: 10%;
   left: 0;
   width: 5%;
-  height: 80%;
+  height: 100%;
   background-image: linear-gradient(
     90deg,
     var(--background-base),
