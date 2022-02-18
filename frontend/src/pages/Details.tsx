@@ -128,10 +128,10 @@ export default function Details<
   async function handleBookmarkClick() {
     if (auth?.user && id) {
       if (bookmarked) {
-        removeBookmark({ id, token: auth?.user.token });
+        removeBookmark({ id });
         setNumBookmark(numBookmark - 1);
       } else {
-        addBookmark({ id, token: auth?.user.token });
+        addBookmark({ id });
         setNumBookmark(numBookmark + 1);
       }
 
@@ -145,10 +145,10 @@ export default function Details<
   async function handleLikesClick() {
     if (auth?.user && id) {
       if (clapped) {
-        removeClap({ id, token: auth?.user.token });
+        removeClap({ id });
         setNumClap(numClap - 1);
       } else {
-        addClap({ id, token: auth?.user.token });
+        addClap({ id });
         setNumClap(numClap + 1);
       }
 
@@ -160,9 +160,7 @@ export default function Details<
   }
 
   async function handleApi() {
-    const apiResponse = await useApi(
-      getPost<T>(`${id}`, `${auth?.user?.token}`)
-    );
+    const apiResponse = await useApi(getPost<T>(`${id}`));
 
     if (!apiResponse) {
       navigate("/");
@@ -220,14 +218,13 @@ export default function Details<
               type="button"
               onClick={() => {
                 modal?.openModal("정말 삭제하시겠습니까?", async () => {
-                  if (!response.post || !auth?.user || !auth.user.token) {
+                  if (!response.post || !auth?.user || !window.token) {
                     return;
                   }
 
                   const apiResponse = await useApi(
                     deletePost({
                       id: response.post._id,
-                      token: auth.user.token,
                     })
                   );
 

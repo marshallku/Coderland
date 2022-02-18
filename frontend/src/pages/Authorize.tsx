@@ -19,7 +19,7 @@ export default function Authorize() {
 
   useEffect(() => {
     const init = async () => {
-      const response = await getUserAuthKey(user.token);
+      const response = await getUserAuthKey();
 
       if (response.isOk === false) {
         toast("인증 키를 불러오는 데 실패했습니다");
@@ -35,7 +35,6 @@ export default function Authorize() {
     event.preventDefault();
     const response = await authorizeUser({
       username: gitlabName,
-      token: user.token,
     });
 
     if (response.isOk === false) {
