@@ -1,4 +1,5 @@
 .carousel {
+  font-family: "Elice Digital Baeum", sans-serif;
   position: relative;
   overflow: hidden;
 }
@@ -87,4 +88,34 @@
 
 .carousel__indicator--highlight {
   color: var(--primary);
+}
+
+.carousel__button {
+  display: none;
+}
+
+@media screen and (min-width: 860px) and (any-hover: hover) {
+  .carousel__button {
+    display: block;
+    position: absolute;
+    top: 50%;
+    transform: translate3d(0, -50%, 0);
+    color: #f1f1f1;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 8px;
+    border-radius: 50%;
+    transition: opacity 0.25s ease-in-out;
+  }
+
+  .carousel__button:disabled {
+    opacity: 0;
+  }
+
+  .carousel__button--prev {
+    left: 20px;
+  }
+
+  .carousel__button--next {
+    right: 20px;
+  }
 }

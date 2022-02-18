@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import favicon from "../../static/image/favicon.svg";
+import logo from "../assets/logo.png";
 import ThemeSwitch from "./ThemeSwitch";
 import Dropdown from "./Dropdown";
 import formatClassName from "../utils/formatClassName";
@@ -40,12 +40,15 @@ export default function GlobalNavigationBar({
         </button>
         <Link to="/" className="gnb__button">
           <img
-            src={favicon}
+            src={logo}
             width={40}
             height={40}
             alt="로고"
             className="gnb__logo"
           />
+        </Link>
+        <Link to="/" className="gnb__button gnb__title">
+          코더랜드
         </Link>
       </div>
       <div className="gnb__grow gnb__grow--right">
@@ -112,14 +115,17 @@ export default function GlobalNavigationBar({
         />
         {auth?.user ? (
           <Dropdown
-            ButtonChildren={<img src={favicon} alt="유저 프로필" />}
+            ButtonChildren={
+              <img
+                className="gnb__profile"
+                src={auth.user.profile}
+                alt="유저 프로필"
+              />
+            }
             ContentChildren={
               <>
                 <figure className="dropdown-profile">
-                  <img
-                    src={auth?.user ? auth.user.profile : favicon}
-                    alt="유저 프로필"
-                  />
+                  <img src={auth.user.profile} alt="유저 프로필" />
                   <figcaption>{auth.user.nickname}</figcaption>
                 </figure>
                 <nav className="dropdown-nav">

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import useApi from "../hooks/api";
 import { formatToReadableTime } from "../utils/time";
@@ -9,12 +9,105 @@ import Clap from "../components/Clap";
 import {
   addBookmark,
   addClap,
+  deletePost,
   getPost,
   removeBookmark,
   removeClap,
 } from "../api";
 import { useAuth } from "../hooks/auth";
+import { useModal } from "../hooks/modal";
 import "./Details.css";
+import { debounce } from "../utils/optimizer";
+import { scrollHorizontal } from "../animation/scroll";
+
+function MemberList({ data }: IMemberListProps) {
+  const containerRef = useRef<HTMLUListElement>(null);
+  const [scrollX, setScrollX] = useState(0);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [containerOffsetWidth, setContainerOffsetWidth] = useState(0);
+
+  const handleResize = debounce(() => {
+    const { current } = containerRef;
+
+    if (!current) {
+      return;
+    }
+
+    setScrollX(current.scrollLeft);
+    setContainerWidth(current.scrollWidth);
+    setContainerOffsetWidth(current.offsetWidth);
+  });
+
+  const handleScroll = () => {
+    const { current } = containerRef;
+
+    if (!current) {
+      return;
+    }
+
+    setScrollX(current.scrollLeft);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    handleResize();
+  }, [scrollX, containerWidth]);
+
+  useEffect(() => {
+    const { current } = containerRef;
+
+    if (!current) {
+      return;
+    }
+
+    current.addEventListener("scroll", handleScroll, { passive: true });
+
+    // eslint-disable-next-line consistent-return
+    return () => {
+      current.removeEventListener("scroll", handleScroll);
+    };
+  }, [containerRef.current]);
+
+  return (
+    <div className="gather-members">
+      <button
+        type="button"
+        className="gather-members__button gather-members__button--west"
+        disabled={scrollX === 0}
+        onClick={() => {
+          scrollHorizontal(containerRef.current, scrollX, scrollX - 100);
+        }}
+      >
+        <i className="icon-west" />
+      </button>
+      <ul className="gather-members__list" ref={containerRef}>
+        {data.map((member) => (
+          <li key={member.nickname} className="gather-members__item">
+            <img src={member.profile} alt={`${member.nickname}님의 이미지`} />
+            <h4>{member.nickname}</h4>
+          </li>
+        ))}
+      </ul>
+      <button
+        type="button"
+        className="gather-members__button gather-members__button--east"
+        disabled={containerWidth - containerOffsetWidth <= scrollX}
+        onClick={() => {
+          scrollHorizontal(containerRef.current, scrollX, scrollX + 100);
+        }}
+      >
+        <i className="icon-east" />
+      </button>
+    </div>
+  );
+}
 
 export default function Details<
   T extends IGatherPostResponse | IPostResponse
@@ -30,6 +123,7 @@ export default function Details<
   const [response, setResponse] = useState<T>();
   const navigate = useNavigate();
   const auth = useAuth();
+  const modal = useModal();
 
   async function handleBookmarkClick() {
     if (auth?.user && id) {
@@ -97,19 +191,20 @@ export default function Details<
           {response?.post.title}
         </h1>
         <div className="details-header__contents">
-          <div className="details-header__author">
-            {response?.post.author.nickname}
-          </div>
+          <span className="details-header__views">
+            조회 수 {response?.post.views}
+          </span>
+          <span className="details-header__dot" />
           <time
             className="details-header__created"
             dateTime={response?.post.createdAt || ""}
           >
             {formatToReadableTime(response?.post.createdAt || "")}
           </time>
-          <div className="details-header__views">
-            <i className="icon-visibility" role="img" aria-label="조회 수" />
-            {response?.post.views}
-          </div>
+          <span className="details-header__dot" />
+          <span className="details-header__author">
+            by <span>{response?.post.author.nickname}</span>
+          </span>
         </div>
         {!!response?.post.isAuthor && (
           <div className="details-header__control">
@@ -119,63 +214,74 @@ export default function Details<
               }`}
               state={response.post}
             >
-              <i className="icon-edit" />
-              수정
+              <i className="icon-create" role="img" aria-label="수정" />
             </Link>
-            {/* TODO: Confirm Modal 작업 후 삭제 로직 추가 */}
-            <button type="button">삭제</button>
+            <button
+              type="button"
+              onClick={() => {
+                modal?.openModal("정말 삭제하시겠습니까?", async () => {
+                  if (!response.post || !auth?.user || !auth.user.token) {
+                    return;
+                  }
+
+                  const apiResponse = await useApi(
+                    deletePost({
+                      id: response.post._id,
+                      token: auth.user.token,
+                    })
+                  );
+
+                  if (!apiResponse) {
+                    return;
+                  }
+
+                  navigate("/");
+                });
+              }}
+            >
+              <i className="icon-delete" role="img" aria-label="삭제" />
+            </button>
           </div>
         )}
       </header>
+      {response?.post && "tags" in response.post && (
+        <header className="gather-info">
+          <h3 className="gather-info__title">기술 스택</h3>
+          <div className="gather-info__tags">
+            {response.post.tags.map((tag) => (
+              <i
+                key={tag}
+                className={`icon-${tag}`}
+                role="img"
+                aria-label={tag}
+              />
+            ))}
+          </div>
+          <h3 className="gather-info__title">기타 정보</h3>
+          <div className="gather-info__statuses">
+            <div className="gather-info__status">
+              <i className="icon-info_outline" />
+              상태: {`${response.post.isCompleted ? "모집 완료" : "모집 중"}`}
+            </div>
+            <div className="gather-info__status">
+              <i className="icon-desktop_windows" />
+              장소: {response.post.area}
+            </div>
+            <div className="gather-info__status">
+              <i className="icon-person" />
+              인원: {response.post.members.length}명
+            </div>
+          </div>
+          <h3 className="gather-info__title">현재 팀원</h3>
+          <MemberList data={response.post.members} />
+        </header>
+      )}
       <div className="details-body">
         <article className="details-body__article">
-          {response?.post && "tags" in response.post && (
-            <>
-              <div className="details-body__tags">
-                {response.post.tags.map((tag) => (
-                  <i
-                    key={tag}
-                    className={`icon-${tag}`}
-                    role="img"
-                    aria-label={tag}
-                  />
-                ))}
-              </div>
-              <div className="details-body__info">
-                <i className="icon-info_outline" />
-                상태: {`${response.post.isCompleted ? "모집 완료" : "모집 중"}`}
-              </div>
-              <div className="details-body__info">
-                <i className="icon-desktop_windows" />
-                장소: {response.post.area}
-              </div>
-              <div className="details-body__info">
-                <i className="icon-person" />
-                인원: {response.post.members.length}명
-              </div>
-            </>
-          )}
           <MarkdownViewer
             value={response?.post.contents || ""}
             className="details-body__content"
           />
-          {response?.post && "tags" in response.post && (
-            <div className="details-body__members member-list">
-              <h3 className="member-list__title">현재 팀원</h3>
-              <ul className="member-list__container">
-                {response?.post.members.map((member: IMemberProps) => (
-                  <li key={member.nickname} className="member-list__item">
-                    <img
-                      src={member.profile}
-                      alt={`${member.nickname}님의 이미지`}
-                      title={`${member.nickname} ${member.track}`}
-                    />
-                    <h4>{member.nickname}</h4>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
         </article>
         <div className="details-body__buttons">
           <button

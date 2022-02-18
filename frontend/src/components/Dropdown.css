@@ -36,9 +36,6 @@
 }
 
 .dropdown-content__title {
-  position: sticky;
-  position: -webkit-sticky;
-  top: 0;
   padding: 10px 0;
   border-bottom: 1px solid var(--gray-5);
 }
@@ -46,6 +43,7 @@
 .dropdown-content__container {
   max-height: 30vh;
   overflow-y: auto;
+  overscroll-behavior: none;
 }
 
 .dropdown-button * {

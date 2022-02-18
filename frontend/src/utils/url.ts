@@ -29,3 +29,7 @@ export function composeQuery(object: IQueryObject): string {
     .map((x) => x.join("="))
     .join("&")}`;
 }
+
+export function isFromSameOrigin(uri: string): boolean {
+  return uri.startsWith(window.location.origin) || uri.startsWith("/");
+}

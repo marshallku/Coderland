@@ -10,6 +10,7 @@
 }
 
 .home-posts__header {
+  font-family: "Elice Digital Baeum", sans-serif;
   display: flex;
   margin-bottom: 1.3rem;
   align-items: center;
@@ -26,14 +27,12 @@
   margin-left: auto;
   padding: 6px;
   line-height: 1.5;
-  background-color: var(--background-elevated);
-  border-radius: var(--border-radius);
 }
 
 .home-posts__link > i {
   display: inline-block;
   margin-left: 5px;
-  transition: transform 0.25s ease-in-out;
+  transition: transform 0.1s ease-in-out;
 }
 
 @media (any-hover: hover) {
