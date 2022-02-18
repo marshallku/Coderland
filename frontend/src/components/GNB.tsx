@@ -127,7 +127,15 @@ export default function GlobalNavigationBar({
                     <Link to="/user">정보 수정</Link>
                   </div>
                   <div>
-                    <button type="button">로그아웃</button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        localStorage.removeItem("token");
+                        window.location.reload();
+                      }}
+                    >
+                      로그아웃
+                    </button>
                   </div>
                 </nav>
               </>
