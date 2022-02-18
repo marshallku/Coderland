@@ -46,7 +46,7 @@ const tmpUser: IUser = {
   profile: "https://i.imgur.com/xCvzudW.png",
   grade: 0,
   track: "SW 엔지니어 트랙 1기",
-  gitlab: "https://kdt-gitlab.elice.io/marshallku",
+  github: "https://kdt-gitlab.elice.io/marshallku",
   token: "just_token",
 };
 
@@ -58,7 +58,7 @@ const tmpUser2: IUser = {
   profile: "https://i.imgur.com/xCvzudW.png",
   grade: 0,
   track: "SW 엔지니어 트랙 1기",
-  gitlab: "https://kdt-gitlab.elice.io/marshallku",
+  github: "https://kdt-gitlab.elice.io/marshallku",
   token: "just_token",
 };
 
