@@ -40,7 +40,7 @@ export const UserSchema = new mongoose.Schema<IUserDocument>(
     track: {
       type: String,
     },
-    gitlab: {
+    github: {
       type: String,
     },
     refreshToken: {
@@ -162,9 +162,13 @@ UserSchema.statics.findAllBookmarks = async (userId: string) => {
  * @param userId 유저 ID
  * @param nickname 유저가 변경할 닉네임
  */
-UserSchema.statics.updateUser = async (userId: string, nickname: string) => {
+UserSchema.statics.updateUser = async (
+  userId: string,
+  userDto: Partial<IUserDocument>
+) => {
+  // 전달되지 않은 undefined 제거 후 수정
   await User.findByIdAndUpdate(userId, {
-    nickname,
+    ...userDto,
   });
 };
 
@@ -185,7 +189,7 @@ UserSchema.statics.withdrawUser = async (userId: string) => {
     profile: "Not access",
     provider: "Not access",
     track: "Not access",
-    gitlab: "Not access",
+    github: "Not access",
     refreshToken: "Not access",
   });
 };

@@ -1,4 +1,4 @@
-import { IUserModel } from "user";
+import { IUserDocument, IUserModel } from "user";
 import { IPostDocument } from "post";
 import axios, { AxiosResponse } from "axios";
 import { User } from "../models";
@@ -21,8 +21,8 @@ export default class UserService {
   }
 
   // 유저 정보 수정
-  async updateUser(userId: string, nickname: string) {
-    await this.UserModel.updateUser(userId, nickname);
+  async updateUser(userId: string, userDto: Partial<IUserDocument>) {
+    await this.UserModel.updateUser(userId, userDto);
   }
 
   async withdrawUser(userId: string) {

@@ -36,6 +36,7 @@ describe("유저 기능 테스트", () => {
       profile: "profile photo url",
       grade: 1,
       refreshToken,
+      github: "githuburl",
     });
 
     const signOpts: SignOptions = {
@@ -309,7 +310,7 @@ describe("회원 탈퇴 기능", () => {
     expect(user.grade).toEqual(-1);
     expect(user.profile).toEqual("Not access");
     expect(user.track).toEqual("Not access");
-    expect(user.gitlab).toEqual("Not access");
+    expect(user.github).toEqual("Not access");
     expect(user.refreshToken).toEqual("Not access");
   });
 
