@@ -14,8 +14,8 @@ export default (comment: ICommentDocument, userId: string, postId: string) => {
   } = comment.toObject();
   return {
     ...rest,
-    isPostAuthor,
     isDeleted,
+    isPostAuthor: isDeleted ? false : isPostAuthor,
     contents: isDeleted ? "" : contents,
     isLiked: likeUsers.includes(userId),
     replies: parseReply(replies, anonymous, author, isPostAuthor, postId),
