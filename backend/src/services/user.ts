@@ -1,6 +1,7 @@
 import { IUserDocument, IUserModel } from "user";
 import { IPostDocument } from "post";
 import axios, { AxiosResponse } from "axios";
+import config from "../config";
 import { User } from "../models";
 import { parsePostBySubject } from "../utils";
 
@@ -12,12 +13,21 @@ export default class UserService {
   }
 
   // 유저 북마크 호출
-  async findAllBookmarks(userId: string) {
+  async findAllBookmarks(userId: string, currentPage: number) {
     const { bookmarks } = await this.UserModel.findAllBookmarks(userId);
     const parsedBookmarks = bookmarks.map((post: IPostDocument) =>
       parsePostBySubject(post.toObject().subject, post.toObject(), userId)
     );
-    return parsedBookmarks;
+
+    // bookmark pagination
+    const total = parsedBookmarks.length;
+    const lastPage = Math.ceil(total / config.perPage);
+    const startIdx = (currentPage - 1) * config.perPage;
+    const lastIdx =
+      startIdx + config.perPage > total ? total : startIdx + config.perPage;
+    const returnedBookmark = parsedBookmarks.slice(startIdx, lastIdx);
+
+    return [returnedBookmark, { currentPage, lastPage }];
   }
 
   // 유저 정보 수정

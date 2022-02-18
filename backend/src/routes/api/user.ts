@@ -23,9 +23,13 @@ export default (app: Router) => {
     loginRequired,
     asyncHandler(async (req, res) => {
       const { user } = req;
+      const currentPage = Number(req.query.page) || 1;
       const userService = new UserService();
-      const bookmarks = await userService.findAllBookmarks(user.id);
-      res.status(200).json({ isOk: true, bookmarks });
+      const [bookmarks, pagination] = await userService.findAllBookmarks(
+        user.id,
+        currentPage
+      );
+      res.status(200).json({ isOk: true, bookmarks, pagination });
     })
   );
 
