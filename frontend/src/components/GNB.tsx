@@ -78,7 +78,9 @@ export default function GlobalNavigationBar({
               </h2>
               <ul className="dropdown-content__container notification-list">
                 {notifications.length === 0 ? (
-                  <article>Nothing</article>
+                  <article className="notification--empty">
+                    소식이 없습니다.
+                  </article>
                 ) : (
                   notifications.map((item) => (
                     <article
