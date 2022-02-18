@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/auth";
 import toast from "../utils/toast";
 import { formatToReadableTime } from "../utils/time";
 import formatClassName from "../utils/formatClassName";
@@ -36,8 +35,6 @@ export default function Comment({
   const [replyText, setReplyText] = useState("");
   const [clapped, setClapped] = useState(!!data.isLiked);
   const [numClap, setNumClap] = useState(data.likes || 0);
-
-  const auth = useAuth();
   const navigate = useNavigate();
   const modal = useModal();
 
@@ -46,7 +43,7 @@ export default function Comment({
 
   const handleEditSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const token = auth?.user?.token;
+    const { token } = window;
 
     if (!token) {
       modal?.openModal("로그인이 필요한 기능입니다. 로그인하시겠습니까?", () =>
@@ -65,14 +62,12 @@ export default function Comment({
           contents: editedText,
           commentId: data._id,
           postId,
-          token,
         })
       : await updateReply({
           contents: editedText,
           parentId,
           commentId: data._id,
           postId,
-          token,
         });
 
     if (editCommentResponse.isOk === false) {
@@ -85,7 +80,7 @@ export default function Comment({
   };
 
   const handleDeleteClick = async () => {
-    const token = auth?.user?.token;
+    const { token } = window;
 
     if (!token) {
       modal?.openModal("로그인이 필요한 기능입니다. 로그인하시겠습니까?", () =>
@@ -98,13 +93,11 @@ export default function Comment({
       ? await deleteComment({
           commentId: data._id,
           postId,
-          token,
         })
       : await deleteReply({
           postId,
           parentId,
           commentId: data._id,
-          token,
         });
 
     if (deleteCommentResponse.isOk === false) {
@@ -117,7 +110,7 @@ export default function Comment({
 
   const handleReplySubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const token = auth?.user?.token;
+    const { token } = window;
 
     if (!token) {
       modal?.openModal("로그인이 필요한 기능입니다. 로그인하시겠습니까?", () =>
@@ -135,7 +128,6 @@ export default function Comment({
       contents: replyText,
       commentId: data._id,
       postId,
-      token,
     });
 
     if (newCommentResponse.isOk === false) {
@@ -159,7 +151,7 @@ export default function Comment({
   };
 
   const handleLikeClick = async () => {
-    const token = auth?.user?.token;
+    const { token } = window;
 
     if (!token) {
       modal?.openModal("로그인이 필요한 기능입니다. 로그인하시겠습니까?", () =>
@@ -169,10 +161,10 @@ export default function Comment({
     }
 
     if (clapped) {
-      removeCommentClap({ postId, commentId: data._id, token });
+      removeCommentClap({ postId, commentId: data._id });
       setNumClap((prev) => prev - 1);
     } else {
-      addCommentClap({ postId, commentId: data._id, token });
+      addCommentClap({ postId, commentId: data._id });
       setNumClap((prev) => prev + 1);
     }
 
@@ -180,7 +172,7 @@ export default function Comment({
   };
 
   const handleGatherRequest = async () => {
-    const token = auth?.user?.token;
+    const { token } = window;
     const userId = data.author?._id;
 
     if (!token) {
@@ -200,12 +192,10 @@ export default function Comment({
         ? deleteGatherRequest({
             postId,
             userId,
-            token,
           })
         : createGatherRequest({
             postId,
             userId,
-            token,
           })
     );
     updatePost();
@@ -338,7 +328,7 @@ export default function Comment({
             className="comment-form__input"
             placeholder="답글을 남겨주세요."
             onClick={() =>
-              !auth?.user?.token &&
+              !window.token &&
               modal?.openModal(
                 "로그인이 필요한 기능입니다. 로그인하시겠습니까?",
                 () => navigate("/login")

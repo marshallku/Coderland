@@ -4,7 +4,6 @@ import Button from "../components/Button";
 import { Input } from "../components/Input";
 import MarkdownEditor from "../components/MarkdownEditor";
 import Select from "../components/Select";
-import { useAuth } from "../hooks/auth";
 import formatClassName from "../utils/formatClassName";
 import toast from "../utils/toast";
 import { createPost, updatePost } from "../api";
@@ -280,7 +279,6 @@ export default function Write() {
   const [currentPostId, setCurrentPostId] = useState("");
   const { subject = "chat", category = "study" } = useParams();
   const location = useLocation();
-  const auth = useAuth();
   const isGather = subject === "gather";
   const isModifying = useMemo(() => !!location.state, []);
 
@@ -304,22 +302,18 @@ export default function Write() {
   const categoriesInKr = ["스터디", "모각코", "프로젝트"];
 
   const requestAddPost = async <T extends IPost | IGatherPost>(
-    post: Partial<T>,
-    token: string
+    post: Partial<T>
   ) => {
     if (isGather) {
       const apiResponse = await useApi(
-        createPost<IGatherPost>(
-          {
-            ...post,
-            subject: "gather",
-            area,
-            tags,
-            icon: tags[0],
-            category: category as TGatherCategory,
-          },
-          token
-        )
+        createPost<IGatherPost>({
+          ...post,
+          subject: "gather",
+          area,
+          tags,
+          icon: tags[0],
+          category: category as TGatherCategory,
+        })
       );
 
       if (!apiResponse) {
@@ -331,7 +325,7 @@ export default function Write() {
       return;
     }
 
-    const apiResponse = await useApi(createPost<IPost>(post, token));
+    const apiResponse = await useApi(createPost<IPost>(post));
 
     if (!apiResponse) {
       toast("글 작성에 실패했습니다.");
@@ -342,8 +336,7 @@ export default function Write() {
   };
 
   const requestUpdatePost = async <T extends IPost | IGatherPost>(
-    post: Partial<T>,
-    token: string
+    post: Partial<T>
   ) => {
     if (isGather) {
       const apiResponse = await useApi(
@@ -357,7 +350,6 @@ export default function Write() {
             icon: tags[0],
             category: category as TGatherCategory,
           },
-          token,
         })
       );
 
@@ -371,7 +363,7 @@ export default function Write() {
     }
 
     const apiResponse = await useApi(
-      updatePost<IPost>({ id: currentPostId, post, token })
+      updatePost<IPost>({ id: currentPostId, post })
     );
 
     if (!apiResponse) {
@@ -383,7 +375,7 @@ export default function Write() {
   };
 
   const handleSubmit = async () => {
-    const token = auth?.user?.token;
+    const { token } = window;
 
     if (!token) {
       navigate("/login");
@@ -407,20 +399,20 @@ export default function Write() {
       } as const;
 
       if (isModifying) {
-        requestUpdatePost<IGatherPost>(gatherPost, token);
+        requestUpdatePost<IGatherPost>(gatherPost);
         return;
       }
 
-      requestAddPost<IGatherPost>(gatherPost, token);
+      requestAddPost<IGatherPost>(gatherPost);
       return;
     }
 
     if (isModifying) {
-      requestUpdatePost<IPost>(post, token);
+      requestUpdatePost<IPost>(post);
       return;
     }
 
-    requestAddPost<IPost>(post, token);
+    requestAddPost<IPost>(post);
   };
 
   useEffect(() => {

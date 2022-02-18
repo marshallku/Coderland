@@ -100,13 +100,13 @@ export default function GlobalNavigationBar({
             </>
           }
           onClick={async () => {
-            const token = auth?.user?.token;
+            const { token } = window;
 
             if (!token) {
               return;
             }
 
-            const response = await useApi(getNotification(token));
+            const response = await useApi(getNotification());
 
             if (!response) {
               return;

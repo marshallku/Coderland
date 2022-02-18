@@ -20,7 +20,6 @@ interface IUser {
   grade: 0;
   track: string;
   github: string;
-  token: string;
 }
 
 interface IAuthor {
@@ -161,7 +160,7 @@ interface IGatherRequestResponse extends ISuccessResponse {
 }
 
 interface IUserResponse extends ISuccessResponse {
-  user: Omit<IUser, "token">;
+  user: IUser;
 }
 // Auth
 interface IAuthKeyResponse extends ISuccessResponse {

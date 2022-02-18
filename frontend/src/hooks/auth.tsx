@@ -5,20 +5,20 @@ import parseCookie from "../utils/cookie";
 const authContext = createContext<IAuth | null>(null);
 
 function useAuthProvider() {
-  const savedToken = localStorage.getItem("token");
+  const { token } = window;
   const [user, setUser] = useState<IUser | null>(null);
 
   useEffect(() => {
-    if (!savedToken) {
+    if (!token) {
       return;
     }
 
-    getMyInfo(savedToken).then((response) => {
+    getMyInfo().then((response) => {
       if (!response.isOk) {
         return;
       }
 
-      setUser({ ...response.user, token: savedToken });
+      setUser({ ...response.user });
     });
   }, []);
 
@@ -50,9 +50,9 @@ function saveToken(token: string) {
 }
 
 export function tryLoginOnLoad() {
-  const savedToken = localStorage.getItem("token");
+  const { token } = window;
 
-  if (savedToken || !document.cookie) {
+  if (!token || !document.cookie) {
     return;
   }
 

@@ -1,6 +1,9 @@
 interface IInstanceProps {
   baseUrl?: string;
   timeOut?: number;
+  commonHeader?: {
+    [key: string]: string;
+  };
 }
 
 declare type TError = (msg?: string) => IFailResponse;

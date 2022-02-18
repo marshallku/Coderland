@@ -4,6 +4,7 @@ import { Link, Navigate, Outlet } from "react-router-dom";
 import { updateMyInfo } from "../api";
 import Button from "../components/Button";
 import { Input } from "../components/Input";
+import Loader from "../components/Loader";
 import Navigation from "../components/Navigation";
 import useApi from "../hooks/api";
 import { useAuth } from "../hooks/auth";
@@ -14,7 +15,11 @@ export function UserInfo() {
   const auth = useAuth();
   const user = auth?.user;
 
-  if (!user) return <Navigate to="/login" />;
+  if (!window.token) return <Navigate to="/login" />;
+
+  if (!user) {
+    return <Loader />;
+  }
 
   const [editing, setEditing] = useState(false);
   const {
@@ -32,9 +37,7 @@ export function UserInfo() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const response = await useApi(
-      updateMyInfo({ nickname, track, github }, user.token)
-    );
+    const response = await useApi(updateMyInfo({ nickname, track, github }));
 
     if (!response) {
       return;

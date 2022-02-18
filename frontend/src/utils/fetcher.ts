@@ -1,7 +1,7 @@
 import to from "./awaitTo";
 
 export default function createInstance(
-  { baseUrl = "", timeOut } = <IInstanceProps>{}
+  { baseUrl = "", timeOut, commonHeader } = <IInstanceProps>{}
 ): IInstance {
   const dummyPromise: TDummyPromise = () =>
     new Promise((resolve) => {
@@ -49,20 +49,40 @@ export default function createInstance(
   };
 
   return {
-    async get(resource: string, init?: RequestInit) {
-      return sendRequest(resource, { ...init, method: "GET" });
+    async get(resource: string, init: RequestInit = {}) {
+      return sendRequest(resource, {
+        ...init,
+        headers: { ...init.headers, ...commonHeader },
+        method: "GET",
+      });
     },
     async post(resource: string, init: RequestInit = {}) {
-      return sendRequest(resource, { ...init, method: "POST" });
+      return sendRequest(resource, {
+        ...init,
+        headers: { ...init.headers, ...commonHeader },
+        method: "POST",
+      });
     },
     async delete(resource: string, init: RequestInit = {}) {
-      return sendRequest(resource, { ...init, method: "DELETE" });
+      return sendRequest(resource, {
+        ...init,
+        headers: { ...init.headers, ...commonHeader },
+        method: "DELETE",
+      });
     },
     async put(resource: string, init: RequestInit = {}) {
-      return sendRequest(resource, { ...init, method: "PUT" });
+      return sendRequest(resource, {
+        ...init,
+        headers: { ...init.headers, ...commonHeader },
+        method: "PUT",
+      });
     },
     async patch(resource: string, init: RequestInit = {}) {
-      return sendRequest(resource, { ...init, method: "PATCH" });
+      return sendRequest(resource, {
+        ...init,
+        headers: { ...init.headers, ...commonHeader },
+        method: "PATCH",
+      });
     },
   };
 }
