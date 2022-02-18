@@ -148,9 +148,9 @@ export default function GlobalNavigationBar({
             }
           />
         ) : (
-          <a className="gnb__sign-in" href="/api/auth/google">
+          <Link className="gnb__sign-in" to="/login">
             로그인
-          </a>
+          </Link>
         )}
       </div>
     </nav>
