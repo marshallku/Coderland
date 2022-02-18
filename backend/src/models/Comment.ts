@@ -202,9 +202,16 @@ CommentSchema.statics.updateReply = async (replyDto) => {
  */
 CommentSchema.statics.deleteReply = async (replyDto) => {
   const { commentId, replyId } = replyDto;
-  await Comment.findByIdAndUpdate(commentId, {
-    $pull: { replies: { _id: replyId } },
-  });
+  const comment = await Comment.findByIdAndUpdate(
+    commentId,
+    {
+      $pull: { replies: { _id: replyId } },
+    },
+    { new: true }
+  );
+  if (comment.replies.length === 0 && comment.isDeleted) {
+    await Comment.findByIdAndDelete(commentId);
+  }
 };
 
 /**
