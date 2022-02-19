@@ -6,7 +6,7 @@
   "scripts": {
     "start": "tsc-watch --onSuccess \"ts-node dist/app.js\"",
     "test": "jest --forceExit --runInBand",
-    "dev": "tsc-watch --onSuccess \"ts-node dist/app.js\""
+    "deploy": "pm2 start dist/app.js"
   },
   "repository": {
     "type": "git",
