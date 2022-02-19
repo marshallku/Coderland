@@ -34,30 +34,28 @@ self.addEventListener("fetch", (event) => {
 });
 
 self.addEventListener("push", (event) => {
+  const flags = {
+    comment: "댓글",
+    reply: "답글",
+  };
   try {
     const data = JSON.parse(event.data.text());
-    const obj = {
-      body: data.body,
-      icon: data.image,
+    const flag = flags[data.flag];
+    const title = `새 ${flag} 등록`;
+
+    self.registration.showNotification(title, {
+      body: `${data.title}에 새로운 ${flag}이 등록되었습니다.`,
       data: {
         to: data.to,
       },
-    };
-
-    if (data.thumbnail) {
-      obj.image = data.thumbnail;
-    } else {
-      obj.badge = "https://coderland.dev/logo/logo-128.png";
-    }
-
-    self.registration.showNotification(data.title, obj);
+      image: "https://coderland.dev/logo/logo-128.png",
+    });
   } catch (err) {
     const data = event.data.text();
 
     self.registration.showNotification(data, {
       body: data,
-      icon: "https://coderland.dev/logo/logo-128.png",
-      badge: "https://coderland.dev/logo/logo-128.png",
+      image: "https://coderland.dev/logo/logo-128.png",
       data: {
         to: "https://coderland.dev/",
       },
@@ -75,12 +73,16 @@ self.addEventListener("notificationclick", (event) => {
         type: "window",
       })
       .then(function (clientList) {
+        if (!("focus" in client)) {
+          return;
+        }
+
         const { to } = event.notification.data;
         const len = clientList.length;
 
         for (let i = 0; i < len; i++) {
           const client = clientList[i];
-          if (client.url === to && "focus" in client) return client.focus();
+          if (client.url === to) return client.focus();
         }
         // eslint-disable-next-line no-undef
         if (clients.openWindow) return clients.openWindow(to);
@@ -107,16 +109,18 @@ self.addEventListener(
             "BDAr5MqR9Ov4EXPQs6_4mz2VMfJuPF8OCqdBDpWWm1yoTjYxTPhC9qTVcdEFSmRE_g-Usy3Rp3qIbfaQvm_fbMc",
         })
         .then((subscription) => {
-          let subscriptionString = JSON.stringify(subscription);
-          if (user.name) {
-            subscriptionString = subscriptionString.replace(
-              "{",
-              `{"name":"${user.name}",`
-            );
+          const token = localStorage.getItem("token");
+
+          if (!token) {
+            return;
           }
-          return fetch("https://coderland.dev/api/user/push", {
-            method: "POST",
-            body: subscriptionString,
+
+          fetch("https://coderland.dev/api/user/push", {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(subscription.toJSON()),
           });
         })
     );
