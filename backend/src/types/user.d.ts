@@ -2,6 +2,7 @@ import { JwtPayload, Jwt } from "jsonwebtoken";
 import { Document, Model, PopulatedDoc } from "mongoose";
 
 import { IPostDocument } from "post";
+import { PushSubscription } from "web-push";
 
 interface IGoogleUser {
   displayName: string;
@@ -24,6 +25,7 @@ export interface IUser {
   hasNewNotification: boolean;
   authKey: string;
   hasNewNotifyings: boolean;
+  subscriptions: PushSubscription[];
   track?: string;
   github?: string;
   refreshToken?: string;
@@ -68,4 +70,13 @@ export interface IUserModel extends Model<IUserDocument> {
     userId: string,
     hasNewNotification: boolean
   ) => Promise<void>;
+
+  pushSubscription: (
+    userId: string,
+    subscription: PushSubscription
+  ) => Promise<void>;
+
+  pullSubscription: (userId: string, endpoint: string) => Promise<void>;
+
+  findAllSubscriptions: (userId: string) => Promise<PushSubscription[]>;
 }

@@ -2,6 +2,8 @@ import { INotificationModel } from "notification";
 import { IPostModel } from "post";
 import { ICommentModel } from "comment";
 import { IUserModel } from "user";
+import webpush from "web-push";
+import config from "../config";
 import { Comment, Notification, Post, User } from "../models";
 
 function makeLink(postId: string, commentId: string): string {
@@ -46,6 +48,19 @@ export default class NotificationService {
     const flag = "comment";
     await this.NotificationModel.addNotification(userId, to, title, flag);
     await this.UserModel.updateNotification(userId, true);
+
+    const subscriptions = await this.UserModel.findAllSubscriptions(userId);
+    const payload = {
+      title,
+      to: `${config.domain}/${to}`,
+      flag,
+    };
+    subscriptions.forEach((subscription) => {
+      webpush.sendNotification(subscription, JSON.stringify(payload), {
+        gcmAPIKey: config.privateVapidKey,
+        TTL: 60,
+      });
+    });
   }
 
   /**
@@ -71,6 +86,19 @@ export default class NotificationService {
     const flag = "reply";
     await this.NotificationModel.addNotification(userId, to, title, flag);
     await this.UserModel.updateNotification(userId, true);
+
+    const subscriptions = await this.UserModel.findAllSubscriptions(userId);
+    const payload = {
+      title,
+      to: `${config.domain}/${to}`,
+      flag,
+    };
+    subscriptions.forEach((subscription) => {
+      webpush.sendNotification(subscription, JSON.stringify(payload), {
+        gcmAPIKey: config.privateVapidKey,
+        TTL: 60,
+      });
+    });
   }
 
   /**

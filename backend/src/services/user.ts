@@ -1,6 +1,7 @@
 import { IUserDocument, IUserModel } from "user";
 import { IPostDocument } from "post";
 import axios, { AxiosResponse } from "axios";
+import { PushSubscription } from "web-push";
 import config from "../config";
 import { User } from "../models";
 import { parsePostBySubject } from "../utils";
@@ -60,5 +61,15 @@ export default class UserService {
       throw new Error("인증키를 확인해주세요!");
     }
     await this.UserModel.updateGrade(userId);
+  }
+
+  // 유저 푸시 알림 기기 추가
+  async pushSubscription(userId: string, subscription: PushSubscription) {
+    await this.UserModel.pushSubscription(userId, subscription);
+  }
+
+  // 유저 푸시 알림 기기 제거
+  async pullSubscription(userId: string, endpoint: string) {
+    await this.UserModel.pullSubscription(userId, endpoint);
   }
 }
