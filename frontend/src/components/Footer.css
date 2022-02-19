@@ -1,11 +1,11 @@
 .footer {
   padding: 30px 70px 60px;
+  background-color: var(--background-elevated);
 }
 
 .footer__info {
   text-align: center;
   font-size: 0.8rem;
-  color: var(--gray-3);
 }
 
 .footer__github-link {

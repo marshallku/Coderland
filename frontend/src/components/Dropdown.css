@@ -29,6 +29,10 @@
   border-bottom: 5px solid var(--background-base);
 }
 
+html.dark .dropdown-content::after {
+  display: none;
+}
+
 .dropdown-content--revealed {
   opacity: 1;
   pointer-events: all;
