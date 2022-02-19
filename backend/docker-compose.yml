@@ -10,7 +10,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./Dockerfile_development
     environment:
       - MONGO_HOST=docker-db
     depends_on:
