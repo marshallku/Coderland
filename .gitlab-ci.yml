@@ -63,8 +63,8 @@ deploy-frontend:
     - chmod 644 ~/.ssh/known_hosts
     # Checkout to master
     - git fetch origin
-    - git checkout $(git_main_branch)
-    - git pull origin $(git_main_branch)
+    - git checkout master
+    - git pull origin master
     # Install npm dependencies
     - cd frontend
     - npm ci

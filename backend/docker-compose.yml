@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  db:
+    image: mongo
+    container_name: docker-db
+    ports:
+      - "27017:27017"
+
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile_development
+    environment:
+      - MONGO_HOST=docker-db
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app
+    command:
+      - bash
+      - -c
+      - |
+        npm run start
