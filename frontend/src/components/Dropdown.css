@@ -39,9 +39,15 @@ html.dark .dropdown-content::after {
   transform: translate3d(0, 0, 0);
 }
 
-.dropdown-content__title {
-  padding: 10px 10px;
+.dropdown-content__title,
+.dropdown-content__push {
+  padding: 10px;
   border-bottom: 1px solid var(--gray-5);
+}
+
+.dropdown-content__push {
+  display: flex;
+  justify-content: space-between;
 }
 
 .dropdown-content__container {
