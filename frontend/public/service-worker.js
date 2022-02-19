@@ -115,8 +115,26 @@ self.addEventListener(
             return;
           }
 
+          const savedEndPoint = localStorage.getItem("endpoint");
+
+          if (savedEndPoint) {
+            fetch("https://coderland.dev/api/user/push", {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ endpoint: savedEndPoint }),
+            }).then((response) => {
+              if (!response.ok) {
+                return;
+              }
+
+              localStorage.removeItem("endpoint");
+            });
+          }
+
           fetch("https://coderland.dev/api/user/push", {
-            method: "DELETE",
+            method: "POST",
             headers: {
               Authorization: `Bearer ${token}`,
             },

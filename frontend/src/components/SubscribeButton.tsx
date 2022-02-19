@@ -14,7 +14,8 @@ export default function SubscribeButton() {
 
     if (subscription) {
       // Unsubscribe
-      const apiResponse = await useApi(removePushPoint(subscription));
+      const { endpoint } = subscription;
+      const apiResponse = await useApi(removePushPoint(endpoint));
 
       if (!apiResponse) {
         return;
