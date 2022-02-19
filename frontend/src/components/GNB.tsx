@@ -6,7 +6,7 @@ import Dropdown from "./Dropdown";
 import formatClassName from "../utils/formatClassName";
 import { useAuth } from "../hooks/auth";
 import useApi from "../hooks/api";
-import getNotification from "../api/notification";
+import { getNotification } from "../api";
 import "./GNB.css";
 
 export default function GlobalNavigationBar({

@@ -3,12 +3,11 @@ import { Navigate, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import { Input } from "../components/Input";
 import { useAuth } from "../hooks/auth";
-import { authorizeUser, getUserAuthKey } from "../api/user";
+import useApi from "../hooks/api";
+import { authorizeUser, getUserAuthKey, getMyInfo } from "../api";
 import copyToClipboard from "../utils/clipboard";
 import toast from "../utils/toast";
 import "./Authorize.css";
-import useApi from "../hooks/api";
-import { getMyInfo } from "../api";
 
 export default function Authorize() {
   const [authKey, setAuthKey] = useState("");

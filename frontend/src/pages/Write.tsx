@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import useApi from "../hooks/api";
+import { createPost, updatePost } from "../api";
 import Button from "../components/Button";
 import { Input } from "../components/Input";
 import MarkdownEditor from "../components/MarkdownEditor";
 import Select from "../components/Select";
 import formatClassName from "../utils/formatClassName";
 import toast from "../utils/toast";
-import { createPost, updatePost } from "../api";
-import useApi from "../hooks/api";
 import "./Write.css";
 
 const MAX_TAGS_LENGTH = 5;

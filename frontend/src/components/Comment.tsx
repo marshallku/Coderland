@@ -6,7 +6,6 @@ import formatClassName from "../utils/formatClassName";
 import Clap from "./Clap";
 import useApi from "../hooks/api";
 import { useModal } from "../hooks/modal";
-import "./Comment.css";
 import {
   createReply,
   deleteComment,
@@ -18,6 +17,7 @@ import {
   createGatherRequest,
   deleteGatherRequest,
 } from "../api";
+import "./Comment.css";
 
 export default function Comment({
   updatePost,

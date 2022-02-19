@@ -5,7 +5,7 @@ import React, {
   ClipboardEvent,
   FormEvent,
 } from "react";
-import uploadImage from "../api/image";
+import { uploadImage } from "../api";
 import useApi from "../hooks/api";
 import formatClassName from "../utils/formatClassName";
 import "./Input.css";

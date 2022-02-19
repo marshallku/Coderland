@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getMyInfo } from "../api/user";
+import { getMyInfo } from "../api";
 import parseCookie from "../utils/cookie";
 
 const authContext = createContext<IAuth | null>(null);
