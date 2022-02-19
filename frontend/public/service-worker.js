@@ -48,14 +48,14 @@ self.addEventListener("push", (event) => {
       data: {
         to: data.to,
       },
-      image: "https://coderland.dev/logo/logo-128.png",
+      badge: "https://coderland.dev/logo/logo-128.png",
     });
   } catch (err) {
     const data = event.data.text();
 
     self.registration.showNotification(data, {
       body: data,
-      image: "https://coderland.dev/logo/logo-128.png",
+      badge: "https://coderland.dev/logo/logo-128.png",
       data: {
         to: "https://coderland.dev/",
       },
