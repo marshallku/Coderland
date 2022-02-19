@@ -1,0 +1,9 @@
+.subscribe-button {
+  padding: 0 0.3rem;
+  background-color: var(--multipurpose);
+  border-radius: 50%;
+}
+
+.subscribe-button--subscribed {
+  color: var(--primary);
+}

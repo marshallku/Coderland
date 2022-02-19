@@ -7,6 +7,7 @@ import formatClassName from "../utils/formatClassName";
 import { useAuth } from "../hooks/auth";
 import useApi from "../hooks/api";
 import { getNotification } from "../api";
+import SubscribeButton from "./SubscribeButton";
 import "./GNB.css";
 
 export default function GlobalNavigationBar({
@@ -76,6 +77,10 @@ export default function GlobalNavigationBar({
                 새 소식{" "}
                 {notifications.filter((x) => x.isNewNotification).length}개
               </h2>
+              <div className="dropdown-content__push">
+                <span>푸시 알림</span>
+                <SubscribeButton />
+              </div>
               <ul className="dropdown-content__container notification-list">
                 {notifications.length === 0 ? (
                   <article className="notification--empty">
