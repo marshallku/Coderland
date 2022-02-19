@@ -13,7 +13,7 @@ export function addPushEndPoint(
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ subscription }),
+    body: JSON.stringify(subscription.toJSON()),
   });
 }
 
@@ -24,6 +24,6 @@ export function removePushPoint(
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ subscription }),
+    body: JSON.stringify(subscription.toJSON()),
   });
 }
