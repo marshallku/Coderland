@@ -18,7 +18,6 @@ staging-frontend:
     # Checkout to Frontend-Sprint
     - git fetch origin
     - git checkout Frontend-Sprint
-    - git reset --hard 19ca9d
     - git pull origin Frontend-Sprint
     # Install npm dependencies
     - cd frontend
