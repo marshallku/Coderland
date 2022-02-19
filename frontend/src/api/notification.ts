@@ -9,6 +9,7 @@ export function getNotification(): Promise<
 export function addPushEndPoint(
   subscription: PushSubscription
 ): Promise<ISuccessResponse | IFailResponse> {
+  localStorage.setItem("endpoint", subscription.endpoint);
   return instance.post("/users/push", {
     headers: {
       "Content-Type": "application/json",
@@ -18,12 +19,13 @@ export function addPushEndPoint(
 }
 
 export function removePushPoint(
-  subscription: PushSubscription
+  endpoint: string
 ): Promise<ISuccessResponse | IFailResponse> {
+  localStorage.removeItem("endpoint");
   return instance.delete("/users/push", {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(subscription.toJSON()),
+    body: JSON.stringify({ endpoint }),
   });
 }
