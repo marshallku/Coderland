@@ -1,0 +1,27 @@
+.authorize__blockquote {
+  margin-bottom: 36px;
+  line-height: 1.7;
+}
+
+.authorize__blockquote > p {
+  margin-bottom: 1rem;
+}
+
+.authorize a {
+  color: var(--primary);
+}
+
+.authorize code {
+  display: inline-block;
+  padding: 0 4px;
+  background-color: var(--background-elevated);
+  border-radius: 4px;
+}
+
+.authorize__form {
+  text-align: right;
+}
+
+.authorize__form > div {
+  margin-bottom: 18px;
+}

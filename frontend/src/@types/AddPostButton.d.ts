@@ -1,0 +1,3 @@
+interface IAddPostButtonProps {
+  to: string;
+}

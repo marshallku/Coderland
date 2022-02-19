@@ -1,0 +1,37 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}
+
+.pagination__page-number-box {
+  display: flex;
+  height: 1.5rem;
+  gap: 0.675rem;
+}
+
+.page-number,
+.pagination__arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 1.5rem;
+  width: 1.5rem;
+  cursor: pointer;
+}
+
+.page-number.selected {
+  background-color: var(--primary);
+  color: var(--gray-7);
+  border-radius: 4px;
+}
+
+.pagination__arrow--disabled {
+  opacity: 0;
+  pointer-events: none;
+}

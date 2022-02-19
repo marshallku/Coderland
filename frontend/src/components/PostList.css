@@ -1,0 +1,48 @@
+.post-list--card {
+  display: flex;
+  margin-top: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.post-list--list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media screen and (min-width: 680px) {
+  .post-list--card {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card-item {
+    height: 100%;
+  }
+}
+
+@media screen and (min-width: 860px) {
+  .post-list--card {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (min-width: 980px) {
+  .post-list--card {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media screen and (min-width: 1180px) {
+  .post-list--card {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (min-width: 1480px) {
+  .post-list--card {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

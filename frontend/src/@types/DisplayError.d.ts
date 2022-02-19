@@ -1,0 +1,3 @@
+interface IDisplayErrorProps {
+  message: string;
+}

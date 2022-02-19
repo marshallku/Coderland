@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>코더랜드</title>
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/logo/logo-152.png" />
+    <link rel="apple-touch-icon-precomposed" href="/favicon.ico" />
+    <meta name="msapplication-TileImage" content="/favicon.ico" />
+    <meta name="theme-color" content="#9986fe" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+    <meta name="apple-mobile-web-app-title" content="코더랜드" />
+    <link rel="preconnect" async href="https://fonts.googleapis.com" />
+    <link rel="preconnect" async href="https://fonts.gstatic.com" crossorigin />
+    <link
+      async
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link async href="//font.elice.io/EliceDigitalBaeum.css" rel="stylesheet" />
+    <script>
+      !(function () {
+        const saved = localStorage.getItem("theme");
+        const savedToken = localStorage.getItem("token");
+
+        window.token = savedToken;
+
+        if (saved) {
+          document.documentElement.className = saved;
+          return;
+        }
+
+        const prefers = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+
+        if (prefers) {
+          document.documentElement.className = "dark";
+          return;
+        }
+
+        document.documentElement.className = "light";
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
