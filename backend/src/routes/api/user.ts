@@ -111,7 +111,7 @@ export default (app: Router) => {
   );
 
   // 유저 푸시 알림 기기 제거
-  route.post(
+  route.delete(
     "/push",
     loginRequired,
     asyncHandler(async (req, res) => {
