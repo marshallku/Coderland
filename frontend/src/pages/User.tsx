@@ -1,21 +1,21 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
+import useApi from "../hooks/api";
 import { getBookmarkedPost, updateMyInfo } from "../api";
 import Button from "../components/Button";
 import DisplayError from "../components/DisplayError";
 import { Input } from "../components/Input";
 import Loader from "../components/Loader";
 import Navigation from "../components/Navigation";
-import useApi from "../hooks/api";
 import { useAuth } from "../hooks/auth";
 import formatClassName from "../utils/formatClassName";
 import { parseQuery } from "../utils/url";
 
+import Pagination from "../components/Pagination";
+import PostListItem, { PostListItemSkeleton } from "../components/PostListItem";
 import { SKELETONS_LENGTH } from "../components/PostList";
 
 import "./User.css";
-import PostListItem, { PostListItemSkeleton } from "../components/PostListItem";
-import Pagination from "../components/Pagination";
 
 export function UserInfo() {
   const auth = useAuth();

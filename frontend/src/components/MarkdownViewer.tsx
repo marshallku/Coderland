@@ -10,8 +10,8 @@ import {
 import { useTheme } from "../hooks/theme";
 import formatClassName from "../utils/formatClassName";
 import { isFromSameOrigin } from "../utils/url";
-import "./MarkdownViewer.css";
 import parseSpecialCharacters from "../utils/parseSpecialCharacters";
+import "./MarkdownViewer.css";
 
 const DEFAULT_RATIO = 56.25; // 16:9
 

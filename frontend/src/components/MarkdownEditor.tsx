@@ -3,8 +3,8 @@ import MarkdownViewer from "./MarkdownViewer";
 import { Textarea } from "./Input";
 import { debounce } from "../utils/optimizer";
 import formatClassName from "../utils/formatClassName";
-import "./MarkdownEditor.css";
 import parseSpecialCharacters from "../utils/parseSpecialCharacters";
+import "./MarkdownEditor.css";
 
 const BREAK_POINT = 860;
 

@@ -12,7 +12,7 @@ export default async function useApi<T extends ISuccessResponse>(
   }
 
   if (data.isOk === false) {
-    toast("API를 정상적으로 호출하지 못했습니다");
+    toast(data.msg);
     return;
   }
 

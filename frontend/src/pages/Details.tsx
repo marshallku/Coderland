@@ -16,9 +16,9 @@ import {
 } from "../api";
 import { useAuth } from "../hooks/auth";
 import { useModal } from "../hooks/modal";
-import "./Details.css";
 import { debounce } from "../utils/optimizer";
 import { scrollHorizontal } from "../animation/scroll";
+import "./Details.css";
 
 function MemberList({ data }: IMemberListProps) {
   const containerRef = useRef<HTMLUListElement>(null);
@@ -128,10 +128,20 @@ export default function Details<
   async function handleBookmarkClick() {
     if (auth?.user && id) {
       if (bookmarked) {
-        removeBookmark({ id });
+        const apiResponse = await useApi(removeBookmark({ id }));
+
+        if (!apiResponse) {
+          return;
+        }
+
         setNumBookmark(numBookmark - 1);
       } else {
-        addBookmark({ id });
+        const apiResponse = await useApi(addBookmark({ id }));
+
+        if (!apiResponse) {
+          return;
+        }
+
         setNumBookmark(numBookmark + 1);
       }
 
@@ -145,10 +155,20 @@ export default function Details<
   async function handleLikesClick() {
     if (auth?.user && id) {
       if (clapped) {
-        removeClap({ id });
+        const apiResponse = await useApi(removeClap({ id }));
+
+        if (!apiResponse) {
+          return;
+        }
+
         setNumClap(numClap - 1);
       } else {
-        addClap({ id });
+        const apiResponse = await useApi(addClap({ id }));
+
+        if (!apiResponse) {
+          return;
+        }
+
         setNumClap(numClap + 1);
       }
 

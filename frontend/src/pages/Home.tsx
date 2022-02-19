@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import getCarouselData from "../api/home";
+import useApi from "../hooks/api";
+import { getCarouselData } from "../api";
 import Carousel from "../components/Carousel";
 import PostList from "../components/PostList";
-import useApi from "../hooks/api";
 import formatClassName from "../utils/formatClassName";
 import "./Home.css";
 
