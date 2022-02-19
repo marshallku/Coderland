@@ -1,6 +1,8 @@
 stages:
   - staging-frontend
   - staging-backend
+  - deploy-frontend
+  - deploy-backend
 
 staging-frontend:
   image: node:latest
@@ -36,7 +38,7 @@ staging-backend:
     - Backend-Sprint
   before_script:
     # Setup ssh
-    - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )'
+    - "command -v ssh-agent >/dev/null || ( apk add --update openssh )"
     - eval $(ssh-agent -s)
     - echo "$SSH_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
@@ -45,3 +47,46 @@ staging-backend:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - ssh -p "$STAGING_SERVER_PORT" "$STAGING_SERVER_USER"@"$STAGING_SERVER_IP" "cd ~/elice-project; bash start.sh"
+
+deploy-frontend:
+  image: node:latest
+  stage: deploy-frontend
+  only:
+    - master
+  before_script:
+    # Setup ssh
+    - eval $(ssh-agent -s)
+    - echo "$ED_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $MAIN_SERVER_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    # Checkout to master
+    - git fetch origin
+    - git checkout $(git_main_branch)
+    - git pull origin $(git_main_branch)
+    # Install npm dependencies
+    - cd frontend
+    - npm ci
+  script:
+    # Build
+    - npm run build
+    # Send dist folder via scp
+    - scp -r dist "$MAIN_SERVER_USER"@"$MAIN_SERVER_IP":/var/www
+    # Run bash script
+    - ssh "$MAIN_SERVER_USER"@"$MAIN_SERVER_IP" "cd /var/www; bash start.sh"
+
+deploy-backend:
+  stage: deploy-backend
+  only:
+    - master
+  before_script:
+    # Setup ssh
+    - eval $(ssh-agent -s)
+    - echo "$ED_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $MAIN_SERVER_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    - ssh "$MAIN_SERVER_USER"@"$MAIN_SERVER_IP" "cd ~/elice-project; bash start.sh"
