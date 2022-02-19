@@ -1,3 +1,4 @@
+import logo from "../assets/logo-256.png";
 import "./Login.css";
 
 export default function Login() {
@@ -6,8 +7,24 @@ export default function Login() {
   }
 
   return (
-    <>
-      <h1 className="main-title">로그인</h1>
+    <div className="login-container">
+      <img
+        src={logo}
+        width={120}
+        height={120}
+        alt="로고"
+        className="login__logo"
+      />
+      <div className="login-text-wrap">
+        <h1 className="login-text__title">
+          코더랜드에 오신 것을 <br />
+          환영합니다!
+        </h1>
+        <p className="login-text__description">
+          모든 기능을 사용하시려면 로그인 후 <br />
+          정보 수정 페이지에서 <strong>레이서 인증</strong>을 해주세요.
+        </p>
+      </div>
       <button type="submit" className="login-button" onClick={handleLogin}>
         <svg
           width="46px"
@@ -68,7 +85,6 @@ export default function Login() {
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
-            <rect id="path-2" x="0" y="0" width="40" height="40" rx="2" />
           </defs>
           <g
             id="Google-Button"
@@ -147,6 +163,6 @@ export default function Login() {
         </svg>
         <span className="login-button__text">Sign in with Google</span>
       </button>
-    </>
+    </div>
   );
 }
