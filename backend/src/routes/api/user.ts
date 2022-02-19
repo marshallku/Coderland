@@ -97,5 +97,31 @@ export default (app: Router) => {
     })
   );
 
+  // 유저 푸시 알림 기기 추가
+  route.post(
+    "/push",
+    loginRequired,
+    asyncHandler(async (req, res) => {
+      const { user } = req;
+      const { endpoint, keys } = req.body;
+      const userService = new UserService();
+      await userService.pushSubscription(user.id, { endpoint, keys });
+      res.status(200).json({ isOk: true });
+    })
+  );
+
+  // 유저 푸시 알림 기기 제거
+  route.post(
+    "/push",
+    loginRequired,
+    asyncHandler(async (req, res) => {
+      const { user } = req;
+      const { endpoint } = req.body;
+      const userService = new UserService();
+      await userService.pullSubscription(user.id, endpoint);
+      res.status(200).json({ isOk: true });
+    })
+  );
+
   app.use("/users", route);
 };

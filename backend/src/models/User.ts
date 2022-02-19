@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { v4 } from "uuid";
 import { IGoogleUser, IUserDocument, IUserModel } from "user";
+import { PushSubscription } from "web-push";
 
 export const UserSchema = new mongoose.Schema<IUserDocument>(
   {
@@ -32,6 +33,10 @@ export const UserSchema = new mongoose.Schema<IUserDocument>(
     authKey: {
       type: String,
       default: () => v4(),
+    },
+    subscriptions: {
+      type: [],
+      default: [],
     },
     track: {
       type: String,
@@ -219,6 +224,39 @@ UserSchema.statics.updateNotification = async (
   await User.findByIdAndUpdate(userId, {
     hasNewNotification,
   });
+};
+
+/**
+ * 유저 푸시 알림 전송 정보 추가
+ * @param userId 유저 정보
+ * @param subscription 푸시 알림 엔드포인트
+ */
+UserSchema.statics.pushSubscription = async (
+  userId: string,
+  subscription: PushSubscription
+) => {
+  await User.findByIdAndUpdate(userId, {
+    $push: { subscriptions: subscription },
+  });
+};
+
+/**
+ * 유저 푸시 알림 전송 정보 제거
+ * @param userId 유저 정보
+ * @param subscription 푸시 알림 엔드포인트
+ */
+UserSchema.statics.pullSubscription = async (
+  userId: string,
+  endpoint: string
+) => {
+  await User.findByIdAndUpdate(userId, {
+    $pull: { subscriptions: { endpoint } },
+  });
+};
+
+UserSchema.statics.findAllSubscriptions = async (userId: string) => {
+  const user = await User.findById(userId).select("subscriptions");
+  return user.subscriptions;
 };
 
 const User = mongoose.model<IUserDocument, IUserModel>("User", UserSchema);

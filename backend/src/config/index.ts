@@ -21,4 +21,7 @@ export default {
   mongoPwd: process.env.MONGO_PASSWORD,
   tlsCertificateKeyFile: process.env.TLS_CERTIFICATE_KEY_FILE,
   tlsCAFile: process.env.TLS_CA_FILE,
+
+  publicVapidKey: process.env.PUBLIC_VAPID_KEY,
+  privateVapidKey: process.env.PRIVATE_VAPID_KEY,
 };
