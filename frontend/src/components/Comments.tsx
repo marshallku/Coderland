@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createComment, getCommentList } from "../api";
 import { scrollTo } from "../animation/scroll";
@@ -129,9 +129,8 @@ export default function Comments({
       {commentList
         .slice(isExpanded ? 0 : -COMMENT_LIMIT)
         .map((comment, index) => (
-          <>
+          <Fragment key={comment._id}>
             <Comment
-              key={comment._id}
               updatePost={updatePost}
               members={members}
               isAuthor={isAuthor}
@@ -169,7 +168,7 @@ export default function Comments({
                   setFocusedId={setFocusedId}
                 />
               ))}
-          </>
+          </Fragment>
         ))}
     </div>
   );
