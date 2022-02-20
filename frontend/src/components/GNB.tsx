@@ -8,6 +8,7 @@ import { useAuth } from "../hooks/auth";
 import useApi from "../hooks/api";
 import { getNotification } from "../api";
 import SubscribeButton from "./SubscribeButton";
+import { deleteCookie } from "../utils/cookie";
 import "./GNB.css";
 
 export default function GlobalNavigationBar({
@@ -144,7 +145,7 @@ export default function GlobalNavigationBar({
                     type="button"
                     onClick={() => {
                       localStorage.removeItem("token");
-                      document.cookie = "";
+                      deleteCookie(["access-token", "refresh-token"]);
                       window.location.reload();
                     }}
                     className="dropdown-nav__item"
