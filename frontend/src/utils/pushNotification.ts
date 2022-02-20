@@ -19,8 +19,12 @@ export default function initializeSubscription(): void {
 
       const subscription = await swRegistration.pushManager.getSubscription();
 
-      window.isSubscribed = !!subscription;
-      window.setSubscribed?.(!!subscription);
+      if (!subscription) {
+        return;
+      }
+
+      window.isSubscribed = true;
+      window.setSubscribed?.(true);
     },
     { once: true, passive: true }
   );
