@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { addPushEndPoint, removePushPoint } from "../api";
 import useApi from "../hooks/api";
 import formatClassName from "../utils/formatClassName";
@@ -51,6 +51,10 @@ export default function SubscribeButton() {
       toast("구독에 실패했습니다. 알림 권한을 확인해주세요.");
     }
   };
+
+  useEffect(() => {
+    window.setSubscribed = setSubscribed;
+  }, []);
 
   return (
     <button
