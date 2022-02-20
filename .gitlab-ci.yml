@@ -63,8 +63,8 @@ deploy-frontend:
     - chmod 644 ~/.ssh/known_hosts
     # Checkout to master
     - git fetch origin
-    - git checkout $(git_main_branch)
-    - git pull origin $(git_main_branch)
+    - git checkout master
+    - git pull origin master
     # Install npm dependencies
     - cd frontend
     - npm ci
@@ -82,6 +82,7 @@ deploy-backend:
     - master
   before_script:
     # Setup ssh
+    - "command -v ssh-agent >/dev/null || ( apk add --update openssh )"
     - eval $(ssh-agent -s)
     - echo "$ED_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
