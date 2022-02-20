@@ -55,15 +55,15 @@ export default class NotificationService {
       to: `${config.domain}${to}`,
       flag,
     };
-    subscriptions.forEach(async (subscription) => {
-      try {
-        await webpush.sendNotification(subscription, JSON.stringify(payload), {
+    subscriptions.forEach((subscription) => {
+      webpush
+        .sendNotification(subscription, JSON.stringify(payload), {
           gcmAPIKey: config.privateVapidKey,
           TTL: 60,
+        })
+        .catch(() => {
+          this.UserModel.pullSubscription(userId, subscription.endpoint);
         });
-      } catch (error) {
-        throw new Error(`${subscription.endpoint}로는 알림을 보낼 수 없습니다`);
-      }
     });
   }
 
@@ -97,15 +97,15 @@ export default class NotificationService {
       to: `${config.domain}${to}`,
       flag,
     };
-    subscriptions.forEach(async (subscription) => {
-      try {
-        await webpush.sendNotification(subscription, JSON.stringify(payload), {
+    subscriptions.forEach((subscription) => {
+      webpush
+        .sendNotification(subscription, JSON.stringify(payload), {
           gcmAPIKey: config.privateVapidKey,
           TTL: 60,
+        })
+        .catch(() => {
+          this.UserModel.pullSubscription(userId, subscription.endpoint);
         });
-      } catch (error) {
-        throw new Error(`${subscription.endpoint}로는 알림을 보낼 수 없습니다`);
-      }
     });
   }
 
