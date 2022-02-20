@@ -52,14 +52,18 @@ export default class NotificationService {
     const subscriptions = await this.UserModel.findAllSubscriptions(userId);
     const payload = {
       title,
-      to: `${config.domain}/${to}`,
+      to: `${config.domain}${to}`,
       flag,
     };
-    subscriptions.forEach((subscription) => {
-      webpush.sendNotification(subscription, JSON.stringify(payload), {
-        gcmAPIKey: config.privateVapidKey,
-        TTL: 60,
-      });
+    subscriptions.forEach(async (subscription) => {
+      try {
+        await webpush.sendNotification(subscription, JSON.stringify(payload), {
+          gcmAPIKey: config.privateVapidKey,
+          TTL: 60,
+        });
+      } catch (error) {
+        throw new Error(`${subscription.endpoint}로는 알림을 보낼 수 없습니다`);
+      }
     });
   }
 
@@ -90,14 +94,18 @@ export default class NotificationService {
     const subscriptions = await this.UserModel.findAllSubscriptions(userId);
     const payload = {
       title,
-      to: `${config.domain}/${to}`,
+      to: `${config.domain}${to}`,
       flag,
     };
-    subscriptions.forEach((subscription) => {
-      webpush.sendNotification(subscription, JSON.stringify(payload), {
-        gcmAPIKey: config.privateVapidKey,
-        TTL: 60,
-      });
+    subscriptions.forEach(async (subscription) => {
+      try {
+        await webpush.sendNotification(subscription, JSON.stringify(payload), {
+          gcmAPIKey: config.privateVapidKey,
+          TTL: 60,
+        });
+      } catch (error) {
+        throw new Error(`${subscription.endpoint}로는 알림을 보낼 수 없습니다`);
+      }
     });
   }
 
