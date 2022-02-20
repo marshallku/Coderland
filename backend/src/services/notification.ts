@@ -52,14 +52,18 @@ export default class NotificationService {
     const subscriptions = await this.UserModel.findAllSubscriptions(userId);
     const payload = {
       title,
-      to: `${config.domain}/${to}`,
+      to: `${config.domain}${to}`,
       flag,
     };
     subscriptions.forEach((subscription) => {
-      webpush.sendNotification(subscription, JSON.stringify(payload), {
-        gcmAPIKey: config.privateVapidKey,
-        TTL: 60,
-      });
+      webpush
+        .sendNotification(subscription, JSON.stringify(payload), {
+          gcmAPIKey: config.privateVapidKey,
+          TTL: 60,
+        })
+        .catch(() => {
+          this.UserModel.pullSubscription(userId, subscription.endpoint);
+        });
     });
   }
 
@@ -90,14 +94,18 @@ export default class NotificationService {
     const subscriptions = await this.UserModel.findAllSubscriptions(userId);
     const payload = {
       title,
-      to: `${config.domain}/${to}`,
+      to: `${config.domain}${to}`,
       flag,
     };
     subscriptions.forEach((subscription) => {
-      webpush.sendNotification(subscription, JSON.stringify(payload), {
-        gcmAPIKey: config.privateVapidKey,
-        TTL: 60,
-      });
+      webpush
+        .sendNotification(subscription, JSON.stringify(payload), {
+          gcmAPIKey: config.privateVapidKey,
+          TTL: 60,
+        })
+        .catch(() => {
+          this.UserModel.pullSubscription(userId, subscription.endpoint);
+        });
     });
   }
 
