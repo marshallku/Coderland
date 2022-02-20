@@ -1,0 +1,56 @@
+.user > .navigation {
+  margin-bottom: 20px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-info__image {
+  position: relative;
+  width: 150px;
+  margin-top: 1rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.user-info__image > img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.user-info__content {
+  width: clamp(0px, 100%, 680px);
+  margin-top: 1rem;
+  padding: 0.5rem;
+}
+
+.user-info__blockquote {
+  line-height: 2;
+}
+
+.user-info__blockquote > a {
+  color: var(--primary);
+}
+
+.user-info--editing .input__input:read-only + .input__label {
+  color: var(--warning);
+}
+
+.user-info__content--readonly {
+  cursor: no-drop;
+}
+
+.user-info .input__input:read-only {
+  pointer-events: none;
+}
+
+.user-info__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

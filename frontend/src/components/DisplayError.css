@@ -1,0 +1,18 @@
+.error {
+  width: 100%;
+  padding: 60px 10px;
+  line-height: 2;
+  text-align: center;
+  grid-row: span 4;
+  grid-column: span 4;
+}
+
+.error__emoji {
+  display: block;
+  margin-bottom: 16px;
+  font-size: calc(3vmax + 32px);
+}
+
+.error__title {
+  font-size: 1.3rem;
+}

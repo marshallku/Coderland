@@ -1,0 +1,62 @@
+.select {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  color: var(--text);
+  background-color: var(--multipurpose);
+  line-height: 2;
+  border: var(--border-thickness) solid var(--gray-5);
+  border-radius: var(--border-radius);
+}
+
+.select--readonly {
+  color: red;
+}
+
+.select button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  cursor: pointer;
+}
+
+.select i {
+  display: inline-block;
+  margin-left: auto;
+  font-size: 1.5rem;
+  transform-origin: center;
+  transition: transform 0.25s ease-in-out;
+}
+
+.select--open i {
+  transform: rotate(180deg);
+}
+
+.select__list {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  width: 100%;
+  padding: 10px;
+  background-color: var(--multipurpose);
+  border: var(--border-thickness) solid var(--gray-5);
+  border-radius: var(--border-radius);
+  opacity: 0;
+  transform: translate3d(0, -10px, 0);
+  transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.select--open .select__list {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  pointer-events: all;
+}
+
+.select__list > li:not(:last-child) > button {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: var(--border-thickness) solid var(--gray-5);
+}

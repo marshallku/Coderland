@@ -1,0 +1,20 @@
+.add-post {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  color: var(--highlighted);
+  background-color: var(--primary);
+  border-radius: 50%;
+  box-shadow: var(--box-shadow-2);
+  transition: transform 0.25s ease-in-out;
+  z-index: 95;
+}
+
+.to-top--revealed + .container .add-post {
+  transform: translate3d(0, -60px, 0);
+}

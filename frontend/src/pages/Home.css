@@ -1,0 +1,57 @@
+.home__grid {
+  display: flex;
+  margin-top: 60px;
+  flex-wrap: wrap;
+}
+
+.home-posts {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.home-posts__header {
+  font-family: "Elice Digital Baeum", sans-serif;
+  display: flex;
+  margin-bottom: 1.3rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.home-posts__title {
+  font-size: 1.75rem;
+  line-height: 1.5;
+}
+
+.home-posts__link {
+  display: inline-block;
+  margin-left: auto;
+  padding: 6px;
+  line-height: 1.5;
+}
+
+.home-posts__link > i {
+  display: inline-block;
+  margin-left: 5px;
+  transition: transform 0.1s ease-in-out;
+}
+
+@media (any-hover: hover) {
+  .home-posts__link:hover > i {
+    transform: translateX(3px);
+  }
+}
+
+.home-posts__footer {
+  text-align: right;
+  line-height: 2;
+}
+
+@media screen and (min-width: 1480px) {
+  .home__grid {
+    gap: 20px;
+  }
+
+  .home-posts:not(.home-posts--large) {
+    width: calc((100% - 20px) / 2);
+  }
+}

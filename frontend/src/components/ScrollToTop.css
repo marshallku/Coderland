@@ -1,0 +1,31 @@
+.to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  background-color: var(--background-elevated);
+  border-radius: 50%;
+  box-shadow: var(--box-shadow-2);
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease-in-out;
+  z-index: 90;
+}
+
+.to-top--revealed {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.to-top__circle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  fill: transparent;
+  stroke: var(--primary);
+  stroke-width: 5px;
+  transform: rotate(-90deg);
+}
