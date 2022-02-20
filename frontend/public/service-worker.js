@@ -73,16 +73,12 @@ self.addEventListener("notificationclick", (event) => {
         type: "window",
       })
       .then(function (clientList) {
-        if (!("focus" in client)) {
-          return;
-        }
-
         const { to } = event.notification.data;
         const len = clientList.length;
 
         for (let i = 0; i < len; i++) {
           const client = clientList[i];
-          if (client.url === to) return client.focus();
+          if (client.url === to && "focus" in client) return client.focus();
         }
         // eslint-disable-next-line no-undef
         if (clients.openWindow) return clients.openWindow(to);
