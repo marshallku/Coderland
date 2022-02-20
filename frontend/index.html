@@ -23,10 +23,23 @@
     <link async href="//font.elice.io/EliceDigitalBaeum.css" rel="stylesheet" />
     <script>
       !(function () {
+        function parseCookie(string = document.cookie) {
+          return Object.fromEntries(
+            string
+              .split(";")
+              .map((x) => x.split("="))
+              .map(([key, value]) => [
+                decodeURIComponent(key.trim()),
+                decodeURIComponent(value.trim()),
+              ])
+          );
+        }
+
         const saved = localStorage.getItem("theme");
         const savedToken = localStorage.getItem("token");
+        const cookieToken = parseCookie()["access-token"];
 
-        window.token = savedToken;
+        window.token = savedToken || cookieToken;
 
         if (saved) {
           document.documentElement.className = saved;
