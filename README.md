@@ -6,18 +6,20 @@
 
 - 기술 스택
 
-| 구성     | 기술 스택                       |
-| -------- | ------------------------------- |
-| Frontend | React, Typescript               |
-| Backend  | Node JS, Express JS, Typescript |
-| Database | Mongo DB, mongoose              |
-| Server   | nginx, VM azure                 |
-| Test     | Jest                            |
+| 구성            | 기술 스택                            |
+| --------------- | ------------------------------------ |
+| Frontend        | Typescript, React, CSS, Vite         |
+| Backend         | Typescript, PHP, Node JS, Express JS |
+| Database        | Mongo DB, mongoose                   |
+| Server          | Nginx                                |
+| Test            | Jest                                 |
+| Version Control | Git, Gitlab, Github                  |
+| CI/CD           | Gitlab CI, Github Actions            |
 
 - 웹서비스에 대한 자세한 개요
 
   엘리스 트랙 수료생의 커뮤니티입니다.\
-  트랙 이후 수료생들이 함께 성장할 수 있는, 함께 의지할 수 있는 공간을 만들어 갑니다.
+  트랙 이후 수료생들이 서로 의지하고 함께 성장할 수 있는 공간을 만들어 갑니다.
 
 ## 2. 기획 의도
 
@@ -31,42 +33,62 @@
   - 트랙이 끝난 이후에 소통할 공간의 부재
   - 레이서간 정보를 공유할 수 있는 공간의 부재
 
-[기획서](https://kdt-gitlab.elice.io/sw_track/class_01/project_2/team3/coderland/-/wikis/%EA%B8%B0%ED%9A%8D%EC%84%9C)에서 자세히 확인
+[기획서](https://github.com/marshallku/Coderland/wiki/%EA%B8%B0%ED%9A%8D%EC%84%9C)에서 자세히 확인
 
 ## 3. 서비스 주요 기능 설명
 
 ### 메인 기능
 
-1. 엘리스 후기 작성 및 회고
+**1. 엘리스 후기 및 회고 작성**
 
-   ```txt
-   익명으로 엘리스에 대한 후기와, 프로젝트 등에 대한 회고를 작성할 수 있습니다.
-   ```
+```txt
+익명으로 엘리스 트랙에 대한 후기와, 프로젝트 등에 대한 회고를 작성할 수 있습니다.
+```
 
-2. 팀원 모집
+**2. 팀원 모집**
 
-   ```txt
-   트랙이 끝난 이후에도 서로 연을 이어가며, 함께 성장하기 위한 스터디, 모각코, 프로젝트 등의 팀원을 모집할 수 있습니다.
-   모집 글을 올리고, 참여 의사를 표할 수 있습니다.
-   ```
+```txt
+트랙이 끝난 이후에도 서로 연을 이어가며, 함께 성장하기 위한 스터디, 모각코, 프로젝트 등의 팀원을 모집할 수 있습니다.
+모집 글에 댓글로 참여 의사를 표하고 신청을 수락할 수 있습니다.
+```
 
-3. 개발 정보 공유
+**3. 개발 및 취업 정보 공유**
 
-   ```txt
-   좋은 글, 새로운 지식 등을 공유합니다.
-   ```
+```txt
+개발이나 취업 관련 유용한 정보와 노하우 등을 공유할 수 있습니다.
+```
 
 ### 서브 기능
 
-1. 알림 서비스
+**1. 알림 서비스**
 
-   ```txt
-   새로운 댓글이 작성되는 등의 상황에 알림을 받을 수 있습니다.
-   ```
+```txt
+본인이 작성한 글에 새로운 댓글이 작성되는 등의 상황에 푸시 알림을 받을 수 있습니다.
+```
+
+**2. 글 작성 편의 기능**
+
+```txt
+마크다운 에디터로 글을 작성하며 실시간 미리보기를 확인할 수 있습니다.
+팀원 모집 글에 기술 스택 입력 시 자동완성이 가능합니다.
+drag & drop으로 편리하게 이미지를 업로드할 수 있습니다.
+```
+
+**3. 북마크**
+
+```txt
+좋은 글을 북마크 해두었다가 마이페이지에서 북마크한 글을 모아볼 수 있습니다.
+```
+
+**4. 레이서 인증**
+
+```txt
+엘리스 Gitlab 계정 인증을 통해 엘리스 교육생이라는 것을 인증할 수 있습니다.
+```
 
 ## 4. 구성도
 
-- [Figma](https://www.figma.com/file/EabUoDHwJea2D7giJmSRng)
+- 와이어프레임: [Figma](https://www.figma.com/file/EabUoDHwJea2D7giJmSRng)
 
 ## 5. 팀원 역할 분담
 
@@ -94,9 +116,9 @@
 
 ## 6. 버전
 
-- 프로젝트의 버전 기입
+- 2020.2.20 - 1.0.0
 
 ## 7. 문서
 
-- [위키](https://kdt-gitlab.elice.io/sw_track/class_01/project_2/team3/coderland/-/wikis/home)
+- [위키](https://github.com/marshallku/Coderland/wiki)
 - [노션](https://www.notion.so/elice/3-67f0e543a03044aaaefa04c1af6b4db7)
