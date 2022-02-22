@@ -1,0 +1,29 @@
+name: Bug Report
+description: 버그 리포트
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 발생한 버그
+      description: 어떤 버그가 발생했는지 상세히 기재해주세요.
+    validations:
+      required: true
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: 어떤 브라우저에서 문제가 발생하나요?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
+        - Something else
+  - type: textarea
+    id: logs
+    attributes:
+      label: 로그
+      description: 관련된 로그를 첨부해주세요. 자동으로 코드로 변경되니 백틱을 사용하지 않아도 됩니다.
+      render: shell
