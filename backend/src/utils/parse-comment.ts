@@ -1,7 +1,11 @@
 import { ICommentDocument } from "comment";
 import { parseReply, createAuthorName } from "./index";
 
-export default (comment: ICommentDocument, userId: string, postId: string) => {
+export default function parseComment(
+  comment: ICommentDocument,
+  userId: string,
+  postId: string
+) {
   const {
     _id,
     author,
@@ -46,4 +50,4 @@ export default (comment: ICommentDocument, userId: string, postId: string) => {
     ),
     author: createAuthorName(anonymous, author, postId),
   };
-};
+}

@@ -11,7 +11,7 @@ function parsedMembers(members: LeanDocument<IUserDocument>[]) {
   }));
 }
 
-export default function parsePostBySubject(
+export default function parsePost(
   subject: string,
   post: LeanDocument<IPostDocument>,
   userId?: string
