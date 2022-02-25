@@ -4,7 +4,8 @@ interface IAsyncFunction {
   (req: Request, res: Response): Promise<void>;
 }
 
-export default (asyncFunction: IAsyncFunction) =>
+const asyncHandler =
+  (asyncFunction: IAsyncFunction) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       await asyncFunction(req, res);
@@ -12,3 +13,5 @@ export default (asyncFunction: IAsyncFunction) =>
       next(err);
     }
   };
+
+export default asyncHandler;
