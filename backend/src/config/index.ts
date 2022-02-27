@@ -14,6 +14,8 @@ export default {
   perPage: 8,
   COOKIE_MAX_AGE: 1000 * 60 * 60 * 24 * 7,
 
+  NOTIFICATION_MAX_AGE: 1000 * 60 * 60 * 24 * 30,
+
   mongoHost: process.env.MONGO_HOST,
   mongoPort: process.env.MONGO_PORT,
   mongoDBName: process.env.MONGO_DBNAME,
