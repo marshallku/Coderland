@@ -15,7 +15,7 @@ interface IGoogleUser {
   }[];
 }
 
-export interface IUser {
+interface IUser {
   googleId: string;
   nickname: string;
   profile: string;
@@ -31,9 +31,9 @@ export interface IUser {
   refreshToken?: string;
 }
 
-export interface IUserDocument extends IUser, Document {}
+interface IUserDocument extends IUser, Document {}
 
-export interface IUserModel extends Model<IUserDocument> {
+interface IUserModel extends Model<IUserDocument> {
   findOrCreate: (
     googleId: string | Jwt | JwtPayload,
     user?: IGoogleUser

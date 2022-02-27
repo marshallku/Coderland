@@ -1,4 +1,4 @@
-export interface IPagination {
+interface IPagination {
   currentPage: number;
   lastPage: number;
 }

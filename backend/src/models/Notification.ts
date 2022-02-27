@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import { INotificationDocument, INotificationModel } from "notification";
+import config from "../config";
 
-const month = 1000 * 60 * 60 * 24 * 30;
+const month = config.NOTIFICATION_MAX_AGE;
 
 export const NotificationSchema = new mongoose.Schema<INotificationDocument>(
   {
