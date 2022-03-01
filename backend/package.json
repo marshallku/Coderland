@@ -4,9 +4,9 @@
   "description": "-   최종 서비스 명을 위 괄호 부분에 작성하세요. -   최종 서비스의 한 줄 소개를 작성하세요.",
   "main": "app.js",
   "scripts": {
-    "start": "tsc-watch --onSuccess \"ts-node dist/app.js\"",
-    "test": "jest --forceExit --runInBand",
-    "deploy": "pm2 start -f dist/app.js"
+    "start": "NODE_ENV=production node dist/app.js",
+    "start:dev": "tsc-watch --onSuccess \"ts-node dist/app.js\"",
+    "test": "jest --forceExit --runInBand"
   },
   "repository": {
     "type": "git",
