@@ -1,8 +1,8 @@
-import { INotificationModel } from "notification";
+import { INotificationModel, NotificationPayload } from "notification";
 import { IPostModel } from "post";
 import { ICommentModel } from "comment";
 import { IUserModel } from "user";
-import webpush from "web-push";
+import webpush, { PushSubscription } from "web-push";
 import config from "../config";
 import { Comment, Notification, Post, User } from "../models";
 
@@ -24,6 +24,29 @@ export default class NotificationService {
     this.PostModel = Post;
     this.CommentModel = Comment;
     this.UserModel = User;
+  }
+
+  /**
+   * 알림 푸시, 기기가 없거나 서비스워커가 동작하지 않을 경우 유저 기기를 제거함.
+   * @param subscriptions Push 기기 정보
+   * @param payload 푸시 알림 내용
+   * @param userId 푸시 알림 받을 유저 ID
+   */
+  private async pushNotificationToUser(
+    subscriptions: PushSubscription[],
+    payload: NotificationPayload,
+    userId: string
+  ) {
+    subscriptions.forEach((subscription) => {
+      webpush
+        .sendNotification(subscription, JSON.stringify(payload), {
+          gcmAPIKey: config.privateVapidKey,
+          TTL: 60,
+        })
+        .catch(() => {
+          this.UserModel.pullSubscription(userId, subscription.endpoint);
+        });
+    });
   }
 
   /**
@@ -55,16 +78,7 @@ export default class NotificationService {
       to: `${config.domain}${to}`,
       flag,
     };
-    subscriptions.forEach((subscription) => {
-      webpush
-        .sendNotification(subscription, JSON.stringify(payload), {
-          gcmAPIKey: config.privateVapidKey,
-          TTL: 60,
-        })
-        .catch(() => {
-          this.UserModel.pullSubscription(userId, subscription.endpoint);
-        });
-    });
+    this.pushNotificationToUser(subscriptions, payload, userId);
   }
 
   /**
@@ -97,16 +111,7 @@ export default class NotificationService {
       to: `${config.domain}${to}`,
       flag,
     };
-    subscriptions.forEach((subscription) => {
-      webpush
-        .sendNotification(subscription, JSON.stringify(payload), {
-          gcmAPIKey: config.privateVapidKey,
-          TTL: 60,
-        })
-        .catch(() => {
-          this.UserModel.pullSubscription(userId, subscription.endpoint);
-        });
-    });
+    this.pushNotificationToUser(subscriptions, payload, userId);
   }
 
   /**
