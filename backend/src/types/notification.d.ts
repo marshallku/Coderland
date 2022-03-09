@@ -1,5 +1,11 @@
 import { Document, Model } from "mongoose";
 
+interface NotificationPayload {
+  title: string;
+  to: string;
+  flag: string;
+}
+
 interface INotification {
   userId: string;
   to: string;
