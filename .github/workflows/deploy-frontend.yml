@@ -1,0 +1,43 @@
+name: Deploy frontend to main server
+
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  deploy-frontend:
+    name: Deploy frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          check-latest: true
+          registry-url: https://registry.npmjs.org/
+      - run: cd frontend
+      - name: Install dependencies
+        run: npm ci
+      - name: Test and build
+        run: npm run build
+      - name: Tar dist directory
+        run: tar -cvf dist.tar dist
+      - name: Deploy via SCP
+          uses: appleboy/scp-action@master
+          with:
+            host: ${{ secrets.MAIN_SERVER_IP }}
+            username: ${{ secrets.MAIN_SERVER_USER }}
+            key: ${{ secrets.ED_KEY }}
+            source: "dist.tar"
+            target: "/var/www"
+      - name: Run shell script
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.MAIN_SERVER_IP }}
+          username: ${{ secrets.MAIN_SERVER_USER }}
+          key: ${{ secrets.ED_KEY }}
+          script_stop: true
+          script: |
+            cd /var/www
+            bash start.sh

@@ -1,0 +1,22 @@
+name: Deploy backend to main server
+
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  deploy-backend:
+    name: Deploy Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run shell script
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.MAIN_SERVER_IP }}
+          username: ${{ secrets.MAIN_SERVER_USER }}
+          key: ${{ secrets.ED_KEY }}
+          script_stop: true
+          script: |
+            cd ~/elice-project
+            bash start.sh

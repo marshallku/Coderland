@@ -1,0 +1,23 @@
+name: Deploy backend to staging server
+
+on:
+  push:
+    branches:
+      - "Backend-Sprint"
+
+jobs:
+  stage-backend:
+    name: Stage Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run shell script
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.STAGING_SERVER_IP }}
+          port: ${{ secrets.STAGING_SERVER_PORT }}
+          username: ${{ secrets.STAGING_SERVER_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script_stop: true
+          script: |
+            cd ~/elice-project
+            bash start.sh
