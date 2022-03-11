@@ -1,10 +1,14 @@
 import { Document, Model, PopulatedDoc } from "mongoose";
 import { IUserDocument } from "user";
-import { IPagination } from "pagination";
 
 type subjects = "review" | "article" | "dev" | "recruit" | "chat" | "gather";
 
 type categories = "study" | "code" | "team" | "none";
+
+interface IPagination {
+  currentPage: number;
+  lastPage: number;
+}
 
 interface IPost {
   title: string;
