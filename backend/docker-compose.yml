@@ -23,4 +23,4 @@ services:
       - bash
       - -c
       - |
-        npm run start
+        npm run start:stage
