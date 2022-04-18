@@ -7,7 +7,7 @@ import {
   vscDarkPlus,
   solarizedlight,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { useTheme } from "../hooks/theme";
+import { useThemeStore } from "../store";
 import formatClassName from "../utils/formatClassName";
 import { isFromSameOrigin } from "../utils/url";
 import parseSpecialCharacters from "../utils/parseSpecialCharacters";
@@ -28,7 +28,7 @@ export default function MarkdownViewer({
     );
   }
 
-  const theme = useTheme();
+  const { theme } = useThemeStore();
 
   return (
     <article className={formatClassName("markdown-article", className)}>
@@ -81,7 +81,7 @@ export default function MarkdownViewer({
 
             return !inline && match ? (
               <Prism
-                style={theme?.theme === "dark" ? vscDarkPlus : solarizedlight}
+                style={theme === "dark" ? vscDarkPlus : solarizedlight}
                 language={match[1]}
                 PreTag="div"
               >

@@ -1,11 +1,11 @@
-import { useTheme } from "../hooks/theme";
+import { useThemeStore } from "../store";
 import "./ThemeSwitch.css";
 
 export default function ThemeSwitch() {
-  const theme = useTheme();
+  const { toggleTheme } = useThemeStore();
 
   return (
-    <button type="button" onClick={theme?.updateTheme} className="theme-switch">
+    <button type="button" onClick={toggleTheme} className="theme-switch">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24px"
