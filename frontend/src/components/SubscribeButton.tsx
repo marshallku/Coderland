@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
 import { addPushEndPoint, removePushPoint } from "../api";
+import { useSubscriptionStateStore } from "../store";
 import useApi from "../hooks/api";
 import formatClassName from "../utils/formatClassName";
 import toast from "../utils/toast";
 import "./SubscribeButton.css";
 
 export default function SubscribeButton() {
-  const [subscribed, setSubscribed] = useState(!!window.isSubscribed);
+  const { subscribed, setSubscribed } = useSubscriptionStateStore();
 
   const updateSubscribe = async () => {
     const sw = await navigator.serviceWorker.ready;
@@ -51,10 +51,6 @@ export default function SubscribeButton() {
       toast("구독에 실패했습니다. 알림 권한을 확인해주세요.");
     }
   };
-
-  useEffect(() => {
-    window.setSubscribed = setSubscribed;
-  }, []);
 
   return (
     <button
