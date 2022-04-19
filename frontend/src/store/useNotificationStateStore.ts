@@ -2,7 +2,7 @@ import create from "zustand";
 
 const useNotificationStateStore = create<NotificationStore>((set) => ({
   hasNewNotification: false,
-  setNotificationState: (state: boolean) => {
+  setHasNewNotification: (state: boolean) => {
     set((x) => ({ ...x, hasNewNotification: state }));
   },
 }));

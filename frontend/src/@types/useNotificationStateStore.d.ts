@@ -1,4 +1,4 @@
 interface NotificationStore {
   hasNewNotification: boolean;
-  setNotificationState: (state: boolean) => void;
+  setHasNewNotification: (state: boolean) => void;
 }
