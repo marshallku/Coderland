@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo-256.png";
-import { useAuthStore } from "../store";
+import { useAuthStore, useNotificationStateStore } from "../store";
 import { getNotification } from "../api";
 import useApi from "../hooks/api";
 import ThemeSwitch from "./ThemeSwitch";
@@ -15,13 +15,9 @@ export default function GlobalNavigationBar({
   drawerRevealed,
   setDrawerRevealed,
 }: IDrawerStatusProps) {
-  const [hasNewNotification, setHasNewNotification] = useState<boolean>(false);
   const [notifications, setNotifications] = useState<Array<INotification>>([]);
   const { token, user } = useAuthStore();
-
-  useEffect(() => {
-    window.setHasNewNotification = setHasNewNotification;
-  }, []);
+  const { hasNewNotification } = useNotificationStateStore();
 
   return (
     <nav className="gnb">
