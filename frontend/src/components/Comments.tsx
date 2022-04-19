@@ -24,7 +24,7 @@ export default function Comments({
   const [expandedIndexes, setExpandedIndexes] = useState<Array<number>>([]);
   const [focusedId, setFocusedId] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
-  const { token } = useAuthStore.getState();
+  const { token } = useAuthStore();
   const navigate = useNavigate();
   const modal = useModal();
 

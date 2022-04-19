@@ -122,7 +122,7 @@ export default function Details<
   }
   const [response, setResponse] = useState<T>();
   const navigate = useNavigate();
-  const { token, user } = useAuthStore.getState();
+  const { token, user } = useAuthStore();
   const modal = useModal();
 
   async function handleBookmarkClick() {

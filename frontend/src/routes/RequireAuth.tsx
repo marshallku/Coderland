@@ -3,7 +3,7 @@ import { useAuthStore } from "../store";
 
 export default function RequireAuth() {
   const location = useLocation();
-  const { token } = useAuthStore.getState();
+  const { token } = useAuthStore();
 
   if (!token) {
     return (

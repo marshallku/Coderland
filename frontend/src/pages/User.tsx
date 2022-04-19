@@ -16,7 +16,7 @@ import { parseQuery } from "../utils/url";
 import "./User.css";
 
 export function UserInfo() {
-  const { user, token } = useAuthStore.getState();
+  const { user, token } = useAuthStore();
 
   if (!token) {
     return <Navigate to="/login" />;

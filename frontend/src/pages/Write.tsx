@@ -376,7 +376,7 @@ export default function Write() {
   };
 
   const handleSubmit = async () => {
-    const { token } = useAuthStore.getState();
+    const { token } = useAuthStore();
 
     if (!token) {
       navigate("/login");

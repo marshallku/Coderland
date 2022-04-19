@@ -36,7 +36,7 @@ export default function Comment({
   const [replyText, setReplyText] = useState("");
   const [clapped, setClapped] = useState(!!data.isLiked);
   const [numClap, setNumClap] = useState(data.likes || 0);
-  const { token } = useAuthStore.getState();
+  const { token } = useAuthStore();
   const navigate = useNavigate();
   const modal = useModal();
 
