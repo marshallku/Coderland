@@ -1,6 +1,6 @@
 export function parseCookie(string = document.cookie) {
   if (!string) {
-    return "";
+    return {};
   }
 
   return Object.fromEntries(

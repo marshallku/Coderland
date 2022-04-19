@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createComment, getCommentList } from "../api";
+import { useAuthStore } from "../store";
 import { scrollTo } from "../animation/scroll";
 import Comment from "./Comment";
 import toast from "../utils/toast";
@@ -23,12 +24,11 @@ export default function Comments({
   const [expandedIndexes, setExpandedIndexes] = useState<Array<number>>([]);
   const [focusedId, setFocusedId] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
+  const { token } = useAuthStore.getState();
   const navigate = useNavigate();
   const modal = useModal();
 
   const updateCommentList = async () => {
-    const { token } = window;
-
     const response = token
       ? await getCommentList({ postId })
       : await getCommentList({ postId });
@@ -52,8 +52,6 @@ export default function Comments({
 
   const handleCommentSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const { token } = window;
-
     if (!token) {
       modal?.openModal("로그인이 필요한 기능입니다. 로그인하시겠습니까?", () =>
         navigate("/login")
@@ -96,7 +94,7 @@ export default function Comments({
             placeholder="댓글을 남겨주세요."
             className="comment-form__input"
             onClick={() =>
-              !window.token &&
+              !token &&
               modal?.openModal(
                 "로그인이 필요한 기능입니다. 로그인하시겠습니까?",
                 () => navigate("/login")
