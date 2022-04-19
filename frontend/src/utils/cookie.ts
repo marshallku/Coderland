@@ -1,4 +1,8 @@
 export function parseCookie(string = document.cookie) {
+  if (!string) {
+    return "";
+  }
+
   return Object.fromEntries(
     string
       .split(";")
