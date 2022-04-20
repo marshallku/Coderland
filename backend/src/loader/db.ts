@@ -35,8 +35,6 @@ export default () => {
       );
     })
     .catch((error) => {
-      if (error) {
-        logger.info(error);
-      }
+      logger.info(error);
     });
 };

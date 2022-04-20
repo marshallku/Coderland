@@ -2,24 +2,24 @@ import mongoose, { Document, Model, PopulatedDoc } from "mongoose";
 import { IUserDocument } from "user";
 import { IPostDocument } from "post";
 
-export interface IReply {
+interface IReply {
   contents: string;
   author: PopulatedDoc<IUserDocument>;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface IReplyDto {
+interface IReplyDto {
   commentId: string;
   replyId: string;
   contents: string;
 }
 
-export interface IReplyDocument extends IReply, Document {}
+interface IReplyDocument extends IReply, Document {}
 
 type ParentDocument = IPostDocument | ICommentDocument;
 
-export interface IComment {
+interface IComment {
   contents: string;
   author: PopulatedDoc<IUserDocument>;
   parentId: mongoose.Types.ObjectId;
@@ -33,9 +33,9 @@ export interface IComment {
   updatedAt: Date;
 }
 
-export interface ICommentDocument extends IComment, Document {}
+interface ICommentDocument extends IComment, Document {}
 
-export interface ICommentModel extends Model<ICommentDocument> {
+interface ICommentModel extends Model<ICommentDocument> {
   findCommentById: (commentId: string) => Promise<ICommentDocument>;
 
   createComment: (

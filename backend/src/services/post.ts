@@ -1,6 +1,6 @@
 import { IUserDocument, IUserModel } from "user";
 import { IPostDocument, IPostModel } from "post";
-import { createExcerpt, parsePostBySubject } from "../utils";
+import { createExcerpt, parsePost } from "../utils";
 import { User, Post } from "../models";
 
 export default class PostService {
@@ -26,7 +26,7 @@ export default class PostService {
       perPage
     );
     const parsedPosts = posts.map((post) => {
-      const { contents, excerpt, ...rest } = parsePostBySubject(
+      const { contents, excerpt, ...rest } = parsePost(
         post.subject,
         post.toObject()
       );
@@ -39,7 +39,7 @@ export default class PostService {
     try {
       const post = await this.PostModel.findPostById(postId);
       await this.PostModel.countViews(postId, userId);
-      return parsePostBySubject(post.subject, post.toObject(), userId);
+      return parsePost(post.subject, post.toObject(), userId);
     } catch (error) {
       throw new Error("존재하지 않는 글입니다.");
     }

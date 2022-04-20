@@ -1,18 +1,16 @@
 import { Document, Model, PopulatedDoc } from "mongoose";
 import { IUserDocument } from "user";
-import { IPagination } from "pagination";
 
-export type subjects =
-  | "review"
-  | "article"
-  | "dev"
-  | "recruit"
-  | "chat"
-  | "gather";
+type subjects = "review" | "article" | "dev" | "recruit" | "chat" | "gather";
 
-export type categories = "study" | "code" | "team" | "none";
+type categories = "study" | "code" | "team" | "none";
 
-export interface IPost {
+interface IPagination {
+  currentPage: number;
+  lastPage: number;
+}
+
+interface IPost {
   title: string;
   contents: string;
   excerpt: string;
@@ -30,7 +28,7 @@ export interface IPost {
   isAuthor?: boolean;
 }
 
-export interface IGatherPost extends IPost {
+interface IGatherPost extends IPost {
   // subejct가 gather 때만 포함될 내용
   category?: categories;
   area?: string;
@@ -40,9 +38,9 @@ export interface IGatherPost extends IPost {
   icon?: string;
 }
 
-export interface IPostDocument extends IGatherPost, Document {}
+interface IPostDocument extends IGatherPost, Document {}
 
-export interface IPostModel extends Model<IPostDocument> {
+interface IPostModel extends Model<IPostDocument> {
   findAllPosts: (
     subject: string,
     category: string,

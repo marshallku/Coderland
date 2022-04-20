@@ -4,7 +4,7 @@ import axios, { AxiosResponse } from "axios";
 import { PushSubscription } from "web-push";
 import config from "../config";
 import { User } from "../models";
-import { parsePostBySubject } from "../utils";
+import { parsePost } from "../utils";
 
 export default class UserService {
   private UserModel: IUserModel;
@@ -17,7 +17,7 @@ export default class UserService {
   async findAllBookmarks(userId: string, currentPage: number) {
     const { bookmarks } = await this.UserModel.findAllBookmarks(userId);
     const parsedBookmarks = bookmarks.map((post: IPostDocument) =>
-      parsePostBySubject(post.toObject().subject, post.toObject(), userId)
+      parsePost(post.toObject().subject, post.toObject(), userId)
     );
 
     // bookmark pagination
