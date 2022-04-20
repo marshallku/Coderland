@@ -1,11 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import toast from "../utils/toast";
-import { formatToReadableTime } from "../utils/time";
-import formatClassName from "../utils/formatClassName";
-import Clap from "./Clap";
-import useApi from "../hooks/api";
-import { useModal } from "../hooks/modal";
 import {
   createReply,
   deleteComment,
@@ -17,6 +11,13 @@ import {
   createGatherRequest,
   deleteGatherRequest,
 } from "../api";
+import { useAuthStore } from "../store";
+import useApi from "../hooks/api";
+import { useModal } from "../hooks/modal";
+import Clap from "./Clap";
+import toast from "../utils/toast";
+import { formatToReadableTime } from "../utils/time";
+import formatClassName from "../utils/formatClassName";
 import "./Comment.css";
 
 export default function Comment({
@@ -35,6 +36,7 @@ export default function Comment({
   const [replyText, setReplyText] = useState("");
   const [clapped, setClapped] = useState(!!data.isLiked);
   const [numClap, setNumClap] = useState(data.likes || 0);
+  const { token } = useAuthStore();
   const navigate = useNavigate();
   const modal = useModal();
 
@@ -43,8 +45,6 @@ export default function Comment({
 
   const handleEditSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const { token } = window;
-
     if (!token) {
       modal?.openModal("로그인이 필요한 기능입니다. 로그인하시겠습니까?", () =>
         navigate("/login")
@@ -80,8 +80,6 @@ export default function Comment({
   };
 
   const handleDeleteClick = async () => {
-    const { token } = window;
-
     if (!token) {
       modal?.openModal("로그인이 필요한 기능입니다. 로그인하시겠습니까?", () =>
         navigate("/login")
@@ -110,8 +108,6 @@ export default function Comment({
 
   const handleReplySubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const { token } = window;
-
     if (!token) {
       modal?.openModal("로그인이 필요한 기능입니다. 로그인하시겠습니까?", () =>
         navigate("/login")
@@ -151,8 +147,6 @@ export default function Comment({
   };
 
   const handleLikeClick = async () => {
-    const { token } = window;
-
     if (!token) {
       modal?.openModal("로그인이 필요한 기능입니다. 로그인하시겠습니까?", () =>
         navigate("/login")
@@ -172,7 +166,6 @@ export default function Comment({
   };
 
   const handleGatherRequest = async () => {
-    const { token } = window;
     const userId = data.author?._id;
 
     if (!token) {
@@ -328,7 +321,7 @@ export default function Comment({
             className="comment-form__input"
             placeholder="답글을 남겨주세요."
             onClick={() =>
-              !window.token &&
+              !token &&
               modal?.openModal(
                 "로그인이 필요한 기능입니다. 로그인하시겠습니까?",
                 () => navigate("/login")

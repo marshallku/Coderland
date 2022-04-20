@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo-256.png";
+import { useAuthStore, useNotificationStateStore } from "../store";
+import { getNotification } from "../api";
+import useApi from "../hooks/api";
 import ThemeSwitch from "./ThemeSwitch";
 import Dropdown from "./Dropdown";
-import formatClassName from "../utils/formatClassName";
-import { useAuth } from "../hooks/auth";
-import useApi from "../hooks/api";
-import { getNotification } from "../api";
 import SubscribeButton from "./SubscribeButton";
+import formatClassName from "../utils/formatClassName";
 import { deleteCookie } from "../utils/cookie";
 import "./GNB.css";
 
@@ -15,13 +15,9 @@ export default function GlobalNavigationBar({
   drawerRevealed,
   setDrawerRevealed,
 }: IDrawerStatusProps) {
-  const auth = useAuth();
-  const [hasNewNotification, setHasNewNotification] = useState<boolean>(false);
   const [notifications, setNotifications] = useState<Array<INotification>>([]);
-
-  useEffect(() => {
-    window.setHasNewNotification = setHasNewNotification;
-  }, []);
+  const { token, user } = useAuthStore();
+  const { hasNewNotification } = useNotificationStateStore();
 
   return (
     <nav className="gnb">
@@ -106,8 +102,6 @@ export default function GlobalNavigationBar({
             </>
           }
           onClick={async () => {
-            const { token } = window;
-
             if (!token) {
               return;
             }
@@ -121,20 +115,20 @@ export default function GlobalNavigationBar({
             setNotifications(response.notification);
           }}
         />
-        {auth?.user ? (
+        {user ? (
           <Dropdown
             ButtonChildren={
               <img
                 className="gnb__profile"
-                src={auth.user.profile}
+                src={user.profile}
                 alt="유저 프로필"
               />
             }
             ContentChildren={
               <>
                 <figure className="dropdown-profile">
-                  <img src={auth.user.profile} alt="유저 프로필" />
-                  <figcaption>{auth.user.nickname}</figcaption>
+                  <img src={user.profile} alt="유저 프로필" />
+                  <figcaption>{user.nickname}</figcaption>
                 </figure>
                 <nav className="dropdown-nav">
                   <Link to="/user" className="dropdown-nav__item">

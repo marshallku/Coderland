@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store";
+import { authorizeUser, getUserAuthKey, getMyInfo } from "../api";
+import useApi from "../hooks/api";
 import Button from "../components/Button";
 import { Input } from "../components/Input";
-import { useAuth } from "../hooks/auth";
-import useApi from "../hooks/api";
-import { authorizeUser, getUserAuthKey, getMyInfo } from "../api";
 import copyToClipboard from "../utils/clipboard";
 import toast from "../utils/toast";
 import "./Authorize.css";
@@ -12,8 +12,7 @@ import "./Authorize.css";
 export default function Authorize() {
   const [authKey, setAuthKey] = useState("");
   const [gitlabName, setGitlabName] = useState("");
-  const auth = useAuth();
-  const user = auth?.user;
+  const { setUser, user } = useAuthStore();
   const navigate = useNavigate();
 
   if (!user) return <Navigate to="/login" />;
@@ -50,7 +49,7 @@ export default function Authorize() {
       return;
     }
 
-    auth.update(newUserApiRequest.user);
+    setUser(newUserApiRequest.user);
 
     navigate("/user");
   };
