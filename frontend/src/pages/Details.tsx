@@ -1,11 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
-import useApi from "../hooks/api";
-import { formatToReadableTime } from "../utils/time";
-import MarkdownViewer from "../components/MarkdownViewer";
-import Comments from "../components/Comments";
-import formatClassName from "../utils/formatClassName";
-import Clap from "../components/Clap";
 import {
   addBookmark,
   addClap,
@@ -14,9 +8,15 @@ import {
   removeBookmark,
   removeClap,
 } from "../api";
-import { useAuth } from "../hooks/auth";
+import { useAuthStore } from "../store";
+import useApi from "../hooks/api";
+import MarkdownViewer from "../components/MarkdownViewer";
+import Comments from "../components/Comments";
+import formatClassName from "../utils/formatClassName";
+import Clap from "../components/Clap";
 import { useModal } from "../hooks/modal";
 import { debounce } from "../utils/optimizer";
+import { formatToReadableTime } from "../utils/time";
 import { scrollHorizontal } from "../animation/scroll";
 import "./Details.css";
 
@@ -122,11 +122,11 @@ export default function Details<
   }
   const [response, setResponse] = useState<T>();
   const navigate = useNavigate();
-  const auth = useAuth();
+  const { token, user } = useAuthStore();
   const modal = useModal();
 
   async function handleBookmarkClick() {
-    if (auth?.user && id) {
+    if (user && id) {
       if (bookmarked) {
         const apiResponse = await useApi(removeBookmark({ id }));
 
@@ -153,7 +153,7 @@ export default function Details<
   }
 
   async function handleLikesClick() {
-    if (auth?.user && id) {
+    if (user && id) {
       if (clapped) {
         const apiResponse = await useApi(removeClap({ id }));
 
@@ -238,7 +238,7 @@ export default function Details<
               type="button"
               onClick={() => {
                 modal?.openModal("정말 삭제하시겠습니까?", async () => {
-                  if (!response.post || !auth?.user || !window.token) {
+                  if (!response.post || !user || !token) {
                     return;
                   }
 

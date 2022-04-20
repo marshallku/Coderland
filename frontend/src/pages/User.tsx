@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
+import { useAuthStore } from "../store";
 import useApi from "../hooks/api";
 import { getBookmarkedPost, updateMyInfo } from "../api";
 import Button from "../components/Button";
@@ -7,28 +8,33 @@ import DisplayError from "../components/DisplayError";
 import { Input } from "../components/Input";
 import Loader from "../components/Loader";
 import Navigation from "../components/Navigation";
-import { useAuth } from "../hooks/auth";
-import formatClassName from "../utils/formatClassName";
-import { parseQuery } from "../utils/url";
-
 import Pagination from "../components/Pagination";
 import PostListItem, { PostListItemSkeleton } from "../components/PostListItem";
 import { SKELETONS_LENGTH } from "../components/PostList";
-
+import formatClassName from "../utils/formatClassName";
+import { parseQuery } from "../utils/url";
 import "./User.css";
 
 export function UserInfo() {
-  const auth = useAuth();
-  const user = auth?.user;
+  const { user, token } = useAuthStore();
 
-  if (!window.token) return <Navigate to="/login" />;
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
 
   if (!user) {
     return <Loader />;
   }
 
   const [editing, setEditing] = useState(false);
-  const { nickname: _nickname, track: _track, github: _github, grade } = user;
+  const {
+    nickname: _nickname,
+    track: _track,
+    github: _github,
+    grade,
+    profile,
+    name,
+  } = user;
   const [nickname, setNickname] = useState(_nickname);
   const [track, setTrack] = useState(_track);
   const [github, setGithub] = useState(_github);
@@ -52,7 +58,7 @@ export function UserInfo() {
       onSubmit={handleSubmit}
     >
       <div className="user-info__image">
-        <img src={user.profile} alt={`${user.name}님의 이미지`} />
+        <img src={profile} alt={`${name}님의 이미지`} />
       </div>
       {!isAuthorized && (
         <div className="user-info__content">

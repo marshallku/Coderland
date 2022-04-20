@@ -1,18 +1,17 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import App from "./App";
-import { tryLoginOnLoad } from "./hooks/auth";
 import initializeSubscription from "./utils/pushNotification";
+import { useAuthStore } from "./store";
 import "./css/reset.css";
 import "./css/index.css";
 import "./css/icon.css";
 
-tryLoginOnLoad();
+useAuthStore.getState().initialize();
 initializeSubscription();
 
-ReactDOM.render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );

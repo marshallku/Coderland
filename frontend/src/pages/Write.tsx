@@ -9,6 +9,7 @@ import Select from "../components/Select";
 import formatClassName from "../utils/formatClassName";
 import toast from "../utils/toast";
 import "./Write.css";
+import { useAuthStore } from "../store";
 
 const MAX_TAGS_LENGTH = 5;
 
@@ -375,7 +376,7 @@ export default function Write() {
   };
 
   const handleSubmit = async () => {
-    const { token } = window;
+    const { token } = useAuthStore();
 
     if (!token) {
       navigate("/login");
