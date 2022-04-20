@@ -14,8 +14,9 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.MAIN_SERVER_IP }}
+          port: ${{ secrets.MAIN_SERVER_PORT }}
           username: ${{ secrets.MAIN_SERVER_USER }}
-          key: ${{ secrets.ED_KEY }}
+          key: ${{ secrets.SSH_KEY }}
           script_stop: true
           script: |
             cd ~/elice-project
