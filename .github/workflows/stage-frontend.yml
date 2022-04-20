@@ -3,7 +3,8 @@ name: Deploy frontend to staging server
 on:
   push:
     branches:
-      - "Frontend-Sprint"
+      - Frontend-Sprint
+  workflow_dispatch:
 
 jobs:
   stage-frontend:
