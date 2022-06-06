@@ -1,9 +1,9 @@
 const CACHE_NAME = "static-cache-v1.0.0";
 const FILES_TO_CACHE = [
-  "/offline.html",
-  "/favicon.ico",
-  "/logo/logo.png",
-  "/logo/logo-128.png",
+  "/Coderland/offline.html",
+  "/Coderland/favicon.ico",
+  "/Coderland/logo/logo.png",
+  "/Coderland/logo/logo-128.png",
 ];
 
 self.addEventListener("install", (event) => {
@@ -28,7 +28,7 @@ self.addEventListener("fetch", (event) => {
   "navigate" === event.request.mode &&
     event.respondWith(
       fetch(event.request).catch(() =>
-        caches.open(CACHE_NAME).then((cache) => cache.match("/offline.html"))
+        caches.open(CACHE_NAME).then((cache) => cache.match("/Coderland/offline.html"))
       )
     );
 });
@@ -48,16 +48,16 @@ self.addEventListener("push", (event) => {
       data: {
         to: data.to,
       },
-      badge: "https://coderland.dev/logo/logo-128.png",
+      badge: "https://marshallku.github.io/Coderland/logo/logo-128.png",
     });
   } catch (err) {
     const data = event.data.text();
 
     self.registration.showNotification(data, {
       body: data,
-      badge: "https://coderland.dev/logo/logo-128.png",
+      badge: "https://marshallku.github.io/Coderland/logo/logo-128.png",
       data: {
-        to: "https://coderland.dev/",
+        to: "https://marshallku.github.io/Coderland/",
       },
     });
   }
@@ -112,30 +112,6 @@ self.addEventListener(
           }
 
           const savedEndPoint = localStorage.getItem("endpoint");
-
-          if (savedEndPoint) {
-            fetch("https://coderland.dev/api/user/push", {
-              method: "DELETE",
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify({ endpoint: savedEndPoint }),
-            }).then((response) => {
-              if (!response.ok) {
-                return;
-              }
-
-              localStorage.removeItem("endpoint");
-            });
-          }
-
-          fetch("https://coderland.dev/api/user/push", {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(subscription.toJSON()),
-          });
         })
     );
   },
